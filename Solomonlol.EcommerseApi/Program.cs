@@ -1,7 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using Solomonlol.EcommerseApi;
+using Solomonlol.EcommerseApi.Models.Base;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+var connectionString = builder.Configuration.GetConnectionString("MSSQLServer");
+
+builder.Services.AddDbContext<ApplicationContext>(options =>
+                            options.UseSqlServer(connectionString));
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -16,4 +22,3 @@ app.UseHttpsRedirection();
 
 
 app.Run();
-
