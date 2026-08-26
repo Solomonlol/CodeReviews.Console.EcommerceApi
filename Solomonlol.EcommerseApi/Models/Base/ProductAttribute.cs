@@ -3,20 +3,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Solomonlol.EcommerseApi.Models.Base
 {
-    public class Product
+    public class ProductAttribute
     {
         [Key]
         public int Id { get; set; }
-        public string Name { get; set; } = null!;
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal Price { get; set; }
-        public string? Description { get; set; }
-        public bool IsDeleted { get; set; }
-
-        [Required]
         public int CategoryId { get; set; }
-
         [ForeignKey(nameof(CategoryId))]
         public Category Category { get; set; } = null!;
+        public string Name { get; set; } = null!;
+        public string? Unit { get; set; }
+        public bool IsRequired { get; set; }
+        public ICollection<ProductAttributeValue> Values { get; set; } = [];
     }
 }
