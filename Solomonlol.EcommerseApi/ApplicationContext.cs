@@ -21,6 +21,11 @@ namespace Solomonlol.EcommerseApi
                 .HasOne(c => c.Category)
                 .WithMany(p => p.Products)
                 .HasForeignKey(p => p.CategoryId);
+            modelBuilder.Entity<Product>()
+                .HasQueryFilter(p => !p.IsDeleted);
+            modelBuilder.Entity<Product>()
+                .HasIndex(p => p.Name)
+                .IsUnique();
 
             modelBuilder.Entity<ProductAttributeValue>()
                 .HasIndex(v => new { v.ProductId, v.ProductAttributeId })
@@ -30,13 +35,18 @@ namespace Solomonlol.EcommerseApi
                 .WithMany(p => p.Values)
                 .HasForeignKey(v => v.ProductAttributeId)
                 .OnDelete(DeleteBehavior.Restrict);
-                
+
+            modelBuilder.Entity<Category>()
+                .HasIndex(c => c.Name)
+                .IsUnique();
 
             modelBuilder.Entity<SaleItem>()
                 .HasKey(s => new { s.SaleId, s.ProductId });
 
-            modelBuilder.Entity<Product>()
-                .HasQueryFilter(p => !p.IsDeleted);
+            modelBuilder.Entity<User>()
+                .HasIndex(u=>u.Login)
+                .IsUnique();
+
         }
     }
 }
