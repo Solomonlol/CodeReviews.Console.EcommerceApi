@@ -1,47 +1,76 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Models.Base;
+using Solomonlol.EcommerseApi.Models.Dto;
+using Solomonlol.EcommerseApi.MyResults;
 
 namespace Solomonlol.EcommerseApi.Services
 {
     public class CategoryService : ICategoryService
     {
         private readonly ApplicationContext _db;
-        public CategoryService(ApplicationContext db)
+        private readonly IMapper _mapper;
+        public CategoryService(ApplicationContext db, IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
         }
 
-        public async Task Create(Category item, CancellationToken ct = default)
+        public async Task<Result> Create(CategoryDto item, CancellationToken ct = default)
         {
-            await _db.Categories.AddAsync(item, ct);
-            await _db.SaveChangesAsync(ct);
+            var category = await _db.Categories.FirstOrDefaultAsync(c=>c.Name==item.Name, ct);
+            if (category == null)
+            {
+                category = _mapper.Map<Category>(item);
+                await _db.Categories.AddAsync(category, ct);
+
+                return await _db.SaveChangesAsync(ct) > 0
+                    ? Result.Success(item)
+                    : Result.Failure("Cannot save changes to database");
+            }
+            else return Result.Failure($"Category with name {item.Name} already exist.");
         }
 
-        public async Task Delete(string name, CancellationToken ct = default)
+        public async Task<Result> Delete(string name, CancellationToken ct = default)
         {
             var category = await _db.Categories.FirstOrDefaultAsync(c => c.Name == name, ct);
             if (category != null)
+            {
                 _db.Remove(category);
-            await _db.SaveChangesAsync(ct);
+                return await _db.SaveChangesAsync(ct) > 0 
+                    ? Result.Success(category) 
+                    : Result.Failure("Cannot save changes to database");
+            }
+            else return Result.Failure($"Category with name '{name}' was not found.");
         }
 
-        public async Task<Category?> Get(string name, CancellationToken ct = default)
+        public async Task<Result<CategoryDto>> Get(string name, CancellationToken ct = default)
         {
-            return await _db.Categories.FirstOrDefaultAsync(c=>c.Name==name, ct);
+            var category = await _db.Categories.FirstOrDefaultAsync(c=>c.Name==name, ct);
+            return category != null 
+                ? Result<CategoryDto>.Success(_mapper.Map<CategoryDto>(category)) 
+                : Result<CategoryDto>.Failure($"Category with name {name} was not found.");
         }
 
-        public async Task<IEnumerable<Category>?> GetAll(CancellationToken ct = default)
+        public async Task<Result<IEnumerable<CategoryDto>>> GetAll(CancellationToken ct = default)
         {
-            return await _db.Categories.ToListAsync(ct);
+            var list = await _db.Categories.ToListAsync(ct);
+            return Result<IEnumerable<CategoryDto>>.Success(_mapper.Map<IEnumerable<CategoryDto>>(list));
         }
 
-        public async Task Update(string name, Category item, CancellationToken ct = default)
+        public async Task<Result> Update(string name, CategoryDto item, CancellationToken ct = default)
         {
             var category = await _db.Categories.FirstOrDefaultAsync(c => c.Name == name, ct);
             if (category != null)
+            {
+                category = _mapper.Map<Category>(item);
                 _db.Categories.Update(category);
-            await _db.SaveChangesAsync(ct);
+                return await _db.SaveChangesAsync(ct) > 0
+                    ? Result.Success(category)
+                    : Result.Failure("Cannot save changes to database");
+            }
+            else return Result.Failure($"Category with name {name} was not found.");
         }
     }
 }

@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Solomonlol.EcommerseApi;
+using Solomonlol.EcommerseApi.Endpoints;
 using Solomonlol.EcommerseApi.Interfaces;
+using Solomonlol.EcommerseApi.Mapping;
 using Solomonlol.EcommerseApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +21,10 @@ builder.Services.AddSwaggerGen(options =>
         Version="v1"
     });
 });
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddProfile<MappingProfile>();
+});
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
@@ -27,5 +33,7 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.MapCategoryEndpoint();
 
 app.Run();

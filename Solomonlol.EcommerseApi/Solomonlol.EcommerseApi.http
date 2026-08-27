@@ -1,6 +1,6 @@
 @Solomonlol.EcommerseApi_HostAddress = http://localhost:5254
 
-GET {{Solomonlol.EcommerseApi_HostAddress}}/weatherforecast/
+GET {{Solomonlol.EcommerseApi_HostAddress}}/api/v1/categories
 Accept: application/json
 
 ###
