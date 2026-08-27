@@ -6,7 +6,9 @@ namespace Solomonlol.EcommerseApi.Models.Base
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; } = string.Empty;
+        public string Description { get; set; }= string.Empty;
         public ICollection<Product> Products { get; set; } = [];
         public ICollection<ProductAttribute> Attributes { get; set; } = [];
     }

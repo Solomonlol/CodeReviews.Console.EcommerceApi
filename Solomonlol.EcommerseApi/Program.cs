@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Solomonlol.EcommerseApi;
+using Solomonlol.EcommerseApi.Interfaces;
+using Solomonlol.EcommerseApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,8 @@ builder.Services.AddSwaggerGen(options =>
         Version="v1"
     });
 });
+
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 
