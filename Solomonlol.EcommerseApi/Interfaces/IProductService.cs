@@ -1,12 +1,15 @@
 ﻿using Solomonlol.EcommerseApi.Models.Base;
+using Solomonlol.EcommerseApi.Models.Dto;
+using Solomonlol.EcommerseApi.MyResults;
 
 namespace Solomonlol.EcommerseApi.Interfaces
 {
     public interface IProductService
     {
-        Task Create(CancellationToken ct = default);
-        Task Update(Product item, CancellationToken ct = default);
-        Task Delete(string name, CancellationToken ct = default);
-        Task<Product> Get(string name, CancellationToken ct = default);
+        Task<Result> Create(ProductDto item, CancellationToken ct = default);
+        Task<Result> Update(string name, ProductDto item, CancellationToken ct = default);
+        Task<Result> Delete(string name, CancellationToken ct = default);
+        Task<Result<ProductDto>> Get(string name, CancellationToken ct = default);
+        Task<Result<IEnumerable<ProductDto>>> GetAll(int page=1, CancellationToken ct = default);
     }
 }

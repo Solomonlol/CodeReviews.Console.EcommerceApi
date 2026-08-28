@@ -13,6 +13,10 @@ namespace Solomonlol.EcommerseApi.Mapping
                 .ForMember(c => c.Id, d => d.Ignore())
                 .ForMember(c => c.Attributes, d => d.Ignore())
                 .ForMember(c => c.Products, d => d.Ignore());
+
+            CreateMap<Product, ProductDto>();
+            CreateMap<ProductDto, Product>()
+                .ForMember(p => p.Id, d => d.Ignore());
         }
     }
 }
