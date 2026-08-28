@@ -8,13 +8,13 @@ namespace Solomonlol.EcommerseApi.Endpoints
         public static void MapCategoryEndpoint(this WebApplication app)
         {
             //get all
-            app.MapGet("api/v1/categories", async (ICategoryService service, CancellationToken ct) =>
+            app.MapGet("api/v1/categories/{page}", async (int page, ICategoryService service, CancellationToken ct) =>
             {
-                var result = await service.GetAll(ct);
+                var result = await service.GetAll(page, ct);
                 return Results.Ok(result.Value);
             });
             //get one
-            app.MapGet("api/v1/categories/{name}", async (string name, ICategoryService service, CancellationToken ct) =>
+            app.MapGet("api/v1/category/{name}", async (string name, ICategoryService service, CancellationToken ct) =>
             {
                 var result = await service.Get(name, ct);
                 return result.IsSuccess 

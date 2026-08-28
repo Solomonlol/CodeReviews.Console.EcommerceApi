@@ -4,6 +4,7 @@ using Solomonlol.EcommerseApi;
 using Solomonlol.EcommerseApi.Endpoints;
 using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Mapping;
+using Solomonlol.EcommerseApi.Seeding;
 using Solomonlol.EcommerseApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,5 +36,6 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.MapCategoryEndpoint();
+await app.SeedAll();
 
-app.Run();
+await app.RunAsync();

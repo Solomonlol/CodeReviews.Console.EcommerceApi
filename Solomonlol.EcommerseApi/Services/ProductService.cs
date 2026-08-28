@@ -5,6 +5,11 @@ namespace Solomonlol.EcommerseApi.Services
 {
     public class ProductService : IProductService
     {
+        private readonly ApplicationContext _db;
+        public ProductService(ApplicationContext db)
+        {
+            _db = db;
+        }
         public Task Create(CancellationToken ct = default)
         {
             throw new NotImplementedException();

@@ -29,7 +29,7 @@ namespace Solomonlol.EcommerseApi.Services
                     ? Result.Success(item)
                     : Result.Failure("Cannot save changes to database");
             }
-            else return Result.Failure($"Category with name {item.Name} already exist.");
+            else return Result.Failure($"Category with name '{item.Name}' already exist.");
         }
 
         public async Task<Result> Delete(string name, CancellationToken ct = default)
@@ -50,12 +50,13 @@ namespace Solomonlol.EcommerseApi.Services
             var category = await _db.Categories.FirstOrDefaultAsync(c=>c.Name==name, ct);
             return category != null 
                 ? Result<CategoryDto>.Success(_mapper.Map<CategoryDto>(category)) 
-                : Result<CategoryDto>.Failure($"Category with name {name} was not found.");
+                : Result<CategoryDto>.Failure($"Category with name '{name}' was not found.");
         }
 
-        public async Task<Result<IEnumerable<CategoryDto>>> GetAll(CancellationToken ct = default)
+        public async Task<Result<IEnumerable<CategoryDto>>> GetAll(int page=1, CancellationToken ct = default)
         {
-            var list = await _db.Categories.ToListAsync(ct);
+            int pageSize = 10;
+            var list = await _db.Categories.Skip((page-1)*pageSize).Take(pageSize).ToListAsync(ct);
             return Result<IEnumerable<CategoryDto>>.Success(_mapper.Map<IEnumerable<CategoryDto>>(list));
         }
 
@@ -64,13 +65,13 @@ namespace Solomonlol.EcommerseApi.Services
             var category = await _db.Categories.FirstOrDefaultAsync(c => c.Name == name, ct);
             if (category != null)
             {
-                category = _mapper.Map<Category>(item);
+                _mapper.Map(item, category);
                 _db.Categories.Update(category);
                 return await _db.SaveChangesAsync(ct) > 0
                     ? Result.Success(category)
                     : Result.Failure("Cannot save changes to database");
             }
-            else return Result.Failure($"Category with name {name} was not found.");
+            else return Result.Failure($"Category with name '{name}' was not found.");
         }
     }
 }
