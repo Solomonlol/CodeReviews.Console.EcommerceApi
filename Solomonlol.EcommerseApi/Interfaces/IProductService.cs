@@ -10,6 +10,6 @@ namespace Solomonlol.EcommerseApi.Interfaces
         Task<Result> Update(string name, ProductDto item, CancellationToken ct = default);
         Task<Result> Delete(string name, CancellationToken ct = default);
         Task<Result<ProductDto>> Get(string name, CancellationToken ct = default);
-        Task<Result<IEnumerable<ProductDto>>> GetAll(int page=1, CancellationToken ct = default);
+        Task<Result<PagedResult<ProductDto>>> GetAll(int page=1, int pageSize=5, CancellationToken ct = default);
     }
 }

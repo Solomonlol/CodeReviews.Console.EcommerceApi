@@ -8,9 +8,11 @@ namespace Solomonlol.EcommerseApi.Endpoints
         public static void MapCategoryEndpoint(this WebApplication app)
         {
             //get all by page
-            app.MapGet("api/v1/categories?page={page}", async (int page, ICategoryService service, CancellationToken ct) =>
+            app.MapGet("api/v1/categories", async (ICategoryService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
-                var result = await service.GetAll(page, ct);
+                page = Math.Max(page, 1);
+                pageSize = Math.Clamp(pageSize, 1, 30);
+                var result = await service.GetAll(page, pageSize, ct);
                 return Results.Ok(result.Value);
             });
             //get one

@@ -9,13 +9,15 @@ namespace Solomonlol.EcommerseApi.Endpoints
         public static void MapProductEndpoints(this WebApplication app)
         {
             //get all by page
-            app.MapGet("api/v1/products/{page}", async (int page, IProductService service, CancellationToken ct) =>
+            app.MapGet("api/v1/products", async (IProductService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
-                var result = await service.GetAll(page, ct);
+                page=Math.Max(page, 1);
+                pageSize = Math.Clamp(pageSize, 1, 30);
+                var result = await service.GetAll(page, pageSize, ct);
                 return Results.Ok(result.Value);
             });
             //get one
-            app.MapGet("api/v1/product/{name}", async (string name, IProductService service, CancellationToken ct) =>
+            app.MapGet("api/v1/products/{name}", async (string name, IProductService service, CancellationToken ct) =>
             {
                 var result = await service.Get(name, ct);
                 return result.IsSuccess ? Results.Ok(result.Value) : Results.NotFound();

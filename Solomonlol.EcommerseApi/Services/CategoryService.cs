@@ -53,11 +53,24 @@ namespace Solomonlol.EcommerseApi.Services
                 : Result<CategoryDto>.Failure($"Category with name '{name}' was not found.");
         }
 
-        public async Task<Result<IEnumerable<CategoryDto>>> GetAll(int page=1, CancellationToken ct = default)
+        public async Task<Result<PagedResult<CategoryDto>>> GetAll(int page=1, int pageSize =5, CancellationToken ct = default)
         {
-            int pageSize = 5;
-            var list = await _db.Categories.Skip((page-1)*pageSize).Take(pageSize).ToListAsync(ct);
-            return Result<IEnumerable<CategoryDto>>.Success(_mapper.Map<IEnumerable<CategoryDto>>(list));
+            var totalCount = await _db.Categories.CountAsync(ct);
+            var list = await _db.Categories
+                .OrderBy(c=>c.Name)
+                .Skip((page-1)*pageSize)
+                .Take(pageSize)
+                .ToListAsync(ct);
+            var dtoList = _mapper.Map<IEnumerable<CategoryDto>>(list);
+            var pagedResult = new PagedResult<CategoryDto>()
+            {
+                Items = dtoList,
+                Page = page,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                Totalpages = (int)Math.Ceiling(totalCount / (double)pageSize)
+            };
+            return Result<PagedResult<CategoryDto>>.Success(pagedResult);
         }
 
         public async Task<Result> Update(string name, CategoryDto item, CancellationToken ct = default)
