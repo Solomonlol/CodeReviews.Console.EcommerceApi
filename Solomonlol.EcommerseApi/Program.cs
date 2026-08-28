@@ -28,6 +28,7 @@ builder.Services.AddAutoMapper(cfg =>
 });
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 
@@ -36,6 +37,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.MapCategoryEndpoint();
+app.MapProductEndpoints();
 await app.SeedAll();
 
 await app.RunAsync();
