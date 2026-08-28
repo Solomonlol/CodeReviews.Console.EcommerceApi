@@ -11,6 +11,13 @@ namespace Solomonlol.EcommerseApi.Models.Dto
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
         public string? Description { get; set; }
+        public string CategoryName
+        {
+            get
+            {
+                return Category.Name;
+            }
+        }
 
         [Required]
         public int CategoryId { get; set; }

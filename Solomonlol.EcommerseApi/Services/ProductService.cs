@@ -58,8 +58,10 @@ namespace Solomonlol.EcommerseApi.Services
         public async Task<Result<PagedResult<ProductDto>>> GetAll(int page=1, int pageSize =5, CancellationToken ct = default)
         {
             var totalCount = await _db.Products.CountAsync(ct);
+
             var list = await _db.Products
                 .OrderBy(c => c.Name)
+                .Include(c=>c.Category)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync(ct);
@@ -70,7 +72,7 @@ namespace Solomonlol.EcommerseApi.Services
                 Page = page,
                 PageSize = pageSize,
                 TotalCount = totalCount,
-                Totalpages = (int)Math.Ceiling(totalCount / (double)pageSize)
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
             };
             return Result<PagedResult<ProductDto>>.Success(pagedResult);
         }

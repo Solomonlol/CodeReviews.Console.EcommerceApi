@@ -68,7 +68,7 @@ namespace Solomonlol.EcommerseApi.Services
                 Page = page,
                 PageSize = pageSize,
                 TotalCount = totalCount,
-                Totalpages = (int)Math.Ceiling(totalCount / (double)pageSize)
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
             };
             return Result<PagedResult<CategoryDto>>.Success(pagedResult);
         }
