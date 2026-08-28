@@ -55,7 +55,7 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result<IEnumerable<CategoryDto>>> GetAll(int page=1, CancellationToken ct = default)
         {
-            int pageSize = 10;
+            int pageSize = 5;
             var list = await _db.Categories.Skip((page-1)*pageSize).Take(pageSize).ToListAsync(ct);
             return Result<IEnumerable<CategoryDto>>.Success(_mapper.Map<IEnumerable<CategoryDto>>(list));
         }

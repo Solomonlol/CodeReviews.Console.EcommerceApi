@@ -33,10 +33,10 @@ namespace Solomonlol.EcommerseApi.Seeding
                     new() { Name="RAM", Description="Category for personal computer memory modules"},
                     new() { Name="Monitors", Description="Category for monitors"},
                     new() { Name="Headphones", Description="Category for headphones"},
-                    new() { Name="Mothreboards", Description="Category for personal computer motherboardes"},
+                    new() { Name="Motherboards", Description="Category for personal computer motherboardes"},
                     new() { Name="Fans", Description="Category for personal computer cooling systems"},
                     new() { Name="Mouse", Description="Category for personal computer mouses"},
-                    new() { Name="Keyboardes", Description="Category for personal computer keyboardes"},
+                    new() { Name="Keyboards", Description="Category for personal computer keyboardes"},
                     new() { Name="Laptops", Description="Category for laptops"},
                     new() { Name="SSD", Description="Category for SSD"},
                     new() { Name="HDD", Description="Category for HDD"},
@@ -240,6 +240,15 @@ namespace Solomonlol.EcommerseApi.Seeding
                         Description="Supports AMD Ryzen 9000, 8000, and 7000 series processors. 24+2+1 power phases, 110A SPS. Supports dual-channel mode, up to 8200+ (OC).",
                         IsDeleted=false, Price = 700m },
                 };
+                
+                await db.Products.AddRangeAsync(cpuProducts
+                    .Concat(gpuProducts)
+                    .Concat(motherboardsProduct)
+                    .Concat(ramProducts)
+                    .Concat(headphoneProducts)
+                    .Concat(monitorProducts)
+                    .Concat(casesProducts), ct);
+                await db.SaveChangesAsync(ct);
             }
         }
     }

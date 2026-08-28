@@ -1,6 +1,7 @@
 ﻿using Solomonlol.EcommerseApi.Models.Base;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Solomonlol.EcommerseApi.Models.Dto
 {
@@ -13,7 +14,7 @@ namespace Solomonlol.EcommerseApi.Models.Dto
 
         [Required]
         public int CategoryId { get; set; }
-
+        [JsonIgnore]
         [ForeignKey(nameof(CategoryId))]
         public Category Category { get; set; } = null!;
     }
