@@ -40,7 +40,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 var result = await service.Delete(name, ct);
                 return result.IsSuccess 
                     ? Results.NoContent() 
-                    : Results.Conflict(result.Error);
+                    : Results.NotFound(result.Error);
             });
         }
     }

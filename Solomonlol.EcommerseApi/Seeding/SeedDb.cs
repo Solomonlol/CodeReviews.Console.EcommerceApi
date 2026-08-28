@@ -11,14 +11,9 @@ namespace Solomonlol.EcommerseApi.Seeding
 
             var db = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
             await db.Database.MigrateAsync(ct);
-            
-            List<Task> seedList = new List<Task>()
-            {
-                SeedCategory(db, ct),
-                SeedProduct(db,ct)
-            };
-            await Task.WhenAll(seedList);
-            
+
+            await SeedCategory(db, ct);
+            await SeedProduct(db, ct);
         }
 
         private static async Task SeedCategory(ApplicationContext db, CancellationToken ct)

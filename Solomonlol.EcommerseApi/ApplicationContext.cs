@@ -20,7 +20,8 @@ namespace Solomonlol.EcommerseApi
             modelBuilder.Entity<Product>()
                 .HasOne(c => c.Category)
                 .WithMany(p => p.Products)
-                .HasForeignKey(p => p.CategoryId);
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Product>()
                 .HasQueryFilter(p => !p.IsDeleted);
             modelBuilder.Entity<Product>()

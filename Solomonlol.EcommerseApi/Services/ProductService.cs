@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Solomonlol.EcommerseApi.Interfaces;
+using Solomonlol.EcommerseApi.Models.Base;
 using Solomonlol.EcommerseApi.Models.Dto;
 using Solomonlol.EcommerseApi.MyResults;
 
@@ -21,8 +22,8 @@ namespace Solomonlol.EcommerseApi.Services
             var product = await _db.Products.FirstOrDefaultAsync(p => p.Name == item.Name, ct);
             if (product == null)
             {
-                _mapper.Map(item, product);
-                await _db.Products.AddAsync(product, ct);
+                var createdProduct =_mapper.Map<Product>(item);
+                await _db.Products.AddAsync(createdProduct, ct);
                 return await _db.SaveChangesAsync(ct)>0 
                     ? Result.Success(item) 
                     : Result.Failure("Cannot save changes to database.");
@@ -35,7 +36,8 @@ namespace Solomonlol.EcommerseApi.Services
             var product = await _db.Products.FirstOrDefaultAsync(p => p.Name == name, ct);
             if (product != null)
             {
-                _db.Products.Remove(product);
+                product.IsDeleted = true;
+                _db.Products.Update(product);
                 return await _db.SaveChangesAsync(ct) > 0
                     ? Result.Success(name)
                     : Result.Failure("Cannot save changes to database.");
@@ -46,7 +48,7 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result<ProductDto>> Get(string name, CancellationToken ct = default)
         {
-            var product = await _db.Products.FirstOrDefaultAsync(p => p.Name == name && !p.IsDeleted, ct);
+            var product = await _db.Products.FirstOrDefaultAsync(p => p.Name == name, ct);
             
             return product != null
                 ? Result<ProductDto>.Success(_mapper.Map<ProductDto>(product)) 
