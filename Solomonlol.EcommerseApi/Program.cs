@@ -45,6 +45,7 @@ app.MapCategoryEndpoint();
 app.MapProductEndpoints();
 app.MapUserEndpoinds();
 
+
 await app.SeedAll();
 
 await app.RunAsync();

@@ -1,20 +1,24 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Solomonlol.EcommerseApi.Models.Base;
 
 namespace Solomonlol.EcommerseApi.Seeding
 {
     public static class SeedDb
     {
+        
         public static async Task SeedAll(this WebApplication app, CancellationToken ct = default)
         {
             using var scope = app.Services.CreateAsyncScope();
 
             var db = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+            var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher<User>>();
             await db.Database.EnsureDeletedAsync(ct);
             await db.Database.MigrateAsync(ct);
 
             await SeedCategory(db, ct);
             await SeedProduct(db, ct);
+            await SeedUser(db, hasher, ct);
         }
 
         private static async Task SeedCategory(ApplicationContext db, CancellationToken ct)
@@ -39,6 +43,30 @@ namespace Solomonlol.EcommerseApi.Seeding
                 };
 
                 await db.Categories.AddRangeAsync(categories, ct);
+                await db.SaveChangesAsync(ct);
+            }
+        }
+
+        private static async Task SeedUser(ApplicationContext db, IPasswordHasher<User> passwordHasher, CancellationToken ct)
+        {
+            var password = "Password123";
+            if (!await db.Categories.AnyAsync(ct))
+            {
+                var users = new List<User>()
+                {
+                    new() { Login="First", FirstName="Alexey", LastName="Gorin", PhoneNumber = "+123 12 1234567" },
+                    new() { Login="Second", FirstName="Natalia", LastName="Nekrasova", PhoneNumber = "+123 12 2234567" },
+                    new() { Login="Third", FirstName="Vasiliy", LastName="Gromov", PhoneNumber = "+123 12 3234567" },
+                    new() { Login="Fourth", FirstName="Evgeniy", LastName="Petrov", PhoneNumber = "+123 12 4234567" },
+                    new() { Login="Fifth", FirstName="Alexander", LastName="Pushnoy", PhoneNumber = "+123 12 5234567" },
+                };
+                foreach (var user in users)
+                {
+                    user.PasswordHash = passwordHasher.HashPassword(user, password);
+                    user.Email = $"{user.Login}" + "@gmail.com";
+                }
+
+                await db.Users.AddRangeAsync(users, ct);
                 await db.SaveChangesAsync(ct);
             }
         }
