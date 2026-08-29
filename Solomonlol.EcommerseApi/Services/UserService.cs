@@ -86,9 +86,23 @@ namespace Solomonlol.EcommerseApi.Services
             return Result<PagedResult<UserDto>>.Success(pageResult);
         }
 
-        public Task<Result> Update(UserDto item, CancellationToken ct = default)
+        public async Task<Result> Update(string login, string password, UserDto item, CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            var userCheck = await _db.Users.FirstOrDefaultAsync(u => u.Login == login, ct);
+            if (userCheck != null)
+            {
+                var passwordCheck = _passwordHasher.VerifyHashedPassword(userCheck, userCheck.PasswordHash, password);
+                if (passwordCheck == PasswordVerificationResult.Success)
+                {
+                    var updatedUser = _mapper.Map<User>(item);
+                    _db.Users.Update(updatedUser);
+                    return await _db.SaveChangesAsync(ct) > 0 
+                        ? Result.Success(item) 
+                        : Result.Failure("Cannot save changes to database");
+                }
+                else return Result.Failure("Incorrect password.");
+            }
+            else return Result.Failure("User was not found.");
         }
     }
 }

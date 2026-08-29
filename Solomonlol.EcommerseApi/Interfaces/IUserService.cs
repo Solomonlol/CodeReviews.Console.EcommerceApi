@@ -8,7 +8,7 @@ namespace Solomonlol.EcommerseApi.Interfaces
     {
         Task<Result> Create(UserDtoCreation item, CancellationToken ct = default);
         Task<Result> Delete(string login, string password, CancellationToken ct = default);
-        Task<Result> Update(UserDto item, CancellationToken ct = default);
+        Task<Result> Update(string login, string password, UserDto item, CancellationToken ct = default);
         Task<Result<UserDto>> Get(string login, CancellationToken ct=default);
         Task<Result<PagedResult<UserDto>>> GetAll(int page = 1, int pageSize = 5, CancellationToken ct = default);
     }
