@@ -19,7 +19,7 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result> Create(ProductDto item, CancellationToken ct = default)
         {
-            var product = await _db.Products.FirstOrDefaultAsync(p => p.Name == item.Name, ct);
+            var product = await _db.Products.FirstOrDefaultAsync(p => p.Name.Trim().ToLower() == item.Name.Trim().ToLower(), ct);
             if (product == null)
             {
                 var createdProduct =_mapper.Map<Product>(item);
@@ -33,7 +33,7 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result> Delete(string name, CancellationToken ct = default)
         {
-            var product = await _db.Products.FirstOrDefaultAsync(p => p.Name == name, ct);
+            var product = await _db.Products.FirstOrDefaultAsync(p => p.Name.Trim().ToLower() == name.Trim().ToLower(), ct);
             if (product != null)
             {
                 product.IsDeleted = true;
@@ -48,7 +48,7 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result<ProductDto>> Get(string name, CancellationToken ct = default)
         {
-            var product = await _db.Products.FirstOrDefaultAsync(p => p.Name == name, ct);
+            var product = await _db.Products.Include(p=>p.Category).FirstOrDefaultAsync(p => p.Name.Trim().ToLower() == name.Trim().ToLower(), ct);
             
             return product != null
                 ? Result<ProductDto>.Success(_mapper.Map<ProductDto>(product)) 
@@ -60,8 +60,8 @@ namespace Solomonlol.EcommerseApi.Services
             var totalCount = await _db.Products.CountAsync(ct);
 
             var list = await _db.Products
-                .OrderBy(c => c.Name)
-                .Include(c=>c.Category)
+                .OrderBy(p => p.Name)
+                .Include(p=>p.Category)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync(ct);
@@ -79,7 +79,7 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result> Update(string name, ProductDto item, CancellationToken ct = default)
         {
-            var product = await _db.Products.FirstOrDefaultAsync(p => p.Name == name, ct);
+            var product = await _db.Products.Include(p=>p.Category).FirstOrDefaultAsync(p => p.Name.Trim().ToLower() == name.Trim().ToLower(), ct);
             if (product != null)
             {
                 _mapper.Map(item, product);

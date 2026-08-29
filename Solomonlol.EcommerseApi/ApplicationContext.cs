@@ -47,7 +47,8 @@ namespace Solomonlol.EcommerseApi
             modelBuilder.Entity<User>()
                 .HasIndex(u=>u.Login)
                 .IsUnique();
-
+            modelBuilder.Entity<User>()
+                .HasQueryFilter(u => !u.IsDeleted);
         }
     }
 }

@@ -20,6 +20,7 @@ namespace Solomonlol.EcommerseApi.Models.Dto
         }
 
         [Required]
+        [JsonIgnore]
         public int CategoryId { get; set; }
         [JsonIgnore]
         [ForeignKey(nameof(CategoryId))]

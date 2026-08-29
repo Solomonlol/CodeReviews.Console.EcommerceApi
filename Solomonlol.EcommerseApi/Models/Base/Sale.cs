@@ -8,7 +8,18 @@ namespace Solomonlol.EcommerseApi.Models.Base
         [Key]
         public int Id { get; set; }
         [Column(TypeName = "decimal(18,2)")]
-        public decimal TotalPrice { get; set; }
+        public decimal TotalPrice
+        {
+            get
+            {
+                decimal total = 0;
+                foreach (var item in SaleItems)
+                {
+                    total += item.UnitPrice * item.Quantity;
+                }
+                return total;
+            }
+        }
         public DateTime CreatedAt { get; set; }
         public int UserId { get; set; }
         [ForeignKey(nameof(UserId))]

@@ -1,15 +1,19 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Solomonlol.EcommerseApi;
 using Solomonlol.EcommerseApi.Endpoints;
 using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Mapping;
+using Solomonlol.EcommerseApi.Models.Base;
 using Solomonlol.EcommerseApi.Seeding;
 using Solomonlol.EcommerseApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("MSSQLServer");
+
+builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
                             options.UseSqlServer(connectionString));
@@ -29,6 +33,7 @@ builder.Services.AddAutoMapper(cfg =>
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
@@ -38,6 +43,8 @@ app.UseSwaggerUI();
 
 app.MapCategoryEndpoint();
 app.MapProductEndpoints();
+app.MapUserEndpoinds();
+
 await app.SeedAll();
 
 await app.RunAsync();

@@ -10,6 +10,7 @@ namespace Solomonlol.EcommerseApi.Seeding
             using var scope = app.Services.CreateAsyncScope();
 
             var db = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+            await db.Database.EnsureDeletedAsync(ct);
             await db.Database.MigrateAsync(ct);
 
             await SeedCategory(db, ct);
@@ -235,14 +236,177 @@ namespace Solomonlol.EcommerseApi.Seeding
                         Description="Supports AMD Ryzen 9000, 8000, and 7000 series processors. 24+2+1 power phases, 110A SPS. Supports dual-channel mode, up to 8200+ (OC).",
                         IsDeleted=false, Price = 700m },
                 };
-                
+                var fanProducts = new List<Product>
+                {
+                    new() { Name="Zalman CNPS13X Black",
+                        CategoryId=8,
+                        Description="Unlike traditional cooling fans, the specially designed Zalman AF120 Annular Fan—featuring \"shark fin\" blades—minimizes airflow resistance, thereby reducing operating noise. Its hydrodynamic bearing operates without metal-to-metal contact, utilizing a lubricating film instead of a traditional bearing mechanism. This design ensures low noise levels, low operating temperatures, and shock resistance, making it a highly reliable and durable component.",
+                        IsDeleted=false, Price = 30m },
+                    new() { Name="ADATA XPG Levante II 240",
+                        CategoryId=8,
+                        Description="A liquid CPU cooling system featuring a 240mm radiator, two 120mm fans, and support for modern Intel and AMD processors. It efficiently dissipates up to 300W of heat and is equipped with ARGB lighting and a quiet fluid dynamic bearing. Its 276mm radiator length and slim profile make it suitable for compact cases.",
+                        IsDeleted=false, Price = 100m },
+                    new() { Name="Arctic Liquid Freezer III Pro 360",
+                        CategoryId=8,
+                        Description="The ARCTIC Liquid Freezer III Pro 360 is a high-performance liquid CPU cooling system featuring a 398 mm radiator and three 120 mm P12 Pro fans. This new version comes with an improved 38 mm thick radiator, ensuring efficient cooling even under high thermal loads.",
+                        IsDeleted=false, Price = 120m },
+                    new() { Name="ID-Cooling DX360 Max Black",
+                        CategoryId=8,
+                        Description="The ID-COOLING DX360 MAX is a high-performance liquid cooling system for processors with a TDP of up to 350W. The model features a 400×120×38 mm aluminum radiator and three 120 mm fans, delivering a maximum airflow of up to 85 CFM with a noise level of up to 32.5 dB.",
+                        IsDeleted=false, Price = 65m },
+                    new() { Name="Noctua NH-D15 G2",
+                        CategoryId=8,
+                        Description="The Noctua NH-D15 G2 is the second generation of the iconic tower-style CPU cooler, featuring improvements over the original NH-D15 model. This new version is equipped with two upgraded NF-A14x25r G2 PWM fans, asymmetrical heatsink towers, and an increased number of heat pipes, delivering even more efficient and quiet cooling—even for powerful modern processors.",
+                        IsDeleted=false, Price = 150m },
+                };
+                var mouseProducts = new List<Product>
+                {
+                    new() { Name="Lenovo Yoga Pro",
+                        CategoryId=9,
+                        Description="A full-sized wireless mouse designed for comfort and style, featuring the signature Yoga series aesthetic. Its ergonomic body, with soft-touch side grips, ensures comfortable use even during extended work sessions.",
+                        IsDeleted=false, Price = 40m },
+                    new() { Name="Logitech M350 Pebble",
+                        CategoryId=9,
+                        Description=string.Empty,
+                        IsDeleted=false, Price = 15m },
+                    new() { Name="A4Tech Bloody V8M Max",
+                        CategoryId=9,
+                        Description="Equipped with a professional-grade sensor featuring 12,000 CPI, 8,000 FPS, 250 IPS, and 35G acceleration, the mouse delivers the precision and control needed for fast-paced gaming, such as FPS titles.",
+                        IsDeleted=false, Price = 20m },
+                    new() { Name="Logitech G304 Lightspeed",
+                        CategoryId=9,
+                        Description="The Logitech G304 wireless gaming mouse features LIGHTSPEED technology, delivering a 1ms response time that rivals wired solutions in speed.",
+                        IsDeleted=false, Price = 30m },
+                    new() { Name="Logitech Pro X Superlight 2",
+                        CategoryId=9,
+                        Description="High battery life; holds a charge for up to a month and a half with daily use.",
+                        IsDeleted=false, Price = 140m },
+                    new() { Name="Razer Naga V2 Pro",
+                        CategoryId=9,
+                        Description="Full-size gaming mouse; wired (USB Type-C), wireless (Bluetooth), and wireless (RF) connectivity; 30,000 DPI optical sensor; 9 buttons; tilt-click scroll wheel; black.",
+                        IsDeleted=false, Price = 280m },
+                };
+                var keyboardProducts = new List<Product>
+                {
+                    new() { Name="Keychron K10 HE Standart Version Black K10H-J1-RU (Nebula Magnetic)",
+                        CategoryId=9,
+                        Description="Standard, magnetic, Gateron Magnetic Nebula 2.0, linear travel, all-metal, connectivity: USB-A/wireless (USB-A)/Bluetooth, backlight, with Cyrillic characters, black.",
+                        IsDeleted=false, Price = 200m },
+                    new() { Name="Lenovo Legion K310 RGB",
+                        CategoryId=9,
+                        Description="A full-sized gaming keyboard that offers the user all the features necessary for comfortable work and effective gaming. The keyboard is equipped with membrane switches that ensure quiet keystrokes and rapid response times, making it suitable for both long gaming sessions and office work.",
+                        IsDeleted=false, Price = 40m },
+                    new() { Name="Samsung Smart Keyboard",
+                        CategoryId=9,
+                        Description="Compact, scissor-switch, all-metal, Bluetooth connectivity, Cyrillic layout, black.",
+                        IsDeleted=false, Price = 90m },
+                    new() { Name="A4Tech KV-300H",
+                        CategoryId=9,
+                        Description="Standard, scissor-switch, plastic, USB-A connection, with Cyrillic characters, USB hub, gray.",
+                        IsDeleted=false, Price = 30m },
+                    new() { Name="Logitech Corded Keyboard K280e",
+                        CategoryId=9,
+                        Description="Multimedia, membrane, plastic, USB-A interface, with Cyrillic characters, moisture-resistant, black.",
+                        IsDeleted=false, Price = 25m },
+                    new() { Name="Razer Huntsman V2 Analog",
+                        CategoryId=9,
+                        Description="Gaming, optical, Razer Analog Optical Switch, metal top plate, USB-A interface, lighting, no Cyrillic characters, USB hub, black",
+                        IsDeleted=false, Price = 250m },
+                };
+                var laptopProducts = new List<Product>
+                {
+                    new() { Name="Lenovo Legion 5 15AHP10",
+                        CategoryId=10,
+                        Description="15.1\" 2560x1600, OLED, 165 Hz, AMD Ryzen 7 260, 16 GB DDR5, 512 GB SSD, NVIDIA GeForce RTX 5060 8 GB (TGP 115 W), no OS, black lid, 80 Wh battery",
+                        IsDeleted=false, Price = 2000m },
+                    new() { Name="Lenovo IdeaPad Slim 3 15IRH10",
+                        CategoryId=10,
+                        Description="15.3\" 1920x1200, IPS, 60 Hz, Intel Core i7-13620H, 16 GB DDR5, 1024 GB SSD, no OS, gray lid, 50 Wh battery",
+                        IsDeleted=false, Price = 1000m },
+                    new() { Name="ASUS ROG Strix G16 2025 G614FR-S5022W",
+                        CategoryId=10,
+                        Description="A powerful gaming laptop designed for modern games, streaming, and resource-intensive creative tasks. Higher-end configurations feature an AMD Ryzen 9 processor and an NVIDIA GeForce RTX 5080 laptop GPU, and run on Windows 11 Pro.",
+                        IsDeleted=false, Price = 3000m },
+                    new() { Name="Acer Aspire Lite 16 AL16-54P-52AL",
+                        CategoryId=10,
+                        Description="16.0\" 1920x1200, IPS, 60 Hz, Intel Core 5 120U, 16 GB DDR5, 512 GB SSD, Windows 11 Home, silver lid, 58 Wh battery",
+                        IsDeleted=false, Price = 900m },
+                    new() { Name="Apple MacBook Neo 13\" A18 Pro 2026 MHFH4",
+                        CategoryId=10,
+                        Description="A compact and affordable Apple laptop designed for everyday work, study, and multimedia. It features a 13-inch Liquid Retina display with a resolution of 2408 x 1506 pixels, brightness of up to 500 nits, and support for 1 billion colors, ensuring crisp images and natural color reproduction when working with text, photos, and video. Its lightweight aluminum body weighs approximately 1.23 kg, making it convenient to carry around.",
+                        IsDeleted=false, Price = 900m },
+                    new() { Name="Acer Nitro V 15 ANV15-52-57BB",
+                        CategoryId=10,
+                        Description="15.6\" 1920x1080, IPS, 165 Hz, Intel Core i5-13420H, 16 GB DDR4, 512 GB SSD, NVIDIA GeForce RTX 5050 8 GB (TGP 75 W), Windows 11 Home, black lid, 76 Wh battery",
+                        IsDeleted=false, Price = 1200m },
+                };
+                var ssdProducts = new List<Product>
+                {
+                    new() { Name="ADATA Legend 900 Pro 1TB SLEG-900P-1TCS",
+                        CategoryId=11,
+                        Description="The LEGEND 900 PRO is built on the modern PCIe Gen4 x4 interface and fully complies with the NVMe 1.4 standard, ensuring compatibility with the latest Intel and AMD platforms. This makes it an excellent tool for those working with graphics, 3D animation, and other resource-intensive tasks. The device is ideal for both professionals and enthusiasts looking to bring their most ambitious creative projects to life.",
+                        IsDeleted=false, Price = 220m },
+                    new() { Name="Patriot P300 512GB P300P512GM28",
+                        CategoryId=11,
+                        Description="512 GB, M.2 2280, PCI Express 3.0 x4, 3D TLC NAND chips, sequential access: 1700/1100 MB/s, random access: 290,000/260,000 IOPS",
+                        IsDeleted=false, Price = 100m },
+                    new() { Name="Kingston A400 240GB SA400S37/240G",
+                        CategoryId=11,
+                        Description="The SLC cache ensures high write speeds—until the buffer is exhausted—during everyday tasks.",
+                        IsDeleted=false, Price = 80m },
+                    new() { Name="Kingston KC3000 1TB SKC3000S/1024G",
+                        CategoryId=11,
+                        Description="1 TB, M.2 2280, PCI Express 4.0 x4, Phison PS5018-E18 controller, 3D TLC NAND chips, sequential access: 7000/6000 MB/s, random access: 900,000/1,000,000 IOPS, PS5 compatibility",
+                        IsDeleted=false, Price = 300m },
+                    new() { Name="Samsung 990 Pro 1TB MZ-V9P1T0BW",
+                        CategoryId=11,
+                        Description="1 TB, M.2 2280, PCI Express 4.0 x4, Samsung Pascal controller, 3D TLC NAND chips, sequential access: 7450/6900 MB/s, random access: 1,200,000/1,550,000 IOPS, PS5 compatibility",
+                        IsDeleted=false, Price = 300m },
+                    new() { Name="Samsung 9100 Pro 4TB MZ-VAP4T0BW",
+                        CategoryId=11,
+                        Description="4 TB, M.2 2280, PCI Express 5.0 x4, Samsung Presto S4LY027 controller, 3D TLC NAND chips, sequential access: 14,800/13,400 MB/s, random access: 2,200,000/2,600,000 IOPS, PS5 compatibility",
+                        IsDeleted=false, Price = 1200m },
+                };
+                var hddProducts = new List<Product>
+                {
+                    new() { Name="WD Purple 1TB [WD10PURZ]",
+                        CategoryId=12,
+                        Description="3.5\", SATA 3.0 (6Gbps), 5400 rpm, 64 MB buffer, CMR technology, air-filled",
+                        IsDeleted=false, Price = 150m },
+                    new() { Name="WD Red Plus 4TB WD40EFPX",
+                        CategoryId=12,
+                        Description="3.5\", SATA 3.0 (6Gbps), 5400 rpm, 256 MB buffer, CMR technology",
+                        IsDeleted=false, Price = 280m },
+                    new() { Name="Seagate IronWolf 4TB ST4000VN006",
+                        CategoryId=12,
+                        Description="3.5\", SATA 3.0 (6Gbps), 5400 rpm, 256 MB buffer, CMR technology, air-filled",
+                        IsDeleted=false, Price = 250m },
+                    new() { Name="SWD Red Plus 8TB WD80EFPX",
+                        CategoryId=12,
+                        Description="3.5\", SATA 3.0 (6Gbps), 5640 rpm, 256 MB buffer, CMR technology, air-filled",
+                        IsDeleted=false, Price = 500m },
+                    new() { Name="WD Caviar Blue 1TB (WD10EZEX)",
+                        CategoryId=12,
+                        Description="3.5\", SATA 3.0 (6Gbps), 7200 rpm, 64 MB buffer, linear speed 150/150 MB/s, CMR technology",
+                        IsDeleted=false, Price = 500m },
+                    new() { Name="Seagate Barracuda 2TB ST2000DM008",
+                        CategoryId=12,
+                        Description="C3.5\", SATA 3.0 (6Gbps), 7200 rpm, 256 MB buffer, SMR technology",
+                        IsDeleted=false, Price = 180m },
+                };
                 await db.Products.AddRangeAsync(cpuProducts
                     .Concat(gpuProducts)
                     .Concat(motherboardsProduct)
                     .Concat(ramProducts)
                     .Concat(headphoneProducts)
                     .Concat(monitorProducts)
-                    .Concat(casesProducts), ct);
+                    .Concat(casesProducts)
+                    .Concat(fanProducts)
+                    .Concat(mouseProducts)
+                    .Concat(keyboardProducts)
+                    .Concat(laptopProducts)
+                    .Concat(ssdProducts)
+                    .Concat(hddProducts), ct);
                 await db.SaveChangesAsync(ct);
             }
         }

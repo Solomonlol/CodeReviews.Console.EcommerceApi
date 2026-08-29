@@ -31,13 +31,13 @@ namespace Solomonlol.EcommerseApi.Endpoints
                     : Results.Conflict(result.Error);
             });
             //update
-            app.MapPut("api/v1/product/{name}", async (string name, ProductDto item, IProductService service, CancellationToken ct) =>
+            app.MapPut("api/v1/products/{name}", async (string name, ProductDto item, IProductService service, CancellationToken ct) =>
             {
                 var result = await service.Update(name, item, ct);
                 return result.IsSuccess ? Results.Ok() : Results.NotFound();
             });
 
-            app.MapDelete("api/v1/product/{name}", async (string name, IProductService service, CancellationToken ct) =>
+            app.MapDelete("api/v1/products/{name}", async (string name, IProductService service, CancellationToken ct) =>
             {
                 var result = await service.Delete(name, ct);
                 return result.IsSuccess 
