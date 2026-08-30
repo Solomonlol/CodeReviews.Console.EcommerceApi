@@ -50,7 +50,7 @@ namespace Solomonlol.EcommerseApi.Seeding
         private static async Task SeedUser(ApplicationContext db, IPasswordHasher<User> passwordHasher, CancellationToken ct)
         {
             var password = "Password123";
-            if (!await db.Categories.AnyAsync(ct))
+            if (!await db.Users.AnyAsync(ct))
             {
                 var users = new List<User>()
                 {

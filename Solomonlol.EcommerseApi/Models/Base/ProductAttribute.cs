@@ -12,7 +12,6 @@ namespace Solomonlol.EcommerseApi.Models.Base
         public Category Category { get; set; } = null!;
         public string Name { get; set; } = null!;
         public string? Unit { get; set; }
-        public bool IsRequired { get; set; }
         public ICollection<ProductAttributeValue> Values { get; set; } = [];
     }
 }

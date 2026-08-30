@@ -28,6 +28,12 @@ namespace Solomonlol.EcommerseApi
                 .HasIndex(p => p.Name)
                 .IsUnique();
 
+            modelBuilder.Entity<ProductAttribute>()
+                .HasOne(a => a.Category)
+                .WithMany(c => c.Attributes)
+                .HasForeignKey(a => a.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<ProductAttributeValue>()
                 .HasIndex(v => new { v.ProductId, v.ProductAttributeId })
                 .IsUnique();
