@@ -10,5 +10,6 @@ namespace Solomonlol.EcommerseApi.Interfaces
         Task<Result> Delete(string name, CancellationToken ct = default);
         Task<Result<CategoryDto>> Get(string name, CancellationToken ct = default);
         Task<Result<PagedResult<CategoryDto>>> GetAll(int page = 1, int pageSize=5, CancellationToken ct = default);
+        
     }
 }

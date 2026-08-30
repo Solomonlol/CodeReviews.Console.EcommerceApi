@@ -4,6 +4,7 @@ using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Models.Base;
 using Solomonlol.EcommerseApi.Models.Dto;
 using Solomonlol.EcommerseApi.MyResults;
+using System.ComponentModel.Design;
 
 namespace Solomonlol.EcommerseApi.Services
 {
@@ -16,6 +17,7 @@ namespace Solomonlol.EcommerseApi.Services
             _db = db;
             _mapper = mapper;
         }
+
 
         public async Task<Result> Create(CategoryDto item, CancellationToken ct = default)
         {

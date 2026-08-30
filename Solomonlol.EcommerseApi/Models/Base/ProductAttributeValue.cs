@@ -5,8 +5,6 @@ namespace Solomonlol.EcommerseApi.Models.Base
 {
     public class ProductAttributeValue
     {
-        [Key]
-        public int Id { get; set; }
         public int ProductId { get; set; }
 
         [ForeignKey(nameof(ProductId))]
