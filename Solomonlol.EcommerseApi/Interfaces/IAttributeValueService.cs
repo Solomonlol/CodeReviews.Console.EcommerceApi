@@ -5,8 +5,8 @@ namespace Solomonlol.EcommerseApi.Interfaces
 {
     public interface IAttributeValueService
     {
-        Task<Result> AddAttributeValue(ProductAttributeValueDto item, CancellationToken ct = default);
-        Task<Result> DeleteAttributeValue(int productId, int productAttributeId, CancellationToken ct = default);
-        Task<Result> UpdateAttributeValue(ProductAttributeValueDto item, CancellationToken ct = default);
+        Task<Result> AddAttributeValue(string productName, ProductAttributeValueDto item, CancellationToken ct = default);
+        Task<Result> DeleteAttributeValue(string productName, string productAttributeName, CancellationToken ct = default);
+        Task<Result> UpdateAttributeValue(string productName, string productAttributeName, ProductAttributeValueDto item, CancellationToken ct = default);
     }
 }

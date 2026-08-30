@@ -34,6 +34,8 @@ builder.Services.AddAutoMapper(cfg =>
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAttributeService, AttributeService>();
+builder.Services.AddScoped<IAttributeValueService, AttributeService>();
 
 var app = builder.Build();
 

@@ -16,9 +16,9 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 return Results.Ok(result.Value);
             });
             //get one
-            app.MapGet("api/v1/categories/{name}", async (string name, ICategoryService service, CancellationToken ct) =>
+            app.MapGet("api/v1/categories/{categoryName}", async (string categoryName, ICategoryService service, CancellationToken ct) =>
             {
-                var result = await service.Get(name, ct);
+                var result = await service.Get(categoryName, ct);
                 return result.IsSuccess 
                 ? Results.Ok(result.Value) 
                 : Results.NotFound(result?.Error);
@@ -32,20 +32,44 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 : Results.Conflict(result?.Error);
             });
             //update
-            app.MapPut("api/v1/categories/{name}", async (string name, CategoryDto category, ICategoryService service, CancellationToken ct) =>
+            app.MapPut("api/v1/categories/{categoryName}", async (string categoryName, CategoryDto category, ICategoryService service, CancellationToken ct) =>
             {
-                var result = await service.Update(name, category, ct);
+                var result = await service.Update(categoryName, category, ct);
                 return result.IsSuccess 
                 ? Results.Ok() 
                 : Results.NotFound(result?.Error);
             });
             //delete
-            app.MapDelete("api/v1/categories/{name}", async (string name, ICategoryService service, CancellationToken ct) =>
+            app.MapDelete("api/v1/categories/{categoryName}", async (string categoryName, ICategoryService service, CancellationToken ct) =>
             {
-                var result = await service.Delete(name, ct);
+                var result = await service.Delete(categoryName, ct);
                 return result.IsSuccess 
                 ? Results.NoContent() 
                 : Results.NotFound(result?.Error);
+            });
+            //add attribute
+            app.MapPost("api/v1/categories/{categoryName}/attributes", async (string categoryName, ProductAttributeDto attribute, IAttributeService service, CancellationToken ct) =>
+            {
+                var result = await service.AddAttribute(categoryName, attribute, ct);
+                return result.IsSuccess
+                ? Results.Created($"api/v1/categories/{categoryName}/attributes/{attribute.Name}", attribute)
+                : Results.Conflict(result?.Error);
+            });
+            //update attribute
+            app.MapPut("api/v1/categories/{categoryName}/attributes", async (string categoryName, ProductAttributeDto attribute, IAttributeService service, CancellationToken ct) =>
+            {
+                var result = await service.UpdateAttribute(categoryName, attribute, ct);
+                return result.IsSuccess
+                ? Results.Created($"api/v1/categories/{categoryName}/attributes/{attribute.Name}", attribute)
+                : Results.Conflict(result?.Error);
+            });
+            //delete attribute
+            app.MapDelete("api/v1/categories/{categoryName}/attributes", async (string categoryName, string attributeName, IAttributeService service, CancellationToken ct) =>
+            {
+                var result = await service.DeleteAttribute(categoryName, attributeName, ct);
+                return result.IsSuccess
+                ? Results.Created($"api/v1/categories/{categoryName}/attributes/{attributeName}", attributeName)
+                : Results.Conflict(result?.Error);
             });
         }
     }
