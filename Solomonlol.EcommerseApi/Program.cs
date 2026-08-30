@@ -45,7 +45,7 @@ app.UseSwaggerUI();
 
 app.MapCategoryEndpoint();
 app.MapProductEndpoints();
-app.MapUserEndpoinds();
+app.MapUserEndpoints();
 
 
 await app.SeedAll();

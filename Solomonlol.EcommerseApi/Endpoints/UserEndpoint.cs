@@ -5,7 +5,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
 {
     public static class UserEndpoint
     {
-        public static void MapUserEndpoinds(this WebApplication app)
+        public static void MapUserEndpoints(this WebApplication app)
         {
             //get one
             app.MapGet("api/v1/users/{login}", async (string login, IUserService service, CancellationToken ct) =>

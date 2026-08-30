@@ -27,14 +27,14 @@ namespace Solomonlol.EcommerseApi.Endpoints
             {
                 var result = await service.Create(item, ct);
                 return result.IsSuccess 
-                    ? Results.Created() 
+                    ? Results.Created($"api/v1/products/{item.Name}", item) 
                     : Results.Conflict(result.Error);
             });
             //update
             app.MapPut("api/v1/products/{productName}", async (string productName, ProductDto item, IProductService service, CancellationToken ct) =>
             {
                 var result = await service.Update(productName, item, ct);
-                return result.IsSuccess ? Results.Ok() : Results.NotFound();
+                return result.IsSuccess ? Results.Ok(item) : Results.NotFound();
             });
             //delete
             app.MapDelete("api/v1/products/{productName}", async (string productName, IProductService service, CancellationToken ct) =>
@@ -46,7 +46,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
             });
 
             //add attribute value
-            app.MapPost("api/v1/products/{productName}", async (string productName, ProductAttributeValueDto attribute, IAttributeValueService service, CancellationToken ct) =>
+            app.MapPost("api/v1/products/{productName}/attributes", async (string productName, ProductAttributeValueDto attribute, IAttributeValueService service, CancellationToken ct) =>
             {
                 var result = await service.AddAttributeValue(productName, attribute, ct);
                 return result.IsSuccess
@@ -58,7 +58,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
             {
                 var result = await service.UpdateAttributeValue(categoryName, attributeName, attribute, ct);
                 return result.IsSuccess
-                ? Results.Created($"api/v1/categories/{categoryName}/attributes", attribute)
+                ? Results.Ok(attribute)
                 : Results.Conflict(result?.Error);
             });
             //delete attribute value
@@ -66,8 +66,8 @@ namespace Solomonlol.EcommerseApi.Endpoints
             {
                 var result = await service.DeleteAttributeValue(categoryName, attributeName, ct);
                 return result.IsSuccess
-                ? Results.Created($"api/v1/categories/{categoryName}/attributes/{attributeName}", attributeName)
-                : Results.Conflict(result?.Error);
+                ? Results.NoContent()
+                : Results.NotFound(result.Error);
             });
         }
     }

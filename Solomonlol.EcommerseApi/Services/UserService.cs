@@ -88,14 +88,14 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result> Update(string login, string password, UserDto item, CancellationToken ct = default)
         {
-            var userCheck = await _db.Users.FirstOrDefaultAsync(u => u.Login == login, ct);
-            if (userCheck != null)
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Login == login, ct);
+            if (user != null)
             {
-                var passwordCheck = _passwordHasher.VerifyHashedPassword(userCheck, userCheck.PasswordHash, password);
+                var passwordCheck = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
                 if (passwordCheck == PasswordVerificationResult.Success)
                 {
-                    var updatedUser = _mapper.Map<User>(item);
-                    _db.Users.Update(updatedUser);
+                    _mapper.Map(item, user);
+                    _db.Users.Update(user);
                     return await _db.SaveChangesAsync(ct) > 0 
                         ? Result.Success(item) 
                         : Result.Failure("Cannot save changes to database");

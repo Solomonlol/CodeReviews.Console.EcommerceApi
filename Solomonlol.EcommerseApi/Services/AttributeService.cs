@@ -58,6 +58,7 @@ namespace Solomonlol.EcommerseApi.Services
                 var attribute = await _db.ProductAttributes.FindAsync(item.Id, ct);
                 if (attribute != null)
                 {
+                    _mapper.Map(item, attribute);
                     _db.ProductAttributes.Update(attribute);
                     return await _db.SaveChangesAsync(ct) > 0 
                         ? Result.Success(item) 
@@ -129,13 +130,13 @@ namespace Solomonlol.EcommerseApi.Services
             if (productAttributeCheck == null)
                 return Result.Failure($"Attribute with name '{productAttributeName}' in product '{productName}' was not found.");
 
-            var valueCheck = await _db.ProductAttributeValues
+            var value = await _db.ProductAttributeValues
                 .FirstOrDefaultAsync(a =>
                 a.ProductAttributeId == item.ProductAttributeId &&
                 a.ProductId == item.ProductId, ct);
-            if(valueCheck!=null)
+            if(value!=null)
             {
-                var value = _mapper.Map<ProductAttributeValue>(item);
+                _mapper.Map(item, value);
                 _db.ProductAttributeValues.Update(value);
                 return await _db.SaveChangesAsync(ct) > 0
                     ? Result.Success()

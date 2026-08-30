@@ -60,7 +60,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
             {
                 var result = await service.UpdateAttribute(categoryName, attribute, ct);
                 return result.IsSuccess
-                ? Results.Created($"api/v1/categories/{categoryName}/attributes/{attribute.Name}", attribute)
+                ? Results.Ok()
                 : Results.Conflict(result?.Error);
             });
             //delete attribute
@@ -68,8 +68,8 @@ namespace Solomonlol.EcommerseApi.Endpoints
             {
                 var result = await service.DeleteAttribute(categoryName, attributeName, ct);
                 return result.IsSuccess
-                ? Results.Created($"api/v1/categories/{categoryName}/attributes/{attributeName}", attributeName)
-                : Results.Conflict(result?.Error);
+                ? Results.NoContent()
+                : Results.NotFound();
             });
         }
     }
