@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Solomonlol.EcommerseApi;
 
@@ -11,9 +12,11 @@ using Solomonlol.EcommerseApi;
 namespace Solomonlol.EcommerseApi.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20260831100814_ChangeDatabase")]
+    partial class ChangeDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,7 +46,7 @@ namespace Solomonlol.EcommerseApi.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Solomonlol.EcommerseApi.Models.Base.Product", b =>
@@ -77,7 +80,7 @@ namespace Solomonlol.EcommerseApi.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Solomonlol.EcommerseApi.Models.Base.ProductAttribute", b =>
@@ -103,7 +106,7 @@ namespace Solomonlol.EcommerseApi.Migrations
                     b.HasIndex("CategoryId", "Name")
                         .IsUnique();
 
-                    b.ToTable("ProductAttributes", (string)null);
+                    b.ToTable("ProductAttributes");
                 });
 
             modelBuilder.Entity("Solomonlol.EcommerseApi.Models.Base.ProductAttributeValue", b =>
@@ -122,7 +125,7 @@ namespace Solomonlol.EcommerseApi.Migrations
 
                     b.HasIndex("ProductAttributeId");
 
-                    b.ToTable("ProductAttributeValues", (string)null);
+                    b.ToTable("ProductAttributeValues");
                 });
 
             modelBuilder.Entity("Solomonlol.EcommerseApi.Models.Base.Sale", b =>
@@ -143,7 +146,7 @@ namespace Solomonlol.EcommerseApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Sales", (string)null);
+                    b.ToTable("Sales");
                 });
 
             modelBuilder.Entity("Solomonlol.EcommerseApi.Models.Base.SaleItem", b =>
@@ -164,7 +167,7 @@ namespace Solomonlol.EcommerseApi.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("SaleItems", (string)null);
+                    b.ToTable("SaleItems");
                 });
 
             modelBuilder.Entity("Solomonlol.EcommerseApi.Models.Base.User", b =>
@@ -209,7 +212,7 @@ namespace Solomonlol.EcommerseApi.Migrations
                     b.HasIndex("Login")
                         .IsUnique();
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Solomonlol.EcommerseApi.Models.Base.Product", b =>

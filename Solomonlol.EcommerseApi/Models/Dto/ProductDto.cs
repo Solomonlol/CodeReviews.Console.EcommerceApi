@@ -18,11 +18,18 @@ namespace Solomonlol.EcommerseApi.Models.Dto
                 return Category.Name;
             }
         }
-
+        public ICollection<ProductAttribute> Attributes
+        {
+            get
+            {
+                return Category.Attributes;
+            }
+        }
         [Required]
         public int CategoryId { get; set; }
         [JsonIgnore]
         [ForeignKey(nameof(CategoryId))]
         public Category Category { get; set; } = null!;
+
     }
 }

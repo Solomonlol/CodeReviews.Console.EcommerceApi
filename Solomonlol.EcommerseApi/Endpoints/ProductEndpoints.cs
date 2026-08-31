@@ -54,17 +54,17 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 : Results.Conflict(result?.Error);
             });
             //update attribute value
-            app.MapPut("api/v1/products/{categoryName}/{attributeName}", async (string categoryName, string attributeName, ProductAttributeValueDto attribute, IAttributeValueService service, CancellationToken ct) =>
+            app.MapPut("api/v1/products/{productName}/attributes", async (string productName, string attributeName, ProductAttributeValueDto attribute, IAttributeValueService service, CancellationToken ct) =>
             {
-                var result = await service.UpdateAttributeValue(categoryName, attributeName, attribute, ct);
+                var result = await service.UpdateAttributeValue(productName, attributeName, attribute, ct);
                 return result.IsSuccess
                 ? Results.Ok(attribute)
                 : Results.Conflict(result?.Error);
             });
             //delete attribute value
-            app.MapDelete("api/v1/products/{categoryName}/{attributeName}", async (string categoryName, string attributeName, IAttributeValueService service, CancellationToken ct) =>
+            app.MapDelete("api/v1/products/{productName}/attributes", async (string productName, string attributeName, IAttributeValueService service, CancellationToken ct) =>
             {
-                var result = await service.DeleteAttributeValue(categoryName, attributeName, ct);
+                var result = await service.DeleteAttributeValue(productName, attributeName, ct);
                 return result.IsSuccess
                 ? Results.NoContent()
                 : Results.NotFound(result.Error);

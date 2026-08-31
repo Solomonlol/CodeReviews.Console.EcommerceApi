@@ -48,7 +48,10 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result<ProductDto>> Get(string name, CancellationToken ct = default)
         {
-            var product = await _db.Products.Include(p=>p.Category).FirstOrDefaultAsync(p => p.Name.Trim().ToLower() == name.Trim().ToLower(), ct);
+            var product = await _db.Products
+                .Include(p=>p.Category)
+                .ThenInclude(a=>a.Attributes)
+                .FirstOrDefaultAsync(p => p.Name.Trim().ToLower() == name.Trim().ToLower(), ct);
             
             return product != null
                 ? Result<ProductDto>.Success(_mapper.Map<ProductDto>(product)) 
