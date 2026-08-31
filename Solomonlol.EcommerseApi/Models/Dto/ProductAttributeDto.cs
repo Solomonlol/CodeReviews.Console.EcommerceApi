@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Solomonlol.EcommerseApi.Models.Base;
+﻿using Solomonlol.EcommerseApi.Models.Base;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace Solomonlol.EcommerseApi.Models.Dto
 {
@@ -12,6 +9,7 @@ namespace Solomonlol.EcommerseApi.Models.Dto
         public int Id { get; set; }
         [Required]
         public int CategoryId { get; set; }
+        public Category Category { get; set; } = null!;
         [Required]
         public string Name { get; set; } = null!;
         public string? Unit { get; set; }

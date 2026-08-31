@@ -7,24 +7,13 @@ namespace Solomonlol.EcommerseApi.Models.Dto
 {
     public class ProductDto
     {
+        int Id { get; set; }
         public string Name { get; set; } = null!;
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
         public string? Description { get; set; }
-        public string CategoryName
-        {
-            get
-            {
-                return Category.Name;
-            }
-        }
-        public ICollection<ProductAttribute> Attributes
-        {
-            get
-            {
-                return Category.Attributes;
-            }
-        }
+        public string CategoryName { get; set; }
+        public IEnumerable<ProductAttributeDisplayDto> Attributes { get; set; } = [];
         [Required]
         public int CategoryId { get; set; }
         [JsonIgnore]
