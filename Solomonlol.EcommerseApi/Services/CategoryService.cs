@@ -18,7 +18,6 @@ namespace Solomonlol.EcommerseApi.Services
             _mapper = mapper;
         }
 
-
         public async Task<Result> Create(CategoryDto item, CancellationToken ct = default)
         {
             var category = await _db.Categories.FirstOrDefaultAsync(c=>c.Name==item.Name, ct);

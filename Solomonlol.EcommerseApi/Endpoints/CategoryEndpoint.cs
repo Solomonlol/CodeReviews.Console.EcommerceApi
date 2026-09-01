@@ -56,9 +56,9 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 : Results.Conflict(result?.Error);
             });
             //update attribute
-            app.MapPut("api/v1/categories/{categoryName}/attributes", async (string categoryName, ProductAttributeDto attribute, IAttributeService service, CancellationToken ct) =>
+            app.MapPut("api/v1/categories/{categoryName}/attributes", async (string categoryName, string attributeName, ProductAttributeDto attribute, IAttributeService service, CancellationToken ct) =>
             {
-                var result = await service.UpdateAttribute(categoryName, attribute, ct);
+                var result = await service.UpdateAttribute(categoryName, attributeName, attribute, ct);
                 return result.IsSuccess
                 ? Results.Ok()
                 : Results.Conflict(result?.Error);

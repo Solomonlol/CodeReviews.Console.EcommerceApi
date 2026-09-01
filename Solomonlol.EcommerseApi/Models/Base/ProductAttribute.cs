@@ -7,9 +7,7 @@ namespace Solomonlol.EcommerseApi.Models.Base
     public class ProductAttribute
     {
         [Key]
-        [JsonIgnore]
         public int Id { get; set; }
-        [JsonIgnore]
         public int CategoryId { get; set; }
         [ForeignKey(nameof(CategoryId))]
         [JsonIgnore]

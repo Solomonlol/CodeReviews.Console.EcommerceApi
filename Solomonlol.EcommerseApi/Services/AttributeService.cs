@@ -26,6 +26,7 @@ namespace Solomonlol.EcommerseApi.Services
                 if (exists) return Result.Failure("Attribute with this name already exists");
 
                 var attribute = _mapper.Map<ProductAttribute>(item);
+                attribute.CategoryId = checkCategory.Id;
                 await _db.ProductAttributes.AddAsync(attribute, ct);
                 return await _db.SaveChangesAsync(ct) > 0
                     ? Result.Success(item)
@@ -50,12 +51,12 @@ namespace Solomonlol.EcommerseApi.Services
             }
             else return Result.Failure("Attribute was not found");
         }
-        public async Task<Result> UpdateAttribute(string categoryName, ProductAttributeDto item, CancellationToken ct = default)
+        public async Task<Result> UpdateAttribute(string categoryName, string attributeName, ProductAttributeDto item, CancellationToken ct = default)
         {
             var checkCategory = await _db.Categories.FirstOrDefaultAsync(c => c.Name == categoryName, ct);
             if (checkCategory != null)
             {
-                var attribute = await _db.ProductAttributes.FindAsync(item.Id, ct);
+                var attribute = await _db.ProductAttributes.FirstOrDefaultAsync(p=>p.Name== attributeName, ct);
                 if (attribute != null)
                 {
                     _mapper.Map(item, attribute);
@@ -119,7 +120,7 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result> UpdateAttributeValue(string productName, string productAttributeName, ProductAttributeValueDto item, CancellationToken ct = default)
         {
-            var productCheck = await _db.Products.FirstOrDefaultAsync(p => p.Name == productName, ct);
+            var productCheck = await _db.Products.FirstOrDefaultAsync(p => p.Name.Trim().ToLower() == productName.Trim().ToLower(), ct);
 
             if (productCheck == null)
                 return Result.Failure($"Product with name '{productName}' was not found.");

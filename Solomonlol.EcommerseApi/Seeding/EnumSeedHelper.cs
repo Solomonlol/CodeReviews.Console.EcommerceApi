@@ -4,8 +4,8 @@
     {
         public enum CategoryEnum
         {
-            GPU =1,
-            CPU,
+            CPU = 1,
+            GPU,
             Cases,
             RAM,
             Monitors,

@@ -52,6 +52,7 @@ namespace Solomonlol.EcommerseApi.Services
                 .Where(p => p.Name.Trim().ToLower() == name.Trim().ToLower())
                 .Select(p => new ProductDto
                 {
+                    Id = p.Id,
                     Name = p.Name,
                     Price = p.Price,
                     Description = p.Description,

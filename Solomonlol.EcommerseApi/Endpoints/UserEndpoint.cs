@@ -21,12 +21,6 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 var result = await service.GetAll(page, pageSize, ct);
                 return Results.Ok(result.Value);
             });
-            //delete
-            app.MapDelete("api/v1/users/{login}", async (string login, string password, IUserService service, CancellationToken ct) =>
-            {
-                var result = await service.Delete(login, password, ct);
-                return result.IsSuccess ? Results.NoContent() : Results.NotFound(result.Error);
-            });
             //create
             app.MapPost("api/v1/users", async (UserDtoCreation item, IUserService service, CancellationToken ct) =>
             {
@@ -42,6 +36,12 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 return result.IsSuccess 
                 ? Results.Ok(item) 
                 : Results.BadRequest(result.Error);
+            });
+            //delete
+            app.MapDelete("api/v1/users/{login}", async (string login, string password, IUserService service, CancellationToken ct) =>
+            {
+                var result = await service.Delete(login, password, ct);
+                return result.IsSuccess ? Results.NoContent() : Results.NotFound(result.Error);
             });
         }
     }
