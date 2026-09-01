@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace Solomonlol.EcommerseApi.Models.Dto
+namespace Solomonlol.EcommerseApi.Models.Dto.Product
 {
     public class ProductDto
     {

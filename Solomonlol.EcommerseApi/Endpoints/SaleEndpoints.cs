@@ -35,7 +35,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
             app.MapPost("api/v1/sales", async (Sale item, ISaleService service, CancellationToken ct) =>
             {
                 var result = await service.Create(item, ct);
-                return result.IsSuccess ? Results.Created($"api/v1/sales/{result.Value.UserId}", result.Value) : Results.Conflict(result.Error);
+                return result.IsSuccess ? Results.Created($"api/v1/sales/{result?.Value?.Id}", result?.Value) : Results.Conflict(result.Error);
             });
             //update
             app.MapPut("api/v1/sales", async (Sale item, ISaleService service, CancellationToken ct) =>

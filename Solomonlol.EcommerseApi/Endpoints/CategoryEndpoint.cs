@@ -1,5 +1,6 @@
 ﻿using Solomonlol.EcommerseApi.Interfaces;
-using Solomonlol.EcommerseApi.Models.Dto;
+using Solomonlol.EcommerseApi.Models.Dto.Category;
+using Solomonlol.EcommerseApi.Models.Dto.Product;
 
 namespace Solomonlol.EcommerseApi.Endpoints
 {

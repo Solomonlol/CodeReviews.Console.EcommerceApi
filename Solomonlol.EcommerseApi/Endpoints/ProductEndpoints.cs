@@ -1,5 +1,5 @@
 ﻿using Solomonlol.EcommerseApi.Interfaces;
-using Solomonlol.EcommerseApi.Models.Dto;
+using Solomonlol.EcommerseApi.Models.Dto.Product;
 using System.Runtime.CompilerServices;
 
 namespace Solomonlol.EcommerseApi.Endpoints

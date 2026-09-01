@@ -99,7 +99,7 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result> Update(Sale item, CancellationToken ct = default)
         {
-            var sale = await _db.Sales.FindAsync(item);
+            var sale = await _db.Sales.FindAsync(item.Id);
             if(sale!=null)
             {
                 _mapper.Map(item, sale);

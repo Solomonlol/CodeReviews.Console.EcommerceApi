@@ -6,7 +6,7 @@ namespace Solomonlol.EcommerseApi.Models.Base
     public class Sale
     {
         [Key]
-        public int? Id { get; set; } = null!;
+        public int Id { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalPrice { get; set; }
         public DateTime CreatedAt { get; set; }

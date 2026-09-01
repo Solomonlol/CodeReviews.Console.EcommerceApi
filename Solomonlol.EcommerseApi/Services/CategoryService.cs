@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Models.Base;
 using Solomonlol.EcommerseApi.Models.Dto;
+using Solomonlol.EcommerseApi.Models.Dto.Category;
 using Solomonlol.EcommerseApi.MyResults;
 using System.ComponentModel.Design;
 

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Models.Base;
-using Solomonlol.EcommerseApi.Models.Dto;
+using Solomonlol.EcommerseApi.Models.Dto.Product;
 using Solomonlol.EcommerseApi.MyResults;
 
 namespace Solomonlol.EcommerseApi.Services

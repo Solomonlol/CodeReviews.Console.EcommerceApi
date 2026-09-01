@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Solomonlol.EcommerseApi.Models.Dto
+namespace Solomonlol.EcommerseApi.Models.Dto.Category
 {
     public class CategoryDto
     {

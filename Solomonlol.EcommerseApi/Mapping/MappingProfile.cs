@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Solomonlol.EcommerseApi.Models.Base;
-using Solomonlol.EcommerseApi.Models.Dto;
+using Solomonlol.EcommerseApi.Models.Dto.Category;
+using Solomonlol.EcommerseApi.Models.Dto.Product;
+using Solomonlol.EcommerseApi.Models.Dto.User;
 
 namespace Solomonlol.EcommerseApi.Mapping
 {

@@ -1,7 +1,8 @@
 ﻿using Solomonlol.EcommerseApi.Models.Base;
+using Solomonlol.EcommerseApi.Models.Dto.Sale;
 using System.ComponentModel.DataAnnotations;
 
-namespace Solomonlol.EcommerseApi.Models.Dto
+namespace Solomonlol.EcommerseApi.Models.Dto.User
 {
     public class UserDto
     {
@@ -14,6 +15,6 @@ namespace Solomonlol.EcommerseApi.Models.Dto
         [Phone(ErrorMessage ="Can't validate phone number. Please check is it correct.")]
         [Required(ErrorMessage ="Phone number is required.")]
         public string PhoneNumber { get; set; } = null!;
-        public ICollection<Sale> Sales { get; set; } = [];
+        public ICollection<SaleDto> Sales { get; set; } = [];
     }
 }

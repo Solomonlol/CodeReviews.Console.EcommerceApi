@@ -1,4 +1,4 @@
-﻿using Solomonlol.EcommerseApi.Models.Dto;
+﻿using Solomonlol.EcommerseApi.Models.Dto.Product;
 using Solomonlol.EcommerseApi.MyResults;
 
 namespace Solomonlol.EcommerseApi.Interfaces
