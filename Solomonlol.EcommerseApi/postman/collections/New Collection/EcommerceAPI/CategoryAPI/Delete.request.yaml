@@ -1,0 +1,5 @@
+$kind: http-request
+url: http://localhost:5254/api/v1/categories/cpu
+method: DELETE
+settings: {}
+order: 3000

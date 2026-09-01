@@ -1,5 +1,6 @@
-﻿using Solomonlol.EcommerseApi.Models.Base;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Solomonlol.EcommerseApi.Models.Base;
+using Solomonlol.EcommerseApi.Models.Dto.Category;
 
 namespace Solomonlol.EcommerseApi.Models.Dto.Product
 {
@@ -9,7 +10,7 @@ namespace Solomonlol.EcommerseApi.Models.Dto.Product
         public int Id { get; set; }
         [Required]
         public int CategoryId { get; set; }
-        public Category Category { get; set; } = null!;
+        public CategoryDto Category { get; set; } = null!;
         [Required]
         public string Name { get; set; } = null!;
         public string? Unit { get; set; }

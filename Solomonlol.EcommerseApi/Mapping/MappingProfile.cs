@@ -2,6 +2,7 @@
 using Solomonlol.EcommerseApi.Models.Base;
 using Solomonlol.EcommerseApi.Models.Dto.Category;
 using Solomonlol.EcommerseApi.Models.Dto.Product;
+using Solomonlol.EcommerseApi.Models.Dto.Sale;
 using Solomonlol.EcommerseApi.Models.Dto.User;
 
 namespace Solomonlol.EcommerseApi.Mapping
@@ -42,6 +43,17 @@ namespace Solomonlol.EcommerseApi.Mapping
                 .ForMember(a => a.ProductId, d => d.Ignore())
                 .ForMember(a => a.ProductAttributeId, d => d.Ignore())
                 .ForMember(a => a.ProductAttribute, d => d.Ignore());
+
+            CreateMap<Sale, SaleDtoRequest>();
+            CreateMap<Sale, SaleDtoResponce>();
+            CreateMap<SaleDtoRequest, Sale>()
+                .ForMember(s => s.EndedAt, d => d.Ignore())
+                .ForMember(s => s.IsEnded, d => d.Ignore())
+                .ForMember(s => s.Id, d => d.Ignore())
+                .ForMember(s => s.User, s => s.Ignore());
+
+            CreateMap<SaleItem, SaleItemDto>();
+            CreateMap<SaleItemDto, SaleItem>();
         }
     }
 }

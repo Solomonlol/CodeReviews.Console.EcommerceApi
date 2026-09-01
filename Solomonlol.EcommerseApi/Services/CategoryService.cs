@@ -39,7 +39,8 @@ namespace Solomonlol.EcommerseApi.Services
             var category = await _db.Categories.FirstOrDefaultAsync(c => c.Name == name, ct);
             if (category != null)
             {
-                _db.Remove(category);
+                category.IsDeleted = true;
+                _db.Update(category);
                 return await _db.SaveChangesAsync(ct) > 0 
                     ? Result.Success(category) 
                     : Result.Failure("Cannot save changes to database");
@@ -57,9 +58,13 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result<PagedResult<CategoryDto>>> GetAll(int page=1, int pageSize =5, CancellationToken ct = default)
         {
-            var totalCount = await _db.Categories.CountAsync(ct);
+            var totalCount = await _db.Categories
+                .Where(c => c.IsDeleted == false)
+                .CountAsync(ct);
+
             var list = await _db.Categories
                 .OrderBy(c=>c.Name)
+                .Where(c=>c.IsDeleted==false)
                 .Skip((page-1)*pageSize)
                 .Take(pageSize)
                 .ToListAsync(ct);
@@ -77,7 +82,14 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result> Update(string name, CategoryDto item, CancellationToken ct = default)
         {
-            var category = await _db.Categories.FirstOrDefaultAsync(c => c.Name == name, ct);
+            var isExist = await _db.Categories
+                .FirstOrDefaultAsync(c => c.Name.Trim().ToLower() == item.Name.Trim().ToLower(), ct);
+
+            if (isExist != null) return Result.Failure($"Category with name '{item.Name}' already exists.");
+
+            var category = await _db.Categories
+                .FirstOrDefaultAsync(c => c.Name.Trim().ToLower() == name.Trim().ToLower(), ct);
+
             if (category != null)
             {
                 _mapper.Map(item, category);

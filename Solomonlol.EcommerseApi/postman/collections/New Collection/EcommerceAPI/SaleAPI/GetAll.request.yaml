@@ -1,0 +1,8 @@
+$kind: http-request
+url: http://localhost:5254/api/v1/sales?page=1&pageSize=30
+method: GET
+queryParams:
+  page: "1"
+  pageSize: "30"
+settings: {}
+order: 2000

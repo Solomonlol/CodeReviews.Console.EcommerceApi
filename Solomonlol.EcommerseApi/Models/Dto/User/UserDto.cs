@@ -15,6 +15,6 @@ namespace Solomonlol.EcommerseApi.Models.Dto.User
         [Phone(ErrorMessage ="Can't validate phone number. Please check is it correct.")]
         [Required(ErrorMessage ="Phone number is required.")]
         public string PhoneNumber { get; set; } = null!;
-        public ICollection<SaleDto> Sales { get; set; } = [];
+        public ICollection<SaleDtoRequest> Sales { get; set; } = [];
     }
 }

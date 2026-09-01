@@ -1,0 +1,5 @@
+$kind: http-request
+url: http://localhost:5254/api/v1/products/Gigabyte GO27Q24A
+method: DELETE
+settings: {}
+order: 4000

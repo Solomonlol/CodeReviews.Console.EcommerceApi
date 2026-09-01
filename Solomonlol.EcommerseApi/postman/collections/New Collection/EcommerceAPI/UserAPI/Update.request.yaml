@@ -1,0 +1,24 @@
+$kind: http-request
+url: http://localhost:5254/api/v1/users/Solomon2?password=Password321!!
+method: PUT
+queryParams:
+  password: Password321!!
+body:
+  type: json
+  content: "{\r
+
+    \    \"login\": \"Solomon3\",\r
+
+    \    \"password\": \"Password321!!\",\r
+
+    \    \"firstName\": \"Alexey\",\r
+
+    \    \"lastName\": \"Gorin\",\r
+
+    \    \"email\": \"First@gmail.com\",\r
+
+    \    \"phoneNumber\": \"+123 12 7654321\"\r
+
+    }"
+settings: {}
+order: 4000

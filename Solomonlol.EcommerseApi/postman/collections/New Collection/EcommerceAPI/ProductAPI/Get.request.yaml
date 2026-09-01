@@ -1,0 +1,5 @@
+$kind: http-request
+url: http://localhost:5254/api/v1/products/Acer Nitro V 15 ANV15-52-57BB
+method: GET
+settings: {}
+order: 3000

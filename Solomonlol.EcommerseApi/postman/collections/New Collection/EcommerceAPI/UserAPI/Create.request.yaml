@@ -1,0 +1,22 @@
+$kind: http-request
+url: http://localhost:5254/api/v1/users
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"login\": \"Solomon2\",\r
+
+    \    \"password\": \"Password321!!\",\r
+
+    \    \"firstName\": \"Niko\",\r
+
+    \    \"lastName\": \"Belick\",\r
+
+    \    \"email\": \"Solomon@gmail.com\",\r
+
+    \    \"phoneNumber\": \"+123 12 7654321\"\r
+
+    }"
+settings: {}
+order: 3000

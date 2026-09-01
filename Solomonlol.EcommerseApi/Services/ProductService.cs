@@ -77,14 +77,18 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result<PagedResult<ProductDto>>> GetAll(int page=1, int pageSize =5, CancellationToken ct = default)
         {
-            var totalCount = await _db.Products.CountAsync(ct);
+            var totalCount = await _db.Products
+                .Where(c => c.Category.IsDeleted == false)
+                .CountAsync(ct);
 
             var list = await _db.Products
                 .OrderBy(p => p.Name)
                 .Include(p=>p.Category)
+                .Where(c=>c.Category.IsDeleted==false)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync(ct);
+
             var dtoList = _mapper.Map<IEnumerable<ProductDto>>(list);
             var pagedResult = new PagedResult<ProductDto>()
             {

@@ -1,5 +1,6 @@
 ﻿using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Models.Base;
+using Solomonlol.EcommerseApi.Models.Dto.Sale;
 
 namespace Solomonlol.EcommerseApi.Endpoints
 {
@@ -32,13 +33,13 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 return result.IsSuccess ? Results.NoContent() : Results.NotFound(result.Error);
             });
             //create
-            app.MapPost("api/v1/sales", async (Sale item, ISaleService service, CancellationToken ct) =>
+            app.MapPost("api/v1/sales", async (SaleDtoRequest item, ISaleService service, CancellationToken ct) =>
             {
                 var result = await service.Create(item, ct);
                 return result.IsSuccess ? Results.Created($"api/v1/sales/{result?.Value?.Id}", result?.Value) : Results.Conflict(result.Error);
             });
             //update
-            app.MapPut("api/v1/sales", async (Sale item, ISaleService service, CancellationToken ct) =>
+            app.MapPut("api/v1/sales", async (SaleDtoRequest item, ISaleService service, CancellationToken ct) =>
             {
                 var result = await service.Update(item, ct);
                 return result.IsSuccess ? Results.Ok() : Results.NotFound(result.Error);

@@ -1,0 +1,7 @@
+$kind: http-request
+url: http://localhost:5254/api/v1/users/Solomon3?password=Password321!!
+method: DELETE
+queryParams:
+  password: Password321!!
+settings: {}
+order: 5000

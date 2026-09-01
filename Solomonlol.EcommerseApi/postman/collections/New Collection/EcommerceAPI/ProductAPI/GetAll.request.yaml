@@ -1,0 +1,14 @@
+$kind: http-request
+url: http://localhost:5254/api/v1/products?page=1&pageSize=30
+method: GET
+queryParams:
+  - key: page
+    value: "1"
+    disabled: false
+    description: ""
+  - key: pageSize
+    value: "30"
+    disabled: false
+    description: ""
+settings: {}
+order: 2000

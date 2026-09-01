@@ -1,0 +1,18 @@
+$kind: http-request
+url: http://localhost:5254/api/v1/products
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"name\": \"Razer Naga V3 Pro\",\r
+
+    \    \"price\": 250.00,\r
+
+    \    \"description\": \"Full-size gaming mouse; wired (USB Type-C), wireless (Bluetooth), and wireless (RF) connectivity; 30,000 DPI optical sensor; 9 buttons; tilt-click scroll wheel; black.\",\r
+
+    \    \"categoryId\": 9\r
+
+    }"
+settings: {}
+order: 6000

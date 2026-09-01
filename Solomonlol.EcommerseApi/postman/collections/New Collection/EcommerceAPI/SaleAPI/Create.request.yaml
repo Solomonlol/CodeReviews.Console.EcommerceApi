@@ -1,0 +1,24 @@
+$kind: http-request
+url: http://localhost:5254/api/v1/sales
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"userId\": 2,\r
+
+    \    \"saleItems\":[\r
+
+    \        {\r
+
+    \            \"productId\": 5,\r
+
+    \            \"quantity\": 2\r
+
+    \        }\r
+
+    \    ]\r
+
+    }"
+settings: {}
+order: 4000
