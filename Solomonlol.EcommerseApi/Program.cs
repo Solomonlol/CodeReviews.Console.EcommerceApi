@@ -36,6 +36,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAttributeService, AttributeService>();
 builder.Services.AddScoped<IAttributeValueService, AttributeService>();
+builder.Services.AddScoped<ISaleService, SaleService>();
 
 var app = builder.Build();
 
@@ -46,6 +47,7 @@ app.UseSwaggerUI();
 app.MapCategoryEndpoint();
 app.MapProductEndpoints();
 app.MapUserEndpoints();
+app.MapSaleEndpoints();
 
 
 await app.SeedAll();

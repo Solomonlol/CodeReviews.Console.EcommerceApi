@@ -1,0 +1,9 @@
+workspace:
+  id: a30aba49-7f73-433c-86f1-11aecb362a22
+localResources:
+  specs:
+    - ../obj/Debug/net10.0/EndpointInfo/Solomonlol.EcommerseApi.json
+cloudResources:
+  collections:
+    ../postman/collections/New Collection: 56709497-c750fd2d-2a8b-4a89-8a9d-7c07861433dc
+    ../postman/collections/My Collection: 56709497-fc6a6d55-8cdc-45a4-9120-c017ec9f2af1
