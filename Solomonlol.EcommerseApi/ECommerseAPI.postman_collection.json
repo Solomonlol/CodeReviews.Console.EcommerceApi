@@ -15,21 +15,9 @@
           "item": [
             {
               "name": "Get",
-              "protocolProfileBehavior": {
-                "disableBodyPruning": true
-              },
               "request": {
                 "method": "GET",
                 "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"name\":\"cpu\",\r\n    \"description\": \"Category for cpu\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
                 "url": {
                   "raw": "http://localhost:5254/api/v1/categories/headphones",
                   "protocol": "http",
@@ -84,7 +72,7 @@
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/categories/",
+                  "raw": "http://localhost:5254/api/v1/categories/cpu",
                   "protocol": "http",
                   "host": [
                     "localhost"
@@ -94,7 +82,7 @@
                     "api",
                     "v1",
                     "categories",
-                    ""
+                    "cpu"
                   ]
                 }
               },
@@ -138,7 +126,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"name\": \"gpu\",\r\n    \"description\": \"Category for gpu\"\r\n}",
+                  "raw": "{\r\n    \"name\": \"Toys\",\r\n    \"description\": \"Category for gpu\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -146,7 +134,7 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/categories/mothreboards",
+                  "raw": "http://localhost:5254/api/v1/categories/motherboards",
                   "protocol": "http",
                   "host": [
                     "localhost"
@@ -156,7 +144,7 @@
                     "api",
                     "v1",
                     "categories",
-                    "mothreboards"
+                    "motherboards"
                   ]
                 }
               },
@@ -173,32 +161,178 @@
                 {
                   "name": "CreateAttribute",
                   "request": {
-                    "method": "GET",
-                    "header": []
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\": \"Test\",\r\n    \"unit\": \"tst\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:5254/api/v1/categories/cpu/attributes",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "5254",
+                      "path": [
+                        "api",
+                        "v1",
+                        "categories",
+                        "cpu",
+                        "attributes"
+                      ]
+                    }
                   },
                   "response": []
                 },
                 {
                   "name": "UpdateAttribute",
                   "request": {
-                    "method": "GET",
-                    "header": []
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\": \"Test2\",\r\n    \"unit\": \"tsts\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:5254/api/v1/categories/cpu/attributes?attributeName=Test",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "5254",
+                      "path": [
+                        "api",
+                        "v1",
+                        "categories",
+                        "cpu",
+                        "attributes"
+                      ],
+                      "query": [
+                        {
+                          "key": "attributeName",
+                          "value": "Test"
+                        }
+                      ]
+                    }
                   },
                   "response": []
                 },
                 {
-                  "name": "Delete",
+                  "name": "DeleteAttribute",
                   "request": {
-                    "method": "GET",
-                    "header": []
+                    "method": "DELETE",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:5254/api/v1/categories/cpu/attributes?attributeName=Test2",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "5254",
+                      "path": [
+                        "api",
+                        "v1",
+                        "categories",
+                        "cpu",
+                        "attributes"
+                      ],
+                      "query": [
+                        {
+                          "key": "attributeName",
+                          "value": "Test2"
+                        }
+                      ]
+                    }
                   },
                   "response": []
                 },
                 {
                   "name": "CreateValue",
                   "request": {
-                    "method": "GET",
-                    "header": []
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"productId\": 5,\r\n    \"productAttributeId\": 68,\r\n    \"value\": \"test\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:5254/api/v1/products/Intel Core i5-14600KF/attributes",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "5254",
+                      "path": [
+                        "api",
+                        "v1",
+                        "products",
+                        "Intel Core i5-14600KF",
+                        "attributes"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "UpdateValue",
+                  "request": {
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"productId\": 5,\r\n    \"productAttributeId\": 68,\r\n    \"value\": \"test2\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:5254/api/v1/products/Intel Core i5-14600KF/attributes?attributeName=Test",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "5254",
+                      "path": [
+                        "api",
+                        "v1",
+                        "products",
+                        "Intel Core i5-14600KF",
+                        "attributes"
+                      ],
+                      "query": [
+                        {
+                          "key": "attributeName",
+                          "value": "Test"
+                        }
+                      ]
+                    }
                   },
                   "response": []
                 }
@@ -241,7 +375,7 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/products/Acer Nitro V 15 ANV15-52-57BB",
+                  "raw": "http://localhost:5254/api/v1/products/Intel Core i5-14600KF",
                   "protocol": "http",
                   "host": [
                     "localhost"
@@ -251,7 +385,7 @@
                     "api",
                     "v1",
                     "products",
-                    "Acer Nitro V 15 ANV15-52-57BB"
+                    "Intel Core i5-14600KF"
                   ]
                 }
               },
@@ -286,7 +420,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"name\": \"Razer Naga V2 Pro\",\r\n    \"price\": 250.00,\r\n    \"description\": \"Full-size gaming mouse; wired (USB Type-C), wireless (Bluetooth), and wireless (RF) connectivity; 30,000 DPI optical sensor; 9 buttons; tilt-click scroll wheel; black.\"\r\n}",
+                  "raw": "{\r\n    \"name\": \"Intel Core i5-14600KF\",\r\n    \"price\": 250.00,\r\n    \"description\": \"\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -294,7 +428,7 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/products/Razer Naga V2 Pro",
+                  "raw": "http://localhost:5254/api/v1/products/Intel Core i5-14600KF",
                   "protocol": "http",
                   "host": [
                     "localhost"
@@ -304,7 +438,7 @@
                     "api",
                     "v1",
                     "products",
-                    "Razer Naga V2 Pro"
+                    "Intel Core i5-14600KF"
                   ]
                 }
               },
@@ -349,7 +483,21 @@
               "name": "Get",
               "request": {
                 "method": "GET",
-                "header": []
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5254/api/v1/users/Second",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5254",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "Second"
+                  ]
+                }
               },
               "response": []
             },
@@ -357,7 +505,20 @@
               "name": "GetAll",
               "request": {
                 "method": "GET",
-                "header": []
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5254/api/v1/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5254",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users"
+                  ]
+                }
               },
               "response": []
             },
@@ -465,7 +626,21 @@
               "name": "Get",
               "request": {
                 "method": "GET",
-                "header": []
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5254/api/v1/sales/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5254",
+                  "path": [
+                    "api",
+                    "v1",
+                    "sales",
+                    "1"
+                  ]
+                }
               },
               "response": []
             },
@@ -506,7 +681,7 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/First/sales?page=1&pageSize=30",
+                  "raw": "http://localhost:5254/api/v1/Second/sales?page=1&pageSize=30",
                   "protocol": "http",
                   "host": [
                     "localhost"
@@ -515,7 +690,7 @@
                   "path": [
                     "api",
                     "v1",
-                    "First",
+                    "Second",
                     "sales"
                   ],
                   "query": [
@@ -536,23 +711,51 @@
               "name": "Create",
               "request": {
                 "method": "POST",
-                "header": []
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"userId\": 3,\r\n    \"saleItems\":[\r\n        {\r\n            \"productId\": 5,\r\n            \"quantity\": 2\r\n        },\r\n        {\r\n            \"productId\": 6,\r\n            \"quantity\": 3\r\n        }\r\n    ]\r\n\r\n}\r\n\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5254/api/v1/sales",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5254",
+                  "path": [
+                    "api",
+                    "v1",
+                    "sales"
+                  ]
+                }
               },
               "response": []
             },
             {
-              "name": "Update",
-              "request": {
-                "method": "PUT",
-                "header": []
-              },
-              "response": []
-            },
-            {
-              "name": "Delete",
+              "name": "Close",
               "request": {
                 "method": "DELETE",
-                "header": []
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5254/api/v1/sales/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5254",
+                  "path": [
+                    "api",
+                    "v1",
+                    "sales",
+                    "1"
+                  ]
+                }
               },
               "response": []
             }

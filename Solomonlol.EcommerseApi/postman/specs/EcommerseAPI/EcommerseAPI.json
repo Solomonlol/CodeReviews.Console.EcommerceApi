@@ -1,0 +1,692 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "EcommerseAPI",
+    "version": "1.0.0",
+    "description": ""
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5254"
+    }
+  ],
+  "paths": {
+    "/api/v1/categories/headphones": {
+      "get": {
+        "summary": "Get",
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "CategoryAPI"
+        ]
+      }
+    },
+    "/api/v1/categories": {
+      "get": {
+        "summary": "GetAll",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 30
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "CategoryAPI"
+        ]
+      }
+    },
+    "/api/v1/categories/cpu": {
+      "delete": {
+        "summary": "Delete",
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "CategoryAPI"
+        ]
+      }
+    },
+    "/api/v1/categories/": {
+      "post": {
+        "summary": "Create",
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "CategoryAPI"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "name": "case",
+                "description": "Category for PC cases"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/categories/motherboards": {
+      "put": {
+        "summary": "Update",
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "CategoryAPI"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "name": "Toys",
+                "description": "Category for gpu"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/categories/cpu/attributes": {
+      "post": {
+        "summary": "CreateAttribute",
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "ProductAPI",
+          "ProductAttributes"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "unit": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "name": "Test",
+                "unit": "tst"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "UpdateAttribute",
+        "parameters": [
+          {
+            "name": "attributeName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Test"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "ProductAPI",
+          "ProductAttributes"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "unit": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "name": "Test2",
+                "unit": "tsts"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "DeleteAttribute",
+        "parameters": [
+          {
+            "name": "attributeName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Test2"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "ProductAPI",
+          "ProductAttributes"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/Intel Core i5-14600KF/attributes": {
+      "post": {
+        "summary": "CreateValue",
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "ProductAPI",
+          "ProductAttributes"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "productId": {
+                    "type": "integer"
+                  },
+                  "productAttributeId": {
+                    "type": "integer"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "productId": 5,
+                "productAttributeId": 68,
+                "value": "test"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "UpdateValue",
+        "parameters": [
+          {
+            "name": "attributeName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Test"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "ProductAPI",
+          "ProductAttributes"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "productId": {
+                    "type": "integer"
+                  },
+                  "productAttributeId": {
+                    "type": "integer"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "productId": 5,
+                "productAttributeId": 68,
+                "value": "test2"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products": {
+      "get": {
+        "summary": "GetAll",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 30
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "ProductAPI"
+        ]
+      },
+      "post": {
+        "summary": "Create",
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "ProductAPI"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "integer"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "categoryId": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "name": "Razer Naga V3 Pro",
+                "price": 250,
+                "description": "Full-size gaming mouse; wired (USB Type-C), wireless (Bluetooth), and wireless (RF) connectivity; 30,000 DPI optical sensor; 9 buttons; tilt-click scroll wheel; black.",
+                "categoryId": 9
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/Intel Core i5-14600KF": {
+      "get": {
+        "summary": "Get",
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "ProductAPI"
+        ]
+      },
+      "put": {
+        "summary": "Update",
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "ProductAPI"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "integer"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "name": "Intel Core i5-14600KF",
+                "price": 250,
+                "description": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/Gigabyte GO27Q24A": {
+      "delete": {
+        "summary": "Delete",
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "ProductAPI"
+        ]
+      }
+    },
+    "/api/v1/users/Second": {
+      "get": {
+        "summary": "Get",
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "UserAPI"
+        ]
+      }
+    },
+    "/api/v1/users": {
+      "get": {
+        "summary": "GetAll",
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "UserAPI"
+        ]
+      },
+      "post": {
+        "summary": "Create",
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "UserAPI"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "login": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "format": "phone"
+                  }
+                }
+              },
+              "example": {
+                "login": "Solomon2",
+                "password": "Password321!!",
+                "firstName": "Niko",
+                "lastName": "Belick",
+                "email": "Solomon@gmail.com",
+                "phoneNumber": "+123 12 7654321"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/Solomon2": {
+      "put": {
+        "summary": "Update",
+        "parameters": [
+          {
+            "name": "password",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Password321!!"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "UserAPI"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "login": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "format": "phone"
+                  }
+                }
+              },
+              "example": {
+                "login": "Solomon3",
+                "password": "Password321!!",
+                "firstName": "Alexey",
+                "lastName": "Gorin",
+                "email": "First@gmail.com",
+                "phoneNumber": "+123 12 7654321"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/Solomon3": {
+      "delete": {
+        "summary": "Delete",
+        "parameters": [
+          {
+            "name": "password",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Password321!!"
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "UserAPI"
+        ]
+      }
+    },
+    "/api/v1/sales/1": {
+      "get": {
+        "summary": "Get",
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "SaleAPI"
+        ]
+      },
+      "delete": {
+        "summary": "Close",
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "SaleAPI"
+        ]
+      }
+    },
+    "/api/v1/sales": {
+      "get": {
+        "summary": "GetAll",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 30
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "SaleAPI"
+        ]
+      },
+      "post": {
+        "summary": "Create",
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "SaleAPI"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "integer"
+                  },
+                  "saleItems": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "productId": {
+                          "type": "integer"
+                        },
+                        "quantity": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "userId": 3,
+                "saleItems": [
+                  {
+                    "productId": 5,
+                    "quantity": 2
+                  },
+                  {
+                    "productId": 6,
+                    "quantity": 3
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/Second/sales": {
+      "get": {
+        "summary": "GetAllByLogin",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 30
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "EcommerceAPI",
+          "SaleAPI"
+        ]
+      }
+    }
+  }
+}

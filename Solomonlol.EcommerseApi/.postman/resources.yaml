@@ -3,7 +3,14 @@ workspace:
 localResources:
   specs:
     - ../obj/Debug/net10.0/EndpointInfo/Solomonlol.EcommerseApi.json
+    - ../postman/specs/EcommerseAPI/EcommerseAPI.json
 cloudResources:
   collections:
     ../postman/collections/New Collection: 56709497-c750fd2d-2a8b-4a89-8a9d-7c07861433dc
     ../postman/collections/My Collection: 56709497-fc6a6d55-8cdc-45a4-9120-c017ec9f2af1
+  specs:
+    ../obj/Debug/net10.0/EndpointInfo/Solomonlol.EcommerseApi.json: 4358c274-df7f-441b-b9e8-2cafc338a75e
+    ../postman/specs/EcommerseAPI/EcommerseAPI.json: 37d7bf61-7e02-4b87-ad2d-6ad050e515f9
+resourceNameMappings:
+  specs:
+    - ../postman/specs/EcommerseAPI/EcommerseAPI.json: EcommerseAPI

@@ -17,12 +17,16 @@ namespace Solomonlol.EcommerseApi.Endpoints
             //get all by user
             app.MapGet("api/v1/{login}/sales", async (string login, ISaleService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
+                page = Math.Max(page, 1);
+                pageSize = Math.Clamp(pageSize, 1, 30);
                 var result = await service.GetAllByLogin(login, page, pageSize, ct);
                 return result.IsSuccess ? Results.Ok(result.Value) : Results.NotFound(result.Error);
             });
             //get all
             app.MapGet("api/v1/sales", async (ISaleService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
+                page = Math.Max(page, 1);
+                pageSize = Math.Clamp(pageSize, 1, 30);
                 var result = await service.GetAll(page, pageSize, ct);
                 return result.IsSuccess ? Results.Ok(result.Value) : Results.Problem(result.Error);
             });
