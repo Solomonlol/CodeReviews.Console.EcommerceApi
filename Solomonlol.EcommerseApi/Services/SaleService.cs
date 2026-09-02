@@ -34,16 +34,17 @@ namespace Solomonlol.EcommerseApi.Services
                     totalPrice += item.Quantity * product.Price;
                     item.UnitPrice = product.Price;
                 }
+                else return Result<SaleDtoResponce>.Failure($"Product with Id={item.ProductId} was not found.");
             }
 
             sale.TotalPrice = totalPrice;
             sale.CreatedAt = DateTime.UtcNow;
 
             await _db.Sales.AddAsync(sale, ct);
-            var saleResponce = _mapper.Map<SaleDtoResponce>(sale);
-
 
             var saveCount=await _db.SaveChangesAsync(ct);
+
+            var saleResponce = _mapper.Map<SaleDtoResponce>(sale);
             return saveCount > 0 
                 ? Result<SaleDtoResponce>.Success(saleResponce) 
                 : Result<SaleDtoResponce>.Failure("Cannot save in database");
@@ -101,6 +102,8 @@ namespace Solomonlol.EcommerseApi.Services
                 .Where(s => s.User.Login == login)
                 .OrderBy(s => s.CreatedAt)
                 .Include(s => s.SaleItems)
+                .ThenInclude(p => p.Product)
+                .ThenInclude(c => c.Category)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync(ct);
@@ -119,17 +122,6 @@ namespace Solomonlol.EcommerseApi.Services
             return Result<PagedResult<SaleDtoResponce>>.Success(pagedList);
         }
 
-        //public async Task<Result> Update(int saleId, SaleDtoRequest item, CancellationToken ct = default)
-        //{
-        //    var sale = await _db.Sales.FindAsync(saleId);
-        //    if(sale!=null)
-        //    {
-        //        _mapper.Map(item, sale);
-        //        _db.Sales.Update(sale);
-        //        return await _db.SaveChangesAsync(ct) > 0 ? Result.Success(sale) : Result.Failure("Cannot save in database.");
-        //    }
-        //    return Result.Failure("Sale was not found.");
-        //}
         public async Task<Result> CloseSale(int saleId, CancellationToken ct = default)
         {
             var sale = await _db.Sales.FindAsync(saleId);

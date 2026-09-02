@@ -15,13 +15,13 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 return result.IsSuccess ? Results.Ok(result.Value) : Results.NotFound(result.Error);
             });
             //get all by user
-            app.MapGet("api/v1/{login}/sales", async (string login, int page, int pageSize, ISaleService service, CancellationToken ct) =>
+            app.MapGet("api/v1/{login}/sales", async (string login, ISaleService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
                 var result = await service.GetAllByLogin(login, page, pageSize, ct);
                 return result.IsSuccess ? Results.Ok(result.Value) : Results.NotFound(result.Error);
             });
             //get all
-            app.MapGet("api/v1/sales", async (int page, int pageSize, ISaleService service, CancellationToken ct) =>
+            app.MapGet("api/v1/sales", async (ISaleService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
                 var result = await service.GetAll(page, pageSize, ct);
                 return result.IsSuccess ? Results.Ok(result.Value) : Results.Problem(result.Error);
@@ -38,12 +38,6 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 var result = await service.Create(item, ct);
                 return result.IsSuccess ? Results.Created($"api/v1/sales/{result?.Value?.Id}", result?.Value) : Results.Conflict(result.Error);
             });
-            ////update
-            //app.MapPut("api/v1/sales/{saleId}", async (int saleId, SaleDtoRequest item, ISaleService service, CancellationToken ct) =>
-            //{
-            //    var result = await service.Update(saleId, item, ct);
-            //    return result.IsSuccess ? Results.Ok() : Results.NotFound(result.Error);
-            //});
         }
     }
 }

@@ -5,7 +5,6 @@ using Solomonlol.EcommerseApi.Models.Base;
 using Solomonlol.EcommerseApi.Models.Dto;
 using Solomonlol.EcommerseApi.Models.Dto.Category;
 using Solomonlol.EcommerseApi.MyResults;
-using System.ComponentModel.Design;
 
 namespace Solomonlol.EcommerseApi.Services
 {
