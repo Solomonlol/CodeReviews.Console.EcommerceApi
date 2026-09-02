@@ -23,8 +23,9 @@ namespace Solomonlol.EcommerseApi.Mapping
                 .ForMember(p => p.CategoryId, d => d.UseDestinationValue())
                 .ForMember(p => p.Category, d => d.Ignore());
 
-            CreateMap<User, UserDto>();
-            CreateMap<UserDto, User>()
+            CreateMap<User, UserDtoRequest>();
+            CreateMap<User, UserDtoResponce>();
+            CreateMap<UserDtoRequest, User>()
                 .ForMember(u => u.Sales, d => d.Ignore())
                 .ForMember(u => u.PasswordHash, d => d.Ignore())
                 .ForMember(u => u.Id, d => d.Ignore());
@@ -52,8 +53,9 @@ namespace Solomonlol.EcommerseApi.Mapping
                 .ForMember(s => s.Id, d => d.Ignore())
                 .ForMember(s => s.User, s => s.Ignore());
 
-            CreateMap<SaleItem, SaleItemDto>();
-            CreateMap<SaleItemDto, SaleItem>();
+            CreateMap<SaleItem, SaleItemDtoRequest>();
+            CreateMap<SaleItem, SaleItemDtoResponce>();
+            CreateMap<SaleItemDtoRequest, SaleItem>();
         }
     }
 }

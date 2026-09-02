@@ -30,7 +30,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 : Results.Conflict(result.Error);
             });
             //update
-            app.MapPut("api/v1/users/{login}", async (string login, string password, UserDto item, IUserService service, CancellationToken ct) =>
+            app.MapPut("api/v1/users/{login}", async (string login, string password, UserDtoRequest item, IUserService service, CancellationToken ct) =>
             {
                 var result = await service.Update(login, password, item, ct);
                 return result.IsSuccess 

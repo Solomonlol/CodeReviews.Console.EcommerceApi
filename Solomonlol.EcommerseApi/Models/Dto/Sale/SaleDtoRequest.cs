@@ -3,6 +3,6 @@
     public class SaleDtoRequest
     {
         public int UserId { get; set; }
-        public ICollection<SaleItemDto> SaleItems { get; set; } = [];
+        public ICollection<SaleItemDtoRequest> SaleItems { get; set; } = [];
     }
 }

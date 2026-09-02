@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Solomonlol.EcommerseApi.Models.Dto.User
 {
-    public class UserDto
+    public class UserDtoRequest
     {
         [Required(ErrorMessage ="Login is required.")]
         public string Login { get; set; } = null!;

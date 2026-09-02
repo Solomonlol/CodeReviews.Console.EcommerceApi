@@ -54,15 +54,18 @@ namespace Solomonlol.EcommerseApi.Services
             else return Result.Failure("User was not found");
         }
 
-        public async Task<Result<UserDto>> Get(string login, CancellationToken ct = default)
+        public async Task<Result<UserDtoRequest>> Get(string login, CancellationToken ct = default)
         {
-            var userCheck = await _db.Users.FirstOrDefaultAsync(u => u.Login == login, ct);
+            var userCheck = await _db.Users
+                .Include(u=>u.Sales)
+                .ThenInclude(s=>s.SaleItems)
+                .FirstOrDefaultAsync(u => u.Login == login, ct);
             return userCheck != null
-                ? Result<UserDto>.Success(_mapper.Map<UserDto>(userCheck)) 
-                : Result<UserDto>.Failure("User was not found.");
+                ? Result<UserDtoRequest>.Success(_mapper.Map<UserDtoRequest>(userCheck)) 
+                : Result<UserDtoRequest>.Failure("User was not found.");
         }
 
-        public async Task<Result<PagedResult<UserDto>>> GetAll(int page = 1, int pageSize = 5, CancellationToken ct = default)
+        public async Task<Result<PagedResult<UserDtoRequest>>> GetAll(int page = 1, int pageSize = 5, CancellationToken ct = default)
         {
             var totalCount = await _db.Users.CountAsync(ct);
 
@@ -73,9 +76,9 @@ namespace Solomonlol.EcommerseApi.Services
                 .Take(pageSize)
                 .ToListAsync(ct);
 
-            var dtoList = _mapper.Map<IEnumerable<UserDto>>(list);
+            var dtoList = _mapper.Map<IEnumerable<UserDtoRequest>>(list);
 
-            var pageResult = new PagedResult<UserDto>()
+            var pageResult = new PagedResult<UserDtoRequest>()
             {
                 Items=dtoList,
                 Page = page,
@@ -84,10 +87,10 @@ namespace Solomonlol.EcommerseApi.Services
                 TotalPages = (int)Math.Ceiling(totalCount/(double)pageSize)
             };
 
-            return Result<PagedResult<UserDto>>.Success(pageResult);
+            return Result<PagedResult<UserDtoRequest>>.Success(pageResult);
         }
 
-        public async Task<Result> Update(string login, string password, UserDto item, CancellationToken ct = default)
+        public async Task<Result> Update(string login, string password, UserDtoRequest item, CancellationToken ct = default)
         {
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Login == login, ct);
             if (user != null)

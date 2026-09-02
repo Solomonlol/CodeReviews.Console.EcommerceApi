@@ -1,5 +1,5 @@
 $kind: http-request
-url: ""
+url: http://localhost:5254/api/v1/users
 method: GET
 settings: {}
 order: 2000
