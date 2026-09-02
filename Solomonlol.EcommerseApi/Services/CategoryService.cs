@@ -28,7 +28,7 @@ namespace Solomonlol.EcommerseApi.Services
                 await _db.Categories.AddAsync(category, ct);
 
                 return await _db.SaveChangesAsync(ct) > 0
-                    ? Result.Success(item)
+                    ? Result.Success(category)
                     : Result.Failure("Cannot save changes to database");
             }
             else return Result.Failure($"Category with name '{item.Name}' already exist.");

@@ -1,5 +1,5 @@
 $kind: http-request
-url: http://localhost:5254/api/v1/First/sales?page=1&pageSize=30
+url: http://localhost:5254/api/v1/Second/sales?page=1&pageSize=30
 method: GET
 queryParams:
   page: "1"

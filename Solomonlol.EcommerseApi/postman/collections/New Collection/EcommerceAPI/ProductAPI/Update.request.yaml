@@ -1,15 +1,15 @@
 $kind: http-request
-url: http://localhost:5254/api/v1/products/Razer Naga V2 Pro
+url: http://localhost:5254/api/v1/products/Intel Core i5-14600KF
 method: PUT
 body:
   type: json
   content: "{\r
 
-    \    \"name\": \"Razer Naga V2 Pro\",\r
+    \    \"name\": \"Intel Core i5-14600KF\",\r
 
     \    \"price\": 250.00,\r
 
-    \    \"description\": \"Full-size gaming mouse; wired (USB Type-C), wireless (Bluetooth), and wireless (RF) connectivity; 30,000 DPI optical sensor; 9 buttons; tilt-click scroll wheel; black.\"\r
+    \    \"description\": \"\"\r
 
     }"
 settings: {}

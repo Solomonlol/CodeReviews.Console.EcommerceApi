@@ -1,0 +1,17 @@
+$kind: http-request
+url: http://localhost:5254/api/v1/products/Intel Core i5-14600KF/attributes?attributeName=Test
+method: PUT
+queryParams:
+  attributeName: Test
+body:
+  type: json
+  content: "{\r
+
+    \    \"productId\": 5,\r
+
+    \    \"productAttributeId\": 68,\r
+
+    \    \"value\": \"test2\"\r
+
+    }"
+order: 2566235051001528

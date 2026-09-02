@@ -1,5 +1,16 @@
 $kind: http-request
-url: ""
-method: GET
+url: http://localhost:5254/api/v1/products/Intel Core i5-14600KF/attributes
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"productId\": 5,\r
+
+    \    \"productAttributeId\": 68,\r
+
+    \    \"value\": \"test\"\r
+
+    }"
 settings: {}
 order: 4000

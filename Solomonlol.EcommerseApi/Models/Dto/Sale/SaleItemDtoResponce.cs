@@ -5,10 +5,11 @@ namespace Solomonlol.EcommerseApi.Models.Dto.Sale
 {
     public class SaleItemDtoResponce
     {
-        public int ProductId { get; set; }
-        [ForeignKey(nameof(ProductId))]
+        //public int ProductId { get; set; }
+        //[ForeignKey(nameof(ProductId))]
         public ProductDto Product { get; set; } = null!;
         public int Quantity { get; set; }
-        public decimal SaleItemPrice { get => Product.Price * Quantity; }
+        public decimal UnitPrice { get; set; }
+        public decimal SaleItemPrice { get => UnitPrice * Quantity; }
     }
 }

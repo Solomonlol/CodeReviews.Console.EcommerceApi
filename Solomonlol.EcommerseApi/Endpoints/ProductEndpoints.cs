@@ -61,14 +61,14 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 ? Results.Ok(attribute)
                 : Results.Conflict(result?.Error);
             });
-            //delete attribute value
-            app.MapDelete("api/v1/products/{productName}/attributes", async (string productName, string attributeName, IAttributeValueService service, CancellationToken ct) =>
-            {
-                var result = await service.DeleteAttributeValue(productName, attributeName, ct);
-                return result.IsSuccess
-                ? Results.NoContent()
-                : Results.NotFound(result.Error);
-            });
+            ////delete attribute value
+            //app.MapDelete("api/v1/products/{productName}/attributes", async (string productName, string attributeName, IAttributeValueService service, CancellationToken ct) =>
+            //{
+            //    var result = await service.DeleteAttributeValue(productName, attributeName, ct);
+            //    return result.IsSuccess
+            //    ? Results.NoContent()
+            //    : Results.NotFound(result.Error);
+            //});
         }
     }
 }

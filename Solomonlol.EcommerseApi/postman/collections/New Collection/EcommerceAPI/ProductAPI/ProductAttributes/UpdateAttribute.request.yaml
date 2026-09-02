@@ -1,5 +1,16 @@
 $kind: http-request
-url: ""
-method: GET
+url: http://localhost:5254/api/v1/categories/cpu/attributes?attributeName=Test
+method: PUT
+queryParams:
+  attributeName: Test
+body:
+  type: json
+  content: "{\r
+
+    \    \"name\": \"Test2\",\r
+
+    \    \"unit\": \"tsts\"\r
+
+    }"
 settings: {}
 order: 2000

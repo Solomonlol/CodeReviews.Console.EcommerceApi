@@ -29,7 +29,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
             //delete
             app.MapDelete("api/v1/sales/{saleId}", async (int saleId, ISaleService service, CancellationToken ct) =>
             {
-                var result = await service.Delete(saleId, ct);
+                var result = await service.CloseSale(saleId, ct);
                 return result.IsSuccess ? Results.NoContent() : Results.NotFound(result.Error);
             });
             //create
@@ -38,12 +38,12 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 var result = await service.Create(item, ct);
                 return result.IsSuccess ? Results.Created($"api/v1/sales/{result?.Value?.Id}", result?.Value) : Results.Conflict(result.Error);
             });
-            //update
-            app.MapPut("api/v1/sales", async (SaleDtoRequest item, ISaleService service, CancellationToken ct) =>
-            {
-                var result = await service.Update(item, ct);
-                return result.IsSuccess ? Results.Ok() : Results.NotFound(result.Error);
-            });
+            ////update
+            //app.MapPut("api/v1/sales/{saleId}", async (int saleId, SaleDtoRequest item, ISaleService service, CancellationToken ct) =>
+            //{
+            //    var result = await service.Update(saleId, item, ct);
+            //    return result.IsSuccess ? Results.Ok() : Results.NotFound(result.Error);
+            //});
         }
     }
 }

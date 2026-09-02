@@ -29,7 +29,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
             {
                 var result = await service.Create(category, ct);
                 return result.IsSuccess 
-                ? Results.Created() 
+                ? Results.Created()
                 : Results.Conflict(result?.Error);
             });
             //update
@@ -53,7 +53,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
             {
                 var result = await service.AddAttribute(categoryName, attribute, ct);
                 return result.IsSuccess
-                ? Results.Created($"api/v1/categories/{categoryName}/attributes/{attribute.Name}", attribute)
+                ? Results.Created($"api/v1/categories/{categoryName}/attributes/{attribute.Name}", result.Value)
                 : Results.Conflict(result?.Error);
             });
             //update attribute

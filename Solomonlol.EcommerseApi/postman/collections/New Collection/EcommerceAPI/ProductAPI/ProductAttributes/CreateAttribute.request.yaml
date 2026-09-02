@@ -1,5 +1,14 @@
 $kind: http-request
-url: ""
-method: GET
+url: http://localhost:5254/api/v1/categories/cpu/attributes
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"name\": \"Test\",\r
+
+    \    \"unit\": \"tst\"\r
+
+    }"
 settings: {}
 order: 1000

@@ -21,29 +21,29 @@ namespace Solomonlol.EcommerseApi.Services
         {
             if (!saleDto.SaleItems.Any())
                 return Result<SaleDtoResponce>.Failure("Sale is empty. Add items before trying create new sale.");
+
             decimal totalPrice = 0;
-            foreach (var item in saleDto.SaleItems)
-            {
-                var product = await _db.Products.FindAsync(item.ProductId);
-                if(product!=null)
-                    totalPrice += item.Quantity * product.Price;
-            }
 
             var sale = _mapper.Map<Sale>(saleDto);
+
+            foreach (var item in sale.SaleItems)
+            {
+                var product = await _db.Products.FindAsync(item.ProductId, ct);
+                if (product != null)
+                {
+                    totalPrice += item.Quantity * product.Price;
+                    item.UnitPrice = product.Price;
+                }
+            }
+
             sale.TotalPrice = totalPrice;
             sale.CreatedAt = DateTime.UtcNow;
 
-
             await _db.Sales.AddAsync(sale, ct);
-            await _db.SaleItems.AddRangeAsync(sale.SaleItems, ct);
+            var saleResponce = _mapper.Map<SaleDtoResponce>(sale);
+
+
             var saveCount=await _db.SaveChangesAsync(ct);
-            var saleCheck = await _db.Sales
-                .Include(s => s.SaleItems)
-                .FirstOrDefaultAsync(s => s.CreatedAt == sale.CreatedAt && s.UserId == sale.UserId);
-
-            
-
-            var saleResponce = _mapper.Map<SaleDtoResponce>(saleCheck);
             return saveCount > 0 
                 ? Result<SaleDtoResponce>.Success(saleResponce) 
                 : Result<SaleDtoResponce>.Failure("Cannot save in database");
@@ -54,12 +54,15 @@ namespace Solomonlol.EcommerseApi.Services
         {
             var sale = await _db.Sales
                 .Include(s => s.SaleItems)
+                .ThenInclude(p=>p.Product)
+                .ThenInclude(c=>c.Category)
                 .FirstOrDefaultAsync(s => s.Id == saleId, ct);
 
             if(sale==null)
                 return Result<SaleDtoResponce>.Failure($"Sale with Id={saleId} was not found.");
 
             var saleDto = _mapper.Map<SaleDtoResponce>(sale);
+            
 
             return Result<SaleDtoResponce>.Success(saleDto);
         }
@@ -70,12 +73,15 @@ namespace Solomonlol.EcommerseApi.Services
             var list = await _db.Sales
                 .OrderBy(s=>s.CreatedAt)
                 .Include(s=>s.SaleItems)
+                .ThenInclude(p=>p.Product)
+                .ThenInclude(c=>c.Category)
                 .Skip((page-1)*pageSize)
                 .Take(pageSize)
                 .ToListAsync(ct);
 
+           
             var dtoList = _mapper.Map<List<SaleDtoResponce>>(list);
-
+            
             var pagedList = new PagedResult<SaleDtoResponce>()
             {
                 Items = dtoList,
@@ -113,18 +119,18 @@ namespace Solomonlol.EcommerseApi.Services
             return Result<PagedResult<SaleDtoResponce>>.Success(pagedList);
         }
 
-        public async Task<Result> Update(SaleDtoRequest item, CancellationToken ct = default)
-        {
-            var sale = await _db.Sales.FindAsync(item.UserId);
-            if(sale!=null)
-            {
-                _mapper.Map(item, sale);
-                _db.Sales.Update(sale);
-                return await _db.SaveChangesAsync(ct) > 0 ? Result.Success(sale) : Result.Failure("Cannot save in database.");
-            }
-            return Result.Failure("Sale was not found.");
-        }
-        public async Task<Result> Delete(int saleId, CancellationToken ct = default)
+        //public async Task<Result> Update(int saleId, SaleDtoRequest item, CancellationToken ct = default)
+        //{
+        //    var sale = await _db.Sales.FindAsync(saleId);
+        //    if(sale!=null)
+        //    {
+        //        _mapper.Map(item, sale);
+        //        _db.Sales.Update(sale);
+        //        return await _db.SaveChangesAsync(ct) > 0 ? Result.Success(sale) : Result.Failure("Cannot save in database.");
+        //    }
+        //    return Result.Failure("Sale was not found.");
+        //}
+        public async Task<Result> CloseSale(int saleId, CancellationToken ct = default)
         {
             var sale = await _db.Sales.FindAsync(saleId);
             if (sale != null)

@@ -1,5 +1,5 @@
 $kind: http-request
-url: ""
+url: http://localhost:5254/api/v1/sales/1
 method: DELETE
 settings: {}
 order: 6000

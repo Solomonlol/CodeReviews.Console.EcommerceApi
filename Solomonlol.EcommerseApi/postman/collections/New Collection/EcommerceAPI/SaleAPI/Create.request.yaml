@@ -5,7 +5,7 @@ body:
   type: json
   content: "{\r
 
-    \    \"userId\": 2,\r
+    \    \"userId\": 3,\r
 
     \    \"saleItems\":[\r
 
@@ -15,10 +15,22 @@ body:
 
     \            \"quantity\": 2\r
 
+    \        },\r
+
+    \        {\r
+
+    \            \"productId\": 6,\r
+
+    \            \"quantity\": 3\r
+
     \        }\r
 
     \    ]\r
 
-    }"
+    \r
+
+    }\r
+
+    \r\n"
 settings: {}
 order: 4000

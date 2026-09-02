@@ -1,0 +1,10 @@
+$kind: http-request
+url: http://localhost:5254/api/v1/categories/cpu/attributes?attributeName=Test2
+method: DELETE
+queryParams:
+  attributeName: Test2
+body:
+  type: json
+  content: ""
+settings: {}
+order: 3000

@@ -1,5 +1,5 @@
 $kind: http-request
-url: ""
+url: http://localhost:5254/api/v1/sales/1
 method: GET
 settings: {}
 order: 1000

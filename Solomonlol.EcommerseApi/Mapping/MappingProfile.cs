@@ -36,13 +36,14 @@ namespace Solomonlol.EcommerseApi.Mapping
 
             CreateMap<ProductAttribute, ProductAttributeDto>();
             CreateMap<ProductAttributeDto, ProductAttribute>()
-                .ForMember(p => p.Values, d => d.Ignore());
+                .ForMember(p => p.Values, d => d.Ignore())
+                .ForMember(p => p.Id, d => d.Ignore())
+                .ForMember(p => p.CategoryId, d => d.Ignore())
+                .ForMember(p => p.Category, d => d.Ignore());
 
             CreateMap<ProductAttributeValue, ProductAttributeValueDto>();
             CreateMap<ProductAttributeValueDto, ProductAttributeValue>()
                 .ForMember(a => a.Product, d => d.Ignore())
-                .ForMember(a => a.ProductId, d => d.Ignore())
-                .ForMember(a => a.ProductAttributeId, d => d.Ignore())
                 .ForMember(a => a.ProductAttribute, d => d.Ignore());
 
             CreateMap<Sale, SaleDtoRequest>();
