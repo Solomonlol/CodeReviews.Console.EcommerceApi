@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Models.Dto.User;
+using System.Security.Claims;
 
 namespace Solomonlol.EcommerseApi.Endpoints
 {
@@ -8,12 +9,25 @@ namespace Solomonlol.EcommerseApi.Endpoints
     {
         public static void MapUserEndpoints(this WebApplication app)
         {
-            //get one
-            app.MapGet("api/v1/users/{login}", [AllowAnonymous] async (string login, IUserService service, CancellationToken ct) =>
+            //get your account
+            app.MapGet("api/v1/users/me", [Authorize] async (ClaimsPrincipal claims, IUserService service, CancellationToken ct) =>
             {
+                var login = claims.FindFirst(ClaimTypes.Name)?.Value;
+                if(string.IsNullOrEmpty(login) || string.IsNullOrWhiteSpace(login)) return Results.BadRequest();
+
                 var result = await service.GetByLogin(login, ct);
                 return result.IsSuccess 
                 ? Results.Ok(result.Value) 
+                : Results.NotFound();
+            });
+            //get one
+            app.MapGet("api/v1/users/{login}", [Authorize(Roles ="Admin, Manager")] async (string login, IUserService service, CancellationToken ct) =>
+            {
+                if (string.IsNullOrEmpty(login) || string.IsNullOrWhiteSpace(login)) return Results.BadRequest();
+
+                var result = await service.GetByLogin(login, ct);
+                return result.IsSuccess
+                ? Results.Ok(result.Value)
                 : Results.NotFound();
             });
             //get all

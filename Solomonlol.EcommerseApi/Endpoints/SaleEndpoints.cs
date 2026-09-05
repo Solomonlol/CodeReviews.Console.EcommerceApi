@@ -2,6 +2,7 @@
 using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Models.Base;
 using Solomonlol.EcommerseApi.Models.Dto.Sale;
+using System.Security.Claims;
 
 namespace Solomonlol.EcommerseApi.Endpoints
 {
@@ -16,15 +17,18 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 return result.IsSuccess ? Results.Ok(result.Value) : Results.NotFound(result.Error);
             });
             //get all by user
-            app.MapGet("api/v1/{login}/sales", [Authorize] async (string login, ISaleService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
+            app.MapGet("api/v1/me/sales", [Authorize] async (ClaimsPrincipal user, ISaleService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
+                var login = user.FindFirst(ClaimTypes.Name)?.Value;
+                if (login == null) return Results.BadRequest();
+
                 page = Math.Max(page, 1);
                 pageSize = Math.Clamp(pageSize, 1, 30);
                 var result = await service.GetAllByLogin(login, page, pageSize, ct);
                 return result.IsSuccess ? Results.Ok(result.Value) : Results.NotFound(result.Error);
             });
             //get all
-            app.MapGet("api/v1/sales", [Authorize] async (ISaleService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
+            app.MapGet("api/v1/sales", [Authorize(Roles ="Admin, Manager")] async (ISaleService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
                 page = Math.Max(page, 1);
                 pageSize = Math.Clamp(pageSize, 1, 30);
