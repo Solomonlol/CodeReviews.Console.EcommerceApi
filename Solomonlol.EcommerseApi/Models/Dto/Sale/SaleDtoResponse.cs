@@ -9,7 +9,8 @@ namespace Solomonlol.EcommerseApi.Models.Dto.Sale
         public bool IsEnded { get; set; } = false;
         public DateTime? EndedAt { get; set; } = null!;
         public decimal TotalPrice { get; set; }
-        public UserDtoResponse User { get; set; } = null!;
+        //public UserDtoResponse User { get; set; } = null!;
+        public int UserId { get; set; }
         public ICollection<SaleItemDtoResponse> SaleItems { get; set; } = [];
     }
 }

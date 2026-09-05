@@ -10,6 +10,7 @@ using Solomonlol.EcommerseApi.Mapping;
 using Solomonlol.EcommerseApi.Models.Base;
 using Solomonlol.EcommerseApi.Seeding;
 using Solomonlol.EcommerseApi.Services;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.MapInboundClaims = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -32,6 +34,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey= new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
+            RoleClaimType = ClaimTypes.Role,
+        };
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine($"AUTH FAILED: {context.Exception.GetType().Name} — {context.Exception.Message}");
+                return Task.CompletedTask;
+            },
+            OnChallenge = context =>
+            {
+                Console.WriteLine($"CHALLENGE: {context.Error}, {context.ErrorDescription}");
+                return Task.CompletedTask;
+            },
+            OnMessageReceived = context =>
+            {
+                Console.WriteLine($"Token received: {context.Token ?? "NULL — заголовок не распознан"}");
+                return Task.CompletedTask;
+            }
         };
     });
 
@@ -61,11 +82,11 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI();
 

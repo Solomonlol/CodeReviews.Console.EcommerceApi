@@ -1,4 +1,5 @@
-﻿using Solomonlol.EcommerseApi.Interfaces;
+﻿using Microsoft.AspNetCore.Authorization;
+using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Models.Dto.User;
 
 namespace Solomonlol.EcommerseApi.Endpoints
@@ -8,7 +9,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
         public static void MapUserEndpoints(this WebApplication app)
         {
             //get one
-            app.MapGet("api/v1/users/{login}", async (string login, IUserService service, CancellationToken ct) =>
+            app.MapGet("api/v1/users/{login}", [AllowAnonymous] async (string login, IUserService service, CancellationToken ct) =>
             {
                 var result = await service.GetByLogin(login, ct);
                 return result.IsSuccess 
@@ -16,13 +17,13 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 : Results.NotFound();
             });
             //get all
-            app.MapGet("api/v1/users", async (IUserService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
+            app.MapGet("api/v1/users", [Authorize(Roles = "Admin, Manager")] async (IUserService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
                 var result = await service.GetAll(page, pageSize, ct);
                 return Results.Ok(result.Value);
             });
             //create
-            app.MapPost("api/v1/users", async (UserDtoCreation item, IUserService service, CancellationToken ct) =>
+            app.MapPost("api/v1/users", [AllowAnonymous] async (UserDtoCreation item, IUserService service, CancellationToken ct) =>
             {
                 var result = await service.Create(item, ct);
                 return result.IsSuccess 
@@ -30,7 +31,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 : Results.Conflict(result.Error);
             });
             //update
-            app.MapPut("api/v1/users/{login}", async (string login, string password, UserDtoRequest item, IUserService service, CancellationToken ct) =>
+            app.MapPut("api/v1/users/{login}", [Authorize(Roles = "Admin, Manager")] async (string login, string password, UserDtoRequest item, IUserService service, CancellationToken ct) =>
             {
                 var result = await service.Update(login, password, item, ct);
                 return result.IsSuccess 
@@ -38,7 +39,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 : Results.BadRequest(result.Error);
             });
             //delete
-            app.MapDelete("api/v1/users/{login}", async (string login, string password, IUserService service, CancellationToken ct) =>
+            app.MapDelete("api/v1/users/{login}", [Authorize(Roles = "Admin, Manager")] async (string login, string password, IUserService service, CancellationToken ct) =>
             {
                 var result = await service.Delete(login, password, ct);
                 return result.IsSuccess ? Results.NoContent() : Results.NotFound(result.Error);

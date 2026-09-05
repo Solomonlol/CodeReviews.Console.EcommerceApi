@@ -1,4 +1,5 @@
-﻿using Solomonlol.EcommerseApi.Interfaces;
+﻿using Microsoft.AspNetCore.Authorization;
+using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Models.Dto.Product;
 using System.Runtime.CompilerServices;
 
@@ -9,7 +10,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
         public static void MapProductEndpoints(this WebApplication app)
         {
             //get all by page
-            app.MapGet("api/v1/products", async (IProductService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
+            app.MapGet("api/v1/products", [AllowAnonymous] async (IProductService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
                 page=Math.Max(page, 1);
                 pageSize = Math.Clamp(pageSize, 1, 30);
@@ -17,13 +18,13 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 return Results.Ok(result.Value);
             });
             //get one
-            app.MapGet("api/v1/products/{productName}", async (string productName, IProductService service, CancellationToken ct) =>
+            app.MapGet("api/v1/products/{productName}", [AllowAnonymous] async (string productName, IProductService service, CancellationToken ct) =>
             {
                 var result = await service.Get(productName, ct);
                 return result.IsSuccess ? Results.Ok(result.Value) : Results.NotFound();
             });
             //create
-            app.MapPost("api/v1/products", async (ProductDto item, IProductService service, CancellationToken ct) =>
+            app.MapPost("api/v1/products", [Authorize(Roles = "Admin, Manager")] async (ProductDto item, IProductService service, CancellationToken ct) =>
             {
                 var result = await service.Create(item, ct);
                 return result.IsSuccess 
@@ -31,13 +32,13 @@ namespace Solomonlol.EcommerseApi.Endpoints
                     : Results.Conflict(result.Error);
             });
             //update
-            app.MapPut("api/v1/products/{productName}", async (string productName, ProductDto item, IProductService service, CancellationToken ct) =>
+            app.MapPut("api/v1/products/{productName}", [Authorize(Roles = "Admin, Manager")] async (string productName, ProductDto item, IProductService service, CancellationToken ct) =>
             {
                 var result = await service.Update(productName, item, ct);
                 return result.IsSuccess ? Results.Ok(item) : Results.NotFound();
             });
             //delete
-            app.MapDelete("api/v1/products/{productName}", async (string productName, IProductService service, CancellationToken ct) =>
+            app.MapDelete("api/v1/products/{productName}", [Authorize(Roles = "Admin, Manager")] async (string productName, IProductService service, CancellationToken ct) =>
             {
                 var result = await service.Delete(productName, ct);
                 return result.IsSuccess 
@@ -46,7 +47,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
             });
 
             //add attribute value
-            app.MapPost("api/v1/products/{productName}/attributes", async (string productName, ProductAttributeValueDto attribute, IAttributeValueService service, CancellationToken ct) =>
+            app.MapPost("api/v1/products/{productName}/attributes", [Authorize(Roles = "Admin, Manager")] async (string productName, ProductAttributeValueDto attribute, IAttributeValueService service, CancellationToken ct) =>
             {
                 var result = await service.AddAttributeValue(productName, attribute, ct);
                 return result.IsSuccess
@@ -54,7 +55,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 : Results.Conflict(result?.Error);
             });
             //update attribute value
-            app.MapPut("api/v1/products/{productName}/attributes", async (string productName, string attributeName, ProductAttributeValueDto attribute, IAttributeValueService service, CancellationToken ct) =>
+            app.MapPut("api/v1/products/{productName}/attributes", [Authorize(Roles = "Admin, Manager")] async (string productName, string attributeName, ProductAttributeValueDto attribute, IAttributeValueService service, CancellationToken ct) =>
             {
                 var result = await service.UpdateAttributeValue(productName, attributeName, attribute, ct);
                 return result.IsSuccess
