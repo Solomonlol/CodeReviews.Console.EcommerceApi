@@ -18,5 +18,12 @@
             SSD,
             HDD
         }
+
+        public enum RoleEnum
+        {
+            Admin,
+            Manager,
+            User,
+        }
     }
 }

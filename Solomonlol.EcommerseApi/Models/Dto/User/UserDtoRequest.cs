@@ -11,6 +11,7 @@ namespace Solomonlol.EcommerseApi.Models.Dto.User
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         [EmailAddress(ErrorMessage ="Can't validate email address. Please check is it correct.")]
+        [Required(ErrorMessage = "Email is required.")]
         public string? Email { get; set; }
         [Phone(ErrorMessage ="Can't validate phone number. Please check is it correct.")]
         [Required(ErrorMessage ="Phone number is required.")]

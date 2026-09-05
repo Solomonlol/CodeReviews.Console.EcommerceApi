@@ -10,7 +10,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
             //get one
             app.MapGet("api/v1/users/{login}", async (string login, IUserService service, CancellationToken ct) =>
             {
-                var result = await service.Get(login, ct);
+                var result = await service.GetByLogin(login, ct);
                 return result.IsSuccess 
                 ? Results.Ok(result.Value) 
                 : Results.NotFound();

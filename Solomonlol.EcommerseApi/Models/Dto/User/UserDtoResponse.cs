@@ -3,8 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Solomonlol.EcommerseApi.Models.Dto.User
 {
-    public class UserDtoResponce
+    public class UserDtoResponse
     {
+        public int Id { get; set; }
         [Required(ErrorMessage = "Login is required.")]
         public string Login { get; set; } = null!;
         public string FirstName { get; set; } = null!;
@@ -14,6 +15,7 @@ namespace Solomonlol.EcommerseApi.Models.Dto.User
         [Phone(ErrorMessage = "Can't validate phone number. Please check is it correct.")]
         [Required(ErrorMessage = "Phone number is required.")]
         public string PhoneNumber { get; set; } = null!;
-        public ICollection<SaleDtoResponce> Sales { get; set; } = [];
+        public string Role {  get; set; } = string.Empty!;
+        public ICollection<SaleDtoResponse> Sales { get; set; } = [];
     }
 }

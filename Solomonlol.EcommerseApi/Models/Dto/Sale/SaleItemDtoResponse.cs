@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Solomonlol.EcommerseApi.Models.Dto.Sale
 {
-    public class SaleItemDtoResponce
+    public class SaleItemDtoResponse
     {
         //public int ProductId { get; set; }
         //[ForeignKey(nameof(ProductId))]

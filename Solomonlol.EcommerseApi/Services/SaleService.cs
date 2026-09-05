@@ -17,10 +17,10 @@ namespace Solomonlol.EcommerseApi.Services
             _db = db;
             _mapper = mapper;
         }
-        public async Task<Result<SaleDtoResponce>> Create(SaleDtoRequest saleDto, CancellationToken ct = default)
+        public async Task<Result<SaleDtoResponse>> Create(SaleDtoRequest saleDto, CancellationToken ct = default)
         {
             if (!saleDto.SaleItems.Any())
-                return Result<SaleDtoResponce>.Failure("Sale is empty. Add items before trying create new sale.");
+                return Result<SaleDtoResponse>.Failure("Sale is empty. Add items before trying create new sale.");
 
             decimal totalPrice = 0;
 
@@ -34,7 +34,7 @@ namespace Solomonlol.EcommerseApi.Services
                     totalPrice += item.Quantity * product.Price;
                     item.UnitPrice = product.Price;
                 }
-                else return Result<SaleDtoResponce>.Failure($"Product with Id={item.ProductId} was not found.");
+                else return Result<SaleDtoResponse>.Failure($"Product with Id={item.ProductId} was not found.");
             }
 
             sale.TotalPrice = totalPrice;
@@ -44,14 +44,14 @@ namespace Solomonlol.EcommerseApi.Services
 
             var saveCount=await _db.SaveChangesAsync(ct);
 
-            var saleResponce = _mapper.Map<SaleDtoResponce>(sale);
+            var saleResponce = _mapper.Map<SaleDtoResponse>(sale);
             return saveCount > 0 
-                ? Result<SaleDtoResponce>.Success(saleResponce) 
-                : Result<SaleDtoResponce>.Failure("Cannot save in database");
+                ? Result<SaleDtoResponse>.Success(saleResponce) 
+                : Result<SaleDtoResponse>.Failure("Cannot save in database");
         }
 
 
-        public async Task<Result<SaleDtoResponce>> Get(int saleId, CancellationToken ct = default)
+        public async Task<Result<SaleDtoResponse>> Get(int saleId, CancellationToken ct = default)
         {
             var sale = await _db.Sales
                 .Include(s => s.SaleItems)
@@ -60,15 +60,15 @@ namespace Solomonlol.EcommerseApi.Services
                 .FirstOrDefaultAsync(s => s.Id == saleId, ct);
 
             if(sale==null)
-                return Result<SaleDtoResponce>.Failure($"Sale with Id={saleId} was not found.");
+                return Result<SaleDtoResponse>.Failure($"Sale with Id={saleId} was not found.");
 
-            var saleDto = _mapper.Map<SaleDtoResponce>(sale);
+            var saleDto = _mapper.Map<SaleDtoResponse>(sale);
             
 
-            return Result<SaleDtoResponce>.Success(saleDto);
+            return Result<SaleDtoResponse>.Success(saleDto);
         }
 
-        public async Task<Result<PagedResult<SaleDtoResponce>>> GetAll(int page=1, int pageSize=5, CancellationToken ct = default)
+        public async Task<Result<PagedResult<SaleDtoResponse>>> GetAll(int page=1, int pageSize=5, CancellationToken ct = default)
         {
             var totalCount = await _db.Sales.CountAsync(ct);
             var list = await _db.Sales
@@ -81,9 +81,9 @@ namespace Solomonlol.EcommerseApi.Services
                 .ToListAsync(ct);
 
            
-            var dtoList = _mapper.Map<List<SaleDtoResponce>>(list);
+            var dtoList = _mapper.Map<List<SaleDtoResponse>>(list);
             
-            var pagedList = new PagedResult<SaleDtoResponce>()
+            var pagedList = new PagedResult<SaleDtoResponse>()
             {
                 Items = dtoList,
                 Page = page,
@@ -92,10 +92,10 @@ namespace Solomonlol.EcommerseApi.Services
                 TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
             };
 
-            return Result<PagedResult<SaleDtoResponce>>.Success(pagedList);
+            return Result<PagedResult<SaleDtoResponse>>.Success(pagedList);
         }
 
-        public async Task<Result<PagedResult<SaleDtoResponce>>> GetAllByLogin(string login, int page = 1, int pageSize = 5, CancellationToken ct = default)
+        public async Task<Result<PagedResult<SaleDtoResponse>>> GetAllByLogin(string login, int page = 1, int pageSize = 5, CancellationToken ct = default)
         {
             var totalCount = await _db.Sales.Where(s=>s.User.Login==login).CountAsync(ct);
             var list = await _db.Sales
@@ -108,9 +108,9 @@ namespace Solomonlol.EcommerseApi.Services
                 .Take(pageSize)
                 .ToListAsync(ct);
 
-            var dtoList = _mapper.Map<List<SaleDtoResponce>>(list);
+            var dtoList = _mapper.Map<List<SaleDtoResponse>>(list);
 
-            var pagedList = new PagedResult<SaleDtoResponce>()
+            var pagedList = new PagedResult<SaleDtoResponse>()
             {
                 Items = dtoList,
                 Page = page,
@@ -119,12 +119,12 @@ namespace Solomonlol.EcommerseApi.Services
                 TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
             };
 
-            return Result<PagedResult<SaleDtoResponce>>.Success(pagedList);
+            return Result<PagedResult<SaleDtoResponse>>.Success(pagedList);
         }
 
         public async Task<Result> CloseSale(int saleId, CancellationToken ct = default)
         {
-            var sale = await _db.Sales.FindAsync(saleId);
+            var sale = await _db.Sales.FindAsync(saleId, ct);
             if (sale != null)
             {
                 sale.IsEnded = true;

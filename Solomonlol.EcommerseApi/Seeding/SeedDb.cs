@@ -148,8 +148,8 @@ namespace Solomonlol.EcommerseApi.Seeding
             {
                 var users = new List<User>()
                 {
-                    new() { Login="First", FirstName="Alexey", LastName="Gorin", PhoneNumber = "+123 12 1234567" },
-                    new() { Login="Second", FirstName="Natalia", LastName="Nekrasova", PhoneNumber = "+123 12 2234567" },
+                    new() { Login="First", FirstName="Alexey", LastName="Gorin", PhoneNumber = "+123 12 1234567", Role=$"{RoleEnum.Admin}"},
+                    new() { Login="Second", FirstName="Natalia", LastName="Nekrasova", PhoneNumber = "+123 12 2234567", Role=$"{RoleEnum.Manager}"},
                     new() { Login="Third", FirstName="Vasiliy", LastName="Gromov", PhoneNumber = "+123 12 3234567" },
                     new() { Login="Fourth", FirstName="Evgeniy", LastName="Petrov", PhoneNumber = "+123 12 4234567" },
                     new() { Login="Fifth", FirstName="Alexander", LastName="Pushnoy", PhoneNumber = "+123 12 5234567" },

@@ -1,4 +1,5 @@
-﻿using Solomonlol.EcommerseApi.Interfaces;
+﻿using Microsoft.AspNetCore.Authorization;
+using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Models.Dto.Category;
 using Solomonlol.EcommerseApi.Models.Dto.Product;
 
@@ -25,7 +26,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 : Results.NotFound(result?.Error);
             });
             //create
-            app.MapPost("api/v1/categories", async (CategoryDto category, ICategoryService service, CancellationToken ct) =>
+            app.MapPost("api/v1/categories", [Authorize(Roles = "Admin")] async (HttpContext context, CategoryDto category, ICategoryService service, CancellationToken ct) =>
             {
                 var result = await service.Create(category, ct);
                 return result.IsSuccess 

@@ -1,26 +1,23 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OAuth;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Solomonlol.EcommerseApi;
-using Solomonlol.EcommerseApi.Auth;
 using Solomonlol.EcommerseApi.Endpoints;
 using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Mapping;
 using Solomonlol.EcommerseApi.Models.Base;
 using Solomonlol.EcommerseApi.Seeding;
 using Solomonlol.EcommerseApi.Services;
-using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("MSSQLServer");
 
 builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddSingleton<ITokenService, TokenService>();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -28,12 +25,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = AuthOptions.ISSUER,
             ValidateAudience= true,
-            ValidAudience=AuthOptions.AUDIENCE,
             ValidateLifetime=true,
-            IssuerSigningKey=AuthOptions.GetSymmetricSecurityKey(),
-            ValidateIssuerSigningKey = true
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey= new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
         };
     });
 
@@ -59,8 +57,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAttributeService, AttributeService>();
 builder.Services.AddScoped<IAttributeValueService, AttributeService>();
 builder.Services.AddScoped<ISaleService, SaleService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 var app = builder.Build();
+
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -73,6 +73,7 @@ app.MapCategoryEndpoint();
 app.MapProductEndpoints();
 app.MapUserEndpoints();
 app.MapSaleEndpoints();
+app.MapLoginEndponts();
 
 
 await app.SeedAll();
