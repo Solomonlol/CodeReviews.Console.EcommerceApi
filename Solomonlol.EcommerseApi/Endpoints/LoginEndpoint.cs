@@ -17,7 +17,6 @@ namespace Solomonlol.EcommerseApi.Endpoints
                     return Results.Ok(token);
                 }
                 else return Results.Unauthorized();
-                //return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
             });
         }
     }

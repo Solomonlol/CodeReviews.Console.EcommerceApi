@@ -45,17 +45,16 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 : Results.Conflict(result.Error);
             });
             //update
-            app.MapPut("api/v1/users/{login}", [Authorize(Roles = "Admin, Manager")] async (string login, string password, UserDtoRequest item, IUserService service, CancellationToken ct) =>
+            app.MapPut("api/v1/users/{login}", [Authorize(Roles = "Admin, Manager")] async (string login, UserDtoRequest item, IUserService service, CancellationToken ct) =>
             {
-                var result = await service.Update(login, password, item, ct);
+                var result = await service.Update(login, item, ct);
                 return result.IsSuccess
                 ? Results.Ok(item)
                 : Results.BadRequest(result.Error);
             });
             //delete
-            app.MapDelete("api/v1/users/{login}", [Authorize(Roles = "Admin, Manager")] async (ClaimsPrincipal claim, IUserService service, CancellationToken ct) =>
+            app.MapDelete("api/v1/users/{login}", [Authorize(Roles = "Admin, Manager")] async (string login, IUserService service, CancellationToken ct) =>
             {
-                var login = claim.FindFirst(ClaimTypes.Name)?.Value;
                 if (string.IsNullOrEmpty(login) || string.IsNullOrWhiteSpace(login))
                     return Results.BadRequest();
                 var result = await service.Delete(login, ct);
