@@ -20,7 +20,7 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result> Create(CategoryDto item, CancellationToken ct = default)
         {
-            var category = await _db.Categories.FirstOrDefaultAsync(c=>c.Name==item.Name, ct);
+            var category = await _db.Categories.FirstOrDefaultAsync(c => c.Name == item.Name, ct);
             if (category == null)
             {
                 category = _mapper.Map<Category>(item);
@@ -40,8 +40,8 @@ namespace Solomonlol.EcommerseApi.Services
             {
                 category.IsDeleted = true;
                 _db.Update(category);
-                return await _db.SaveChangesAsync(ct) > 0 
-                    ? Result.Success(category) 
+                return await _db.SaveChangesAsync(ct) > 0
+                    ? Result.Success(category)
                     : Result.Failure("Cannot save changes to database");
             }
             else return Result.Failure($"Category with name '{name}' was not found.");
@@ -49,22 +49,22 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result<CategoryDto>> Get(string name, CancellationToken ct = default)
         {
-            var category = await _db.Categories.FirstOrDefaultAsync(c=>c.Name==name, ct);
-            return category != null 
-                ? Result<CategoryDto>.Success(_mapper.Map<CategoryDto>(category)) 
+            var category = await _db.Categories.FirstOrDefaultAsync(c => c.Name == name, ct);
+            return category != null
+                ? Result<CategoryDto>.Success(_mapper.Map<CategoryDto>(category))
                 : Result<CategoryDto>.Failure($"Category with name '{name}' was not found.");
         }
 
-        public async Task<Result<PagedResult<CategoryDto>>> GetAll(int page=1, int pageSize =5, CancellationToken ct = default)
+        public async Task<Result<PagedResult<CategoryDto>>> GetAll(int page = 1, int pageSize = 5, CancellationToken ct = default)
         {
             var totalCount = await _db.Categories
                 .Where(c => c.IsDeleted == false)
                 .CountAsync(ct);
 
             var list = await _db.Categories
-                .OrderBy(c=>c.Name)
-                .Where(c=>c.IsDeleted==false)
-                .Skip((page-1)*pageSize)
+                .OrderBy(c => c.Name)
+                .Where(c => c.IsDeleted == false)
+                .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync(ct);
             var dtoList = _mapper.Map<IEnumerable<CategoryDto>>(list);

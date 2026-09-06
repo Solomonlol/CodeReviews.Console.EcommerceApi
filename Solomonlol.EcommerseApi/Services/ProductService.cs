@@ -23,10 +23,10 @@ namespace Solomonlol.EcommerseApi.Services
             var product = await _db.Products.FirstOrDefaultAsync(p => p.Name.Trim().ToLower() == item.Name.Trim().ToLower(), ct);
             if (product == null)
             {
-                var createdProduct =_mapper.Map<Product>(item);
+                var createdProduct = _mapper.Map<Product>(item);
                 await _db.Products.AddAsync(createdProduct, ct);
-                return await _db.SaveChangesAsync(ct)>0 
-                    ? Result.Success(item) 
+                return await _db.SaveChangesAsync(ct) > 0
+                    ? Result.Success(item)
                     : Result.Failure("Cannot save changes to database.");
             }
             else return Result.Failure($"Product with name {item.Name} already exist.");
@@ -69,13 +69,13 @@ namespace Solomonlol.EcommerseApi.Services
                     })
                 })
                 .FirstOrDefaultAsync(ct);
-            
+
             return product != null
-                ? Result<ProductDto>.Success(_mapper.Map<ProductDto>(product)) 
+                ? Result<ProductDto>.Success(_mapper.Map<ProductDto>(product))
                 : Result<ProductDto>.Failure($"Product with name {name} was not found.");
         }
 
-        public async Task<Result<PagedResult<ProductDto>>> GetAll(int page=1, int pageSize =5, CancellationToken ct = default)
+        public async Task<Result<PagedResult<ProductDto>>> GetAll(int page = 1, int pageSize = 5, CancellationToken ct = default)
         {
             var totalCount = await _db.Products
                 .Where(c => c.Category.IsDeleted == false)
@@ -83,8 +83,8 @@ namespace Solomonlol.EcommerseApi.Services
 
             var list = await _db.Products
                 .OrderBy(p => p.Name)
-                .Include(p=>p.Category)
-                .Where(c=>c.Category.IsDeleted==false)
+                .Include(p => p.Category)
+                .Where(c => c.Category.IsDeleted == false)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync(ct);
@@ -103,7 +103,7 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result> Update(string name, ProductDto item, CancellationToken ct = default)
         {
-            var product = await _db.Products.Include(p=>p.Category).FirstOrDefaultAsync(p => p.Name.Trim().ToLower() == name.Trim().ToLower(), ct);
+            var product = await _db.Products.Include(p => p.Category).FirstOrDefaultAsync(p => p.Name.Trim().ToLower() == name.Trim().ToLower(), ct);
             if (product != null)
             {
                 _mapper.Map(item, product);

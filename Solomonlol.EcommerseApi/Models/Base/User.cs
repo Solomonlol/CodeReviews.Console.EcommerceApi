@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using static Solomonlol.EcommerseApi.Seeding.EnumSeedHelper;
 
 namespace Solomonlol.EcommerseApi.Models.Base

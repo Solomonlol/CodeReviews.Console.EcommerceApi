@@ -21,15 +21,15 @@ namespace Solomonlol.EcommerseApi.Endpoints
             app.MapGet("api/v1/categories/{categoryName}", [AllowAnonymous] async (string categoryName, ICategoryService service, CancellationToken ct) =>
             {
                 var result = await service.Get(categoryName, ct);
-                return result.IsSuccess 
-                ? Results.Ok(result.Value) 
+                return result.IsSuccess
+                ? Results.Ok(result.Value)
                 : Results.NotFound(result?.Error);
             });
             //create
             app.MapPost("api/v1/categories", [Authorize(Roles = "Admin, Manager")] async (HttpContext context, CategoryDto category, ICategoryService service, CancellationToken ct) =>
             {
                 var result = await service.Create(category, ct);
-                return result.IsSuccess 
+                return result.IsSuccess
                 ? Results.Created()
                 : Results.Conflict(result?.Error);
             });
@@ -37,16 +37,16 @@ namespace Solomonlol.EcommerseApi.Endpoints
             app.MapPut("api/v1/categories/{categoryName}", [Authorize(Roles = "Admin, Manager")] async (string categoryName, CategoryDto category, ICategoryService service, CancellationToken ct) =>
             {
                 var result = await service.Update(categoryName, category, ct);
-                return result.IsSuccess 
-                ? Results.Ok() 
+                return result.IsSuccess
+                ? Results.Ok()
                 : Results.NotFound(result?.Error);
             });
             //delete
             app.MapDelete("api/v1/categories/{categoryName}", [Authorize(Roles = "Admin, Manager")] async (string categoryName, ICategoryService service, CancellationToken ct) =>
             {
                 var result = await service.Delete(categoryName, ct);
-                return result.IsSuccess 
-                ? Results.NoContent() 
+                return result.IsSuccess
+                ? Results.NoContent()
                 : Results.NotFound(result?.Error);
             });
             //add attribute

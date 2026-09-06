@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Models.Base;
@@ -28,28 +27,23 @@ namespace Solomonlol.EcommerseApi.Services
                 var user = _mapper.Map<User>(item);
                 user.PasswordHash = _accountService.Hash(user, item.Password);
                 await _db.Users.AddAsync(user, ct);
-                return await _db.SaveChangesAsync(ct) > 0 
-                    ? Result.Success(item) 
+                return await _db.SaveChangesAsync(ct) > 0
+                    ? Result.Success(item)
                     : Result.Failure("Cannot save changes to database");
             }
             else return Result.Failure("User with this login already exist.");
         }
 
-        public async Task<Result> Delete(string login, string password, CancellationToken ct = default)
+        public async Task<Result> Delete(string login, CancellationToken ct = default)
         {
-            var userCheck=await _db.Users.FirstOrDefaultAsync(u=>u.Login == login, ct);
+            var userCheck = await _db.Users.FirstOrDefaultAsync(u => u.Login == login, ct);
             if (userCheck != null)
             {
-                var passwordCheck = _accountService.CheckHash(userCheck, password);
-                if (passwordCheck)
-                {
-                    userCheck.IsDeleted = true;
-                    _db.Users.Update(userCheck);
-                    return await _db.SaveChangesAsync(ct) > 0
-                        ? Result.Success()
-                        : Result.Failure("Cannot save changes to database");
-                }
-                else return Result.Failure("Incorrect password.");
+                userCheck.IsDeleted = true;
+                _db.Users.Update(userCheck);
+                return await _db.SaveChangesAsync(ct) > 0
+                    ? Result.Success()
+                    : Result.Failure("Cannot save changes to database");
             }
             else return Result.Failure("User was not found");
         }
@@ -57,28 +51,28 @@ namespace Solomonlol.EcommerseApi.Services
         public async Task<Result<UserDtoResponse>> GetByLogin(string login, CancellationToken ct = default)
         {
             var userCheck = await _db.Users
-                .Include(u=>u.Sales)
-                .ThenInclude(s=>s.SaleItems)
+                .Include(u => u.Sales)
+                .ThenInclude(s => s.SaleItems)
                 .FirstOrDefaultAsync(u => u.Login == login, ct);
             return userCheck != null
-                ? Result<UserDtoResponse>.Success(_mapper.Map<UserDtoResponse>(userCheck)) 
+                ? Result<UserDtoResponse>.Success(_mapper.Map<UserDtoResponse>(userCheck))
                 : Result<UserDtoResponse>.Failure("User was not found.");
         }
 
-        public async Task<Result<UserDtoResponse>> VerifyByEmail(string email, string password,  CancellationToken ct = default)
+        public async Task<Result<UserDtoResponse>> VerifyByEmail(string email, string password, CancellationToken ct = default)
         {
             var userCheck = await _db.Users
                 .Include(u => u.Sales)
                 .ThenInclude(s => s.SaleItems)
                 .FirstOrDefaultAsync(u => u.Email == email, ct);
 
-            if(userCheck==null) return Result<UserDtoResponse>.Failure("User was not found.");
+            if (userCheck == null) return Result<UserDtoResponse>.Failure("User was not found.");
 
             var verificationResult = _accountService.CheckHash(userCheck, password);
 
             return verificationResult
                 ? Result<UserDtoResponse>.Success(_mapper.Map<UserDtoResponse>(userCheck))
-                : Result<UserDtoResponse>.Failure("User was not found.");
+                : Result<UserDtoResponse>.Failure("Wrong login or password.");
         }
 
         public async Task<Result<PagedResult<UserDtoResponse>>> GetAll(int page = 1, int pageSize = 5, CancellationToken ct = default)
@@ -96,31 +90,27 @@ namespace Solomonlol.EcommerseApi.Services
 
             var pageResult = new PagedResult<UserDtoResponse>()
             {
-                Items=dtoList,
+                Items = dtoList,
                 Page = page,
                 PageSize = pageSize,
                 TotalCount = totalCount,
-                TotalPages = (int)Math.Ceiling(totalCount/(double)pageSize)
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
             };
 
             return Result<PagedResult<UserDtoResponse>>.Success(pageResult);
         }
 
-        public async Task<Result> Update(string login, string password, UserDtoRequest item, CancellationToken ct = default)
+        public async Task<Result> Update(string login, UserDtoRequest item, CancellationToken ct = default)
         {
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Login == login, ct);
             if (user != null)
             {
-                var passwordCheck = _accountService.CheckHash(user, password);
-                if (passwordCheck)
-                {
-                    _mapper.Map(item, user);
-                    _db.Users.Update(user);
-                    return await _db.SaveChangesAsync(ct) > 0 
-                        ? Result.Success(item) 
-                        : Result.Failure("Cannot save changes to database");
-                }
-                else return Result.Failure("Incorrect password.");
+
+                _mapper.Map(item, user);
+                _db.Users.Update(user);
+                return await _db.SaveChangesAsync(ct) > 0
+                    ? Result.Success(item)
+                    : Result.Failure("Cannot save changes to database");
             }
             else return Result.Failure("User was not found.");
         }

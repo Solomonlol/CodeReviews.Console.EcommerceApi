@@ -7,7 +7,7 @@ namespace Solomonlol.EcommerseApi.Seeding
 {
     public static class SeedDb
     {
-        
+
         public static async Task SeedAll(this WebApplication app, CancellationToken ct = default)
         {
             using var scope = app.Services.CreateAsyncScope();
@@ -117,7 +117,7 @@ namespace Solomonlol.EcommerseApi.Seeding
 
         private static async Task SeedCategory(ApplicationContext db, CancellationToken ct)
         {
-            if(!await db.Categories.AnyAsync(ct))
+            if (!await db.Categories.AnyAsync(ct))
             {
                 var categories = new List<Category>
                 {
@@ -167,7 +167,7 @@ namespace Solomonlol.EcommerseApi.Seeding
 
         private static async Task SeedProduct(ApplicationContext db, CancellationToken ct)
         {
-            if(!await db.Products.AnyAsync(ct))
+            if (!await db.Products.AnyAsync(ct))
             {
                 var cpuProducts = new List<Product>
                 {
@@ -206,8 +206,8 @@ namespace Solomonlol.EcommerseApi.Seeding
                 };
                 var gpuProducts = new List<Product>
                 {
-                    new() { Name="ASUS Dual GeForce RTX 5070 12GB GDDR7 OC Edition", 
-                        CategoryId=(int)CategoryEnum.GPU, 
+                    new() { Name="ASUS Dual GeForce RTX 5070 12GB GDDR7 OC Edition",
+                        CategoryId=(int)CategoryEnum.GPU,
                         Description="A powerful and compact solution for modern gaming machines and industrial systems.",
                         IsDeleted=false, Price = 1000m },
                     new() { Name="ASUS Prime Radeon RX 9070 XT OC Edition 16GB GDDR6",

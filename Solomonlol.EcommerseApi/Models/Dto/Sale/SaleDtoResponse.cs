@@ -1,6 +1,4 @@
-﻿using Solomonlol.EcommerseApi.Models.Dto.User;
-
-namespace Solomonlol.EcommerseApi.Models.Dto.Sale
+﻿namespace Solomonlol.EcommerseApi.Models.Dto.Sale
 {
     public class SaleDtoResponse
     {

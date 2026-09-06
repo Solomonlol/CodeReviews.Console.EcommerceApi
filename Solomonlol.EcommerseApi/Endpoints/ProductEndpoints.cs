@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Models.Dto.Product;
-using System.Runtime.CompilerServices;
 
 namespace Solomonlol.EcommerseApi.Endpoints
 {
@@ -12,7 +11,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
             //get all by page
             app.MapGet("api/v1/products", [AllowAnonymous] async (IProductService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
-                page=Math.Max(page, 1);
+                page = Math.Max(page, 1);
                 pageSize = Math.Clamp(pageSize, 1, 30);
                 var result = await service.GetAll(page, pageSize, ct);
                 return Results.Ok(result.Value);
@@ -27,8 +26,8 @@ namespace Solomonlol.EcommerseApi.Endpoints
             app.MapPost("api/v1/products", [Authorize(Roles = "Admin, Manager")] async (ProductDto item, IProductService service, CancellationToken ct) =>
             {
                 var result = await service.Create(item, ct);
-                return result.IsSuccess 
-                    ? Results.Created($"api/v1/products/{item.Name}", item) 
+                return result.IsSuccess
+                    ? Results.Created($"api/v1/products/{item.Name}", item)
                     : Results.Conflict(result.Error);
             });
             //update
@@ -41,8 +40,8 @@ namespace Solomonlol.EcommerseApi.Endpoints
             app.MapDelete("api/v1/products/{productName}", [Authorize(Roles = "Admin, Manager")] async (string productName, IProductService service, CancellationToken ct) =>
             {
                 var result = await service.Delete(productName, ct);
-                return result.IsSuccess 
-                    ? Results.NoContent() 
+                return result.IsSuccess
+                    ? Results.NoContent()
                     : Results.NotFound(result.Error);
             });
 

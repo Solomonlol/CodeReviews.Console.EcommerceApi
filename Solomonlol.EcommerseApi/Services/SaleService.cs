@@ -42,11 +42,11 @@ namespace Solomonlol.EcommerseApi.Services
 
             await _db.Sales.AddAsync(sale, ct);
 
-            var saveCount=await _db.SaveChangesAsync(ct);
+            var saveCount = await _db.SaveChangesAsync(ct);
 
             var saleResponce = _mapper.Map<SaleDtoResponse>(sale);
-            return saveCount > 0 
-                ? Result<SaleDtoResponse>.Success(saleResponce) 
+            return saveCount > 0
+                ? Result<SaleDtoResponse>.Success(saleResponce)
                 : Result<SaleDtoResponse>.Failure("Cannot save in database");
         }
 
@@ -55,34 +55,34 @@ namespace Solomonlol.EcommerseApi.Services
         {
             var sale = await _db.Sales
                 .Include(s => s.SaleItems)
-                .ThenInclude(p=>p.Product)
-                .ThenInclude(c=>c.Category)
+                .ThenInclude(p => p.Product)
+                .ThenInclude(c => c.Category)
                 .FirstOrDefaultAsync(s => s.Id == saleId, ct);
 
-            if(sale==null)
+            if (sale == null)
                 return Result<SaleDtoResponse>.Failure($"Sale with Id={saleId} was not found.");
 
             var saleDto = _mapper.Map<SaleDtoResponse>(sale);
-            
+
 
             return Result<SaleDtoResponse>.Success(saleDto);
         }
 
-        public async Task<Result<PagedResult<SaleDtoResponse>>> GetAll(int page=1, int pageSize=5, CancellationToken ct = default)
+        public async Task<Result<PagedResult<SaleDtoResponse>>> GetAll(int page = 1, int pageSize = 5, CancellationToken ct = default)
         {
             var totalCount = await _db.Sales.CountAsync(ct);
             var list = await _db.Sales
-                .OrderBy(s=>s.CreatedAt)
-                .Include(s=>s.SaleItems)
-                .ThenInclude(p=>p.Product)
-                .ThenInclude(c=>c.Category)
-                .Skip((page-1)*pageSize)
+                .OrderBy(s => s.CreatedAt)
+                .Include(s => s.SaleItems)
+                .ThenInclude(p => p.Product)
+                .ThenInclude(c => c.Category)
+                .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync(ct);
 
-           
+
             var dtoList = _mapper.Map<List<SaleDtoResponse>>(list);
-            
+
             var pagedList = new PagedResult<SaleDtoResponse>()
             {
                 Items = dtoList,
@@ -97,7 +97,7 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result<PagedResult<SaleDtoResponse>>> GetAllByLogin(string login, int page = 1, int pageSize = 5, CancellationToken ct = default)
         {
-            var totalCount = await _db.Sales.Where(s=>s.User.Login==login).CountAsync(ct);
+            var totalCount = await _db.Sales.Where(s => s.User.Login == login).CountAsync(ct);
             var list = await _db.Sales
                 .Where(s => s.User.Login == login)
                 .OrderBy(s => s.CreatedAt)

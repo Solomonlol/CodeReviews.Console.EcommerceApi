@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.Data;
 using Solomonlol.EcommerseApi.Interfaces;
-using System.Runtime.CompilerServices;
 
 namespace Solomonlol.EcommerseApi.Endpoints
 {
@@ -10,7 +9,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
         {
             app.MapPost("/api/v1/login", async (LoginRequest request, ITokenService tokenService, IUserService userService, CancellationToken ct) =>
             {
-                var result = await  userService.VerifyByEmail(request.Email, request.Password, ct);
+                var result = await userService.VerifyByEmail(request.Email, request.Password, ct);
                 if (result.IsSuccess)
                 {
                     var user = result.Value;

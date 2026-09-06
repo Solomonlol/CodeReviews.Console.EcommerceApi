@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Solomonlol.EcommerseApi.Models.Dto.Sale
+﻿namespace Solomonlol.EcommerseApi.Models.Dto.Sale
 {
     public class SaleItemDtoRequest
     {

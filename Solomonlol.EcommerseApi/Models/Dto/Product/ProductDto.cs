@@ -1,5 +1,4 @@
-﻿using Solomonlol.EcommerseApi.Models.Base;
-using Solomonlol.EcommerseApi.Models.Dto.Category;
+﻿using Solomonlol.EcommerseApi.Models.Dto.Category;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;

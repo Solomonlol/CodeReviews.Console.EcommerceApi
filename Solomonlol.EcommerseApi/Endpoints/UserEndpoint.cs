@@ -13,15 +13,15 @@ namespace Solomonlol.EcommerseApi.Endpoints
             app.MapGet("api/v1/users/me", [Authorize] async (ClaimsPrincipal claims, IUserService service, CancellationToken ct) =>
             {
                 var login = claims.FindFirst(ClaimTypes.Name)?.Value;
-                if(string.IsNullOrEmpty(login) || string.IsNullOrWhiteSpace(login)) return Results.BadRequest();
+                if (string.IsNullOrEmpty(login) || string.IsNullOrWhiteSpace(login)) return Results.BadRequest();
 
                 var result = await service.GetByLogin(login, ct);
-                return result.IsSuccess 
-                ? Results.Ok(result.Value) 
+                return result.IsSuccess
+                ? Results.Ok(result.Value)
                 : Results.NotFound();
             });
             //get one
-            app.MapGet("api/v1/users/{login}", [Authorize(Roles ="Admin, Manager")] async (string login, IUserService service, CancellationToken ct) =>
+            app.MapGet("api/v1/users/{login}", [Authorize(Roles = "Admin, Manager")] async (string login, IUserService service, CancellationToken ct) =>
             {
                 if (string.IsNullOrEmpty(login) || string.IsNullOrWhiteSpace(login)) return Results.BadRequest();
 
@@ -40,22 +40,25 @@ namespace Solomonlol.EcommerseApi.Endpoints
             app.MapPost("api/v1/users", [AllowAnonymous] async (UserDtoCreation item, IUserService service, CancellationToken ct) =>
             {
                 var result = await service.Create(item, ct);
-                return result.IsSuccess 
-                ? Results.Created($"api/v1/users/{item.Login}", item) 
+                return result.IsSuccess
+                ? Results.Created($"api/v1/users/{item.Login}", item)
                 : Results.Conflict(result.Error);
             });
             //update
             app.MapPut("api/v1/users/{login}", [Authorize(Roles = "Admin, Manager")] async (string login, string password, UserDtoRequest item, IUserService service, CancellationToken ct) =>
             {
                 var result = await service.Update(login, password, item, ct);
-                return result.IsSuccess 
-                ? Results.Ok(item) 
+                return result.IsSuccess
+                ? Results.Ok(item)
                 : Results.BadRequest(result.Error);
             });
             //delete
-            app.MapDelete("api/v1/users/{login}", [Authorize(Roles = "Admin, Manager")] async (string login, string password, IUserService service, CancellationToken ct) =>
+            app.MapDelete("api/v1/users/{login}", [Authorize(Roles = "Admin, Manager")] async (ClaimsPrincipal claim, IUserService service, CancellationToken ct) =>
             {
-                var result = await service.Delete(login, password, ct);
+                var login = claim.FindFirst(ClaimTypes.Name)?.Value;
+                if (string.IsNullOrEmpty(login) || string.IsNullOrWhiteSpace(login))
+                    return Results.BadRequest();
+                var result = await service.Delete(login, ct);
                 return result.IsSuccess ? Results.NoContent() : Results.NotFound(result.Error);
             });
         }

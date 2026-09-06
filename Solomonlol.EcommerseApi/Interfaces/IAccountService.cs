@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Solomonlol.EcommerseApi.Models.Base;
+﻿using Solomonlol.EcommerseApi.Models.Base;
 
 namespace Solomonlol.EcommerseApi.Interfaces
 {

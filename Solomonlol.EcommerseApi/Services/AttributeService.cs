@@ -38,15 +38,15 @@ namespace Solomonlol.EcommerseApi.Services
         {
             var checkCategory = await _db.Categories.FirstOrDefaultAsync(c => c.Name.Trim().ToLower() == categoryName.Trim().ToLower(), ct);
 
-            if (checkCategory == null) 
+            if (checkCategory == null)
                 return Result.Failure("Category was not found");
 
             var checkAttribute = await _db.ProductAttributes.FirstOrDefaultAsync(x => x.Name == attributeName, ct);
             if (checkAttribute != null)
             {
                 _db.ProductAttributes.Remove(checkAttribute);
-                return await _db.SaveChangesAsync(ct) > 0 
-                    ? Result.Success(attributeName) 
+                return await _db.SaveChangesAsync(ct) > 0
+                    ? Result.Success(attributeName)
                     : Result.Failure("Cannot save changes to database");
             }
             else return Result.Failure("Attribute was not found");
@@ -56,13 +56,13 @@ namespace Solomonlol.EcommerseApi.Services
             var checkCategory = await _db.Categories.FirstOrDefaultAsync(c => c.Name.Trim().ToLower() == categoryName.Trim().ToLower(), ct);
             if (checkCategory != null)
             {
-                var attribute = await _db.ProductAttributes.FirstOrDefaultAsync(p=>p.Name.Trim().ToLower() == attributeName.Trim().ToLower(), ct);
+                var attribute = await _db.ProductAttributes.FirstOrDefaultAsync(p => p.Name.Trim().ToLower() == attributeName.Trim().ToLower(), ct);
                 if (attribute != null)
                 {
                     _mapper.Map(item, attribute);
                     _db.ProductAttributes.Update(attribute);
-                    return await _db.SaveChangesAsync(ct) > 0 
-                        ? Result.Success(item) 
+                    return await _db.SaveChangesAsync(ct) > 0
+                        ? Result.Success(item)
                         : Result.Failure("Cannot save changes to database");
                 }
                 else return Result.Failure("Attribute was not found");
@@ -78,16 +78,16 @@ namespace Solomonlol.EcommerseApi.Services
                 return Result.Failure($"Product with name '{productName}' was not found.");
 
             var valueCheck = await _db.ProductAttributeValues
-                .FirstOrDefaultAsync(a=>
-                a.ProductAttributeId==item.ProductAttributeId && 
-                a.ProductId==item.ProductId, ct);
+                .FirstOrDefaultAsync(a =>
+                a.ProductAttributeId == item.ProductAttributeId &&
+                a.ProductId == item.ProductId, ct);
             if (valueCheck == null)
             {
                 var value = _mapper.Map<ProductAttributeValue>(item);
-                
+
                 await _db.ProductAttributeValues.AddAsync(value, ct);
-                return await _db.SaveChangesAsync(ct) > 0 
-                    ? Result.Success(item) 
+                return await _db.SaveChangesAsync(ct) > 0
+                    ? Result.Success(item)
                     : Result.Failure("Cannot save changes to database");
             }
             else return Result.Failure("Attribute value already exist.");
@@ -113,8 +113,8 @@ namespace Solomonlol.EcommerseApi.Services
             if (valueCheck != null)
             {
                 _db.ProductAttributeValues.Remove(valueCheck);
-                return await _db.SaveChangesAsync(ct) > 0 
-                    ? Result.Success() 
+                return await _db.SaveChangesAsync(ct) > 0
+                    ? Result.Success()
                     : Result.Failure("Cannot save changes to database");
             }
             else return Result.Failure("Attribute value was not found.");
@@ -137,7 +137,7 @@ namespace Solomonlol.EcommerseApi.Services
                 .FirstOrDefaultAsync(a =>
                 a.ProductAttributeId == item.ProductAttributeId &&
                 a.ProductId == item.ProductId, ct);
-            if(value!=null)
+            if (value != null)
             {
                 _mapper.Map(item, value);
                 _db.ProductAttributeValues.Update(value);

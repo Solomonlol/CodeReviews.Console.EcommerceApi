@@ -1,7 +1,4 @@
-﻿using Solomonlol.EcommerseApi.Models.Base;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Solomonlol.EcommerseApi.Models.Dto.Product
+﻿namespace Solomonlol.EcommerseApi.Models.Dto.Product
 {
     public class ProductAttributeValueDto
     {

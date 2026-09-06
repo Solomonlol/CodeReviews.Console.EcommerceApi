@@ -1,5 +1,4 @@
 ﻿using Solomonlol.EcommerseApi.Models.Dto.Product;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Solomonlol.EcommerseApi.Models.Dto.Sale
 {
