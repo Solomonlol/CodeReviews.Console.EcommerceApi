@@ -2,6 +2,8 @@
 using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Models.Dto.Category;
 using Solomonlol.EcommerseApi.Models.Dto.Product;
+using Solomonlol.EcommerseApi.Services.Extensions.Filters;
+using Solomonlol.EcommerseApi.Services.Extensions.Sort;
 
 namespace Solomonlol.EcommerseApi.Endpoints
 {
@@ -10,11 +12,11 @@ namespace Solomonlol.EcommerseApi.Endpoints
         public static void MapCategoryEndpoint(this WebApplication app)
         {
             //get all by page
-            app.MapGet("api/v1/categories", [AllowAnonymous] async (ICategoryService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
+            app.MapGet("api/v1/categories", [AllowAnonymous] async ([AsParameters]CategoryFilter filter, [AsParameters] SortParams sortParams, ICategoryService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
                 page = Math.Max(page, 1);
                 pageSize = Math.Clamp(pageSize, 1, 30);
-                var result = await service.GetAll(page, pageSize, ct);
+                var result = await service.GetAll(filter, sortParams, page, pageSize, ct);
                 return Results.Ok(result.Value);
             });
             //get one

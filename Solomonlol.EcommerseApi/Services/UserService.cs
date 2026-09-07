@@ -5,6 +5,9 @@ using Solomonlol.EcommerseApi.Models.Base;
 using Solomonlol.EcommerseApi.Models.Dto;
 using Solomonlol.EcommerseApi.Models.Dto.User;
 using Solomonlol.EcommerseApi.MyResults;
+using Solomonlol.EcommerseApi.Services.Extensions;
+using Solomonlol.EcommerseApi.Services.Extensions.Filters;
+using Solomonlol.EcommerseApi.Services.Extensions.Sort;
 
 namespace Solomonlol.EcommerseApi.Services
 {
@@ -75,12 +78,13 @@ namespace Solomonlol.EcommerseApi.Services
                 : Result<UserDtoResponse>.Failure("Wrong login or password.");
         }
 
-        public async Task<Result<PagedResult<UserDtoResponse>>> GetAll(int page = 1, int pageSize = 5, CancellationToken ct = default)
+        public async Task<Result<PagedResult<UserDtoResponse>>> GetAll(UserFilter filter, SortParams sortParams, int page = 1, int pageSize = 5, CancellationToken ct = default)
         {
             var totalCount = await _db.Users.CountAsync(ct);
 
             var list = await _db.Users
-                .OrderBy(u => u.Login)
+                .Sort(sortParams)
+                .Filter(filter)
                 .Include(u => u.Sales)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)

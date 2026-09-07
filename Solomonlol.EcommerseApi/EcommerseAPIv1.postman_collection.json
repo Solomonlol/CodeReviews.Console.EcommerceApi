@@ -19,12 +19,10 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/categories/headphones",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/categories/headphones",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
@@ -40,13 +38,20 @@
               "request": {
                 "method": "GET",
                 "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/categories?page=1&pageSize=30",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/categories?OrderBy=description&Direction=1&page=1&pageSize=5",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
@@ -54,12 +59,20 @@
                   ],
                   "query": [
                     {
+                      "key": "OrderBy",
+                      "value": "description"
+                    },
+                    {
+                      "key": "Direction",
+                      "value": "1"
+                    },
+                    {
                       "key": "page",
                       "value": "1"
                     },
                     {
                       "key": "pageSize",
-                      "value": "30"
+                      "value": "5"
                     }
                   ]
                 }
@@ -72,12 +85,10 @@
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/categories/cpu",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/categories/cpu",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
@@ -90,7 +101,30 @@
             },
             {
               "name": "Create",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
               "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
                 "method": "POST",
                 "header": [],
                 "body": {
@@ -103,12 +137,10 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/categories/",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/categories/",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
@@ -134,12 +166,10 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/categories/motherboards",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/categories/motherboards",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
@@ -173,12 +203,10 @@
                       }
                     },
                     "url": {
-                      "raw": "http://localhost:5254/api/v1/categories/cpu/attributes",
-                      "protocol": "http",
+                      "raw": "{{BASE_URL}}/api/v1/categories/cpu/attributes",
                       "host": [
-                        "localhost"
+                        "{{BASE_URL}}"
                       ],
-                      "port": "5254",
                       "path": [
                         "api",
                         "v1",
@@ -205,12 +233,10 @@
                       }
                     },
                     "url": {
-                      "raw": "http://localhost:5254/api/v1/categories/cpu/attributes?attributeName=Test",
-                      "protocol": "http",
+                      "raw": "{{BASE_URL}}/api/v1/categories/cpu/attributes?attributeName=Test",
                       "host": [
-                        "localhost"
+                        "{{BASE_URL}}"
                       ],
-                      "port": "5254",
                       "path": [
                         "api",
                         "v1",
@@ -243,12 +269,10 @@
                       }
                     },
                     "url": {
-                      "raw": "http://localhost:5254/api/v1/categories/cpu/attributes?attributeName=Test2",
-                      "protocol": "http",
+                      "raw": "{{BASE_URL}}/api/v1/categories/cpu/attributes?attributeName=Test2",
                       "host": [
-                        "localhost"
+                        "{{BASE_URL}}"
                       ],
-                      "port": "5254",
                       "path": [
                         "api",
                         "v1",
@@ -281,12 +305,10 @@
                       }
                     },
                     "url": {
-                      "raw": "http://localhost:5254/api/v1/products/Intel Core i5-14600KF/attributes",
-                      "protocol": "http",
+                      "raw": "{{BASE_URL}}/api/v1/products/Intel Core i5-14600KF/attributes",
                       "host": [
-                        "localhost"
+                        "{{BASE_URL}}"
                       ],
-                      "port": "5254",
                       "path": [
                         "api",
                         "v1",
@@ -313,12 +335,10 @@
                       }
                     },
                     "url": {
-                      "raw": "http://localhost:5254/api/v1/products/Intel Core i5-14600KF/attributes?attributeName=Test",
-                      "protocol": "http",
+                      "raw": "{{BASE_URL}}/api/v1/products/Intel Core i5-14600KF/attributes?attributeName=Test",
                       "host": [
-                        "localhost"
+                        "{{BASE_URL}}"
                       ],
-                      "port": "5254",
                       "path": [
                         "api",
                         "v1",
@@ -344,18 +364,32 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/products?page=1&pageSize=30",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/products?MaxPrice=1200&MinPrice=800&OrderBy=price&Direction=1&page=1&pageSize=30",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
                     "products"
                   ],
                   "query": [
+                    {
+                      "key": "MaxPrice",
+                      "value": "1200"
+                    },
+                    {
+                      "key": "MinPrice",
+                      "value": "800"
+                    },
+                    {
+                      "key": "OrderBy",
+                      "value": "price"
+                    },
+                    {
+                      "key": "Direction",
+                      "value": "1"
+                    },
                     {
                       "key": "page",
                       "value": "1"
@@ -375,12 +409,10 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/products/Intel Core i5-14600KF",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/products/Intel Core i5-14600KF",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
@@ -397,12 +429,10 @@
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/products/Gigabyte GO27Q24A",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/products/Gigabyte GO27Q24A",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
@@ -428,12 +458,10 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/products/Intel Core i5-14600KF",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/products/Intel Core i5-14600KF",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
@@ -459,12 +487,10 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/products",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/products",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
@@ -480,22 +506,20 @@
           "name": "UserAPI",
           "item": [
             {
-              "name": "Get",
+              "name": "GetYourAcc",
               "request": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/users/Second",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/users/me",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
                     "users",
-                    "Second"
+                    "me"
                   ]
                 }
               },
@@ -507,16 +531,32 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/users",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/users?OrderBy=role&Direction=0&page=1&pageSize=15",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
                     "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "OrderBy",
+                      "value": "role"
+                    },
+                    {
+                      "key": "Direction",
+                      "value": "0"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "15"
+                    }
                   ]
                 }
               },
@@ -525,6 +565,16 @@
             {
               "name": "Create",
               "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
                 "method": "POST",
                 "header": [],
                 "body": {
@@ -537,12 +587,10 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/users",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/users",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
@@ -567,12 +615,10 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/users/Solomon2?password=Password321!!",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/users/Solomon2?password=Password321!!",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
@@ -595,27 +641,63 @@
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/users/Solomon3?password=Password321!!",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/users/Solomon3",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
                     "users",
                     "Solomon3"
-                  ],
-                  "query": [
-                    {
-                      "key": "password",
-                      "value": "Password321!!"
-                    }
                   ]
                 }
               },
               "response": []
+            },
+            {
+              "name": "Get",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/api/v1/users/First",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "First"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  ""
+                ]
+              }
             }
           ]
         },
@@ -627,13 +709,20 @@
               "request": {
                 "method": "GET",
                 "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/sales/1",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/sales/1",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
@@ -650,12 +739,10 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/sales?page=1&pageSize=30",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/sales?page=1&pageSize=30",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
@@ -681,27 +768,15 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/Second/sales?page=1&pageSize=30",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/me/sales",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
-                    "Second",
+                    "me",
                     "sales"
-                  ],
-                  "query": [
-                    {
-                      "key": "page",
-                      "value": "1"
-                    },
-                    {
-                      "key": "pageSize",
-                      "value": "30"
-                    }
                   ]
                 }
               },
@@ -722,12 +797,10 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/sales",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/sales",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
@@ -743,12 +816,10 @@
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5254/api/v1/sales/1",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/v1/sales/1",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5254",
                   "path": [
                     "api",
                     "v1",
@@ -760,8 +831,110 @@
               "response": []
             }
           ]
+        },
+        {
+          "name": "Auth",
+          "item": [
+            {
+              "name": "Authentication",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.environment.set(\"TOKEN\", pm.response.json())"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\": \"Second@gmail.com\",\r\n    \"password\": \"Password123\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{AUTH_URL}}",
+                  "host": [
+                    "{{AUTH_URL}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "auth": {
+            "type": "noauth"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  ""
+                ]
+              }
+            }
+          ]
         }
       ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{TOKEN}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
     }
   ]
 }

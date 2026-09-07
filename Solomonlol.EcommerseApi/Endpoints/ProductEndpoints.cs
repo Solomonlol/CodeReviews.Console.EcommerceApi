@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Models.Dto.Product;
+using Solomonlol.EcommerseApi.Services.Extensions.Filters;
+using Solomonlol.EcommerseApi.Services.Extensions.Sort;
 
 namespace Solomonlol.EcommerseApi.Endpoints
 {
@@ -9,11 +11,11 @@ namespace Solomonlol.EcommerseApi.Endpoints
         public static void MapProductEndpoints(this WebApplication app)
         {
             //get all by page
-            app.MapGet("api/v1/products", [AllowAnonymous] async (IProductService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
+            app.MapGet("api/v1/products", [AllowAnonymous] async ([AsParameters]ProductFilter filter, [AsParameters] SortParams sortParams, IProductService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
                 page = Math.Max(page, 1);
                 pageSize = Math.Clamp(pageSize, 1, 30);
-                var result = await service.GetAll(page, pageSize, ct);
+                var result = await service.GetAll(filter, sortParams, page, pageSize, ct);
                 return Results.Ok(result.Value);
             });
             //get one

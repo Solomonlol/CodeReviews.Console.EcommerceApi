@@ -5,6 +5,9 @@ using Solomonlol.EcommerseApi.Models.Base;
 using Solomonlol.EcommerseApi.Models.Dto;
 using Solomonlol.EcommerseApi.Models.Dto.Category;
 using Solomonlol.EcommerseApi.MyResults;
+using Solomonlol.EcommerseApi.Services.Extensions;
+using Solomonlol.EcommerseApi.Services.Extensions.Filters;
+using Solomonlol.EcommerseApi.Services.Extensions.Sort;
 
 namespace Solomonlol.EcommerseApi.Services
 {
@@ -55,14 +58,16 @@ namespace Solomonlol.EcommerseApi.Services
                 : Result<CategoryDto>.Failure($"Category with name '{name}' was not found.");
         }
 
-        public async Task<Result<PagedResult<CategoryDto>>> GetAll(int page = 1, int pageSize = 5, CancellationToken ct = default)
+        public async Task<Result<PagedResult<CategoryDto>>> GetAll(CategoryFilter filter, SortParams sortParams, int page = 1, int pageSize = 5, CancellationToken ct = default)
         {
             var totalCount = await _db.Categories
                 .Where(c => c.IsDeleted == false)
+                .Filter(filter)
                 .CountAsync(ct);
 
             var list = await _db.Categories
-                .OrderBy(c => c.Name)
+                .Sort(sortParams)
+                .Filter(filter)
                 .Where(c => c.IsDeleted == false)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)

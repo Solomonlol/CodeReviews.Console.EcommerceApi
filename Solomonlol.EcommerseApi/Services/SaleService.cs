@@ -5,6 +5,9 @@ using Solomonlol.EcommerseApi.Models.Base;
 using Solomonlol.EcommerseApi.Models.Dto;
 using Solomonlol.EcommerseApi.Models.Dto.Sale;
 using Solomonlol.EcommerseApi.MyResults;
+using Solomonlol.EcommerseApi.Services.Extensions;
+using Solomonlol.EcommerseApi.Services.Extensions.Filters;
+using Solomonlol.EcommerseApi.Services.Extensions.Sort;
 
 namespace Solomonlol.EcommerseApi.Services
 {
@@ -68,11 +71,12 @@ namespace Solomonlol.EcommerseApi.Services
             return Result<SaleDtoResponse>.Success(saleDto);
         }
 
-        public async Task<Result<PagedResult<SaleDtoResponse>>> GetAll(int page = 1, int pageSize = 5, CancellationToken ct = default)
+        public async Task<Result<PagedResult<SaleDtoResponse>>> GetAll(SaleFilter filter, SortParams sortParams, int page = 1, int pageSize = 5, CancellationToken ct = default)
         {
-            var totalCount = await _db.Sales.CountAsync(ct);
+            var totalCount = await _db.Sales.Filter(filter).CountAsync(ct);
             var list = await _db.Sales
-                .OrderBy(s => s.CreatedAt)
+                .Filter(filter)
+                .Sort(sortParams)
                 .Include(s => s.SaleItems)
                 .ThenInclude(p => p.Product)
                 .ThenInclude(c => c.Category)
@@ -95,12 +99,13 @@ namespace Solomonlol.EcommerseApi.Services
             return Result<PagedResult<SaleDtoResponse>>.Success(pagedList);
         }
 
-        public async Task<Result<PagedResult<SaleDtoResponse>>> GetAllByLogin(string login, int page = 1, int pageSize = 5, CancellationToken ct = default)
+        public async Task<Result<PagedResult<SaleDtoResponse>>> GetAllByLogin(SaleFilter filter, SortParams sortParams, string login, int page = 1, int pageSize = 5, CancellationToken ct = default)
         {
             var totalCount = await _db.Sales.Where(s => s.User.Login == login).CountAsync(ct);
             var list = await _db.Sales
                 .Where(s => s.User.Login == login)
-                .OrderBy(s => s.CreatedAt)
+                .Filter(filter)
+                .Sort(sortParams)
                 .Include(s => s.SaleItems)
                 .ThenInclude(p => p.Product)
                 .ThenInclude(c => c.Category)

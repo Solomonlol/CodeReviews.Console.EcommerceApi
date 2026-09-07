@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Solomonlol.EcommerseApi.Interfaces;
 using Solomonlol.EcommerseApi.Models.Dto.User;
+using Solomonlol.EcommerseApi.Services.Extensions.Filters;
+using Solomonlol.EcommerseApi.Services.Extensions.Sort;
 using System.Security.Claims;
 
 namespace Solomonlol.EcommerseApi.Endpoints
@@ -31,9 +33,9 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 : Results.NotFound();
             });
             //get all
-            app.MapGet("api/v1/users", [Authorize(Roles = "Admin, Manager")] async (IUserService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
+            app.MapGet("api/v1/users", [Authorize(Roles = "Admin, Manager")] async ([AsParameters]UserFilter filter, [AsParameters] SortParams sortParams, IUserService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
-                var result = await service.GetAll(page, pageSize, ct);
+                var result = await service.GetAll(filter, sortParams, page, pageSize, ct);
                 return Results.Ok(result.Value);
             });
             //create

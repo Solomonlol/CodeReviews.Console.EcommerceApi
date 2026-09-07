@@ -50,7 +50,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             },
             OnMessageReceived = context =>
             {
-                Console.WriteLine($"Token received: {context.Token ?? "NULL — заголовок не распознан"}");
+                Console.WriteLine($"Token received: {context.Token ?? "NULL — Header not recognized"}");
                 return Task.CompletedTask;
             }
         };
@@ -65,6 +65,20 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "EcommerceApi",
         Version = "v1"
+    });
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Enter token",
+        Name = "Auth",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    options.AddSecurityRequirement(document=>
+    new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("Bearer", document)] = new List<string>()
     });
 });
 builder.Services.AddAutoMapper(cfg =>

@@ -5,6 +5,9 @@ using Solomonlol.EcommerseApi.Models.Base;
 using Solomonlol.EcommerseApi.Models.Dto;
 using Solomonlol.EcommerseApi.Models.Dto.Product;
 using Solomonlol.EcommerseApi.MyResults;
+using Solomonlol.EcommerseApi.Services.Extensions;
+using Solomonlol.EcommerseApi.Services.Extensions.Filters;
+using Solomonlol.EcommerseApi.Services.Extensions.Sort;
 
 namespace Solomonlol.EcommerseApi.Services
 {
@@ -75,16 +78,18 @@ namespace Solomonlol.EcommerseApi.Services
                 : Result<ProductDto>.Failure($"Product with name {name} was not found.");
         }
 
-        public async Task<Result<PagedResult<ProductDto>>> GetAll(int page = 1, int pageSize = 5, CancellationToken ct = default)
+        public async Task<Result<PagedResult<ProductDto>>> GetAll(ProductFilter filter, SortParams sortParams, int page = 1, int pageSize = 5, CancellationToken ct = default)
         {
             var totalCount = await _db.Products
                 .Where(c => c.Category.IsDeleted == false)
+                .Filter(filter)
                 .CountAsync(ct);
 
             var list = await _db.Products
-                .OrderBy(p => p.Name)
                 .Include(p => p.Category)
+                .Sort(sortParams)
                 .Where(c => c.Category.IsDeleted == false)
+                .Filter(filter)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync(ct);
