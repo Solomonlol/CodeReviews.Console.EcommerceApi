@@ -6,15 +6,20 @@ namespace EcommerseAPI.Frontend.Menus
 {
     internal class MainMenu : UserInterface
     {
-        public MainMenu(string title) :base(title)
+        private readonly ProductMenu _productMenu;
+        public MainMenu(ProductMenu productMenu) : base("Main menu")
         {
-            AddItem("LogIn", ()=> LogIn());
-            AddExitItem("Exit");
+            _productMenu = productMenu;
+            AddSubMenu("Products", _productMenu);
+            AddItem("Login", () => Login());
+            AddExitOption("Exit");
         }
 
-        public async Task LogIn(CancellationToken ct = default)
+        public async Task Login(CancellationToken ct=default)
         {
 
         }
+
+        
     }
 }

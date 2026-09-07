@@ -7,7 +7,9 @@ using Microsoft.Extensions.Hosting;
 using IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
+        
         services.AddTransient<MainMenu>();
+        services.AddTransient<ProductMenu>();
         services.AddHttpClient("ApiClient", (sp, client) =>
         {
             var config = sp.GetRequiredService<IConfiguration>();
