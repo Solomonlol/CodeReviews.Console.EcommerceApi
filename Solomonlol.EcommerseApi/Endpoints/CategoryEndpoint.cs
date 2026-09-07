@@ -12,7 +12,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
         public static void MapCategoryEndpoint(this WebApplication app)
         {
             //get all by page
-            app.MapGet("api/v1/categories", [AllowAnonymous] async ([AsParameters]CategoryFilter filter, [AsParameters] SortParams sortParams, ICategoryService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
+            app.MapGet("api/v1/categories", [AllowAnonymous] async ([AsParameters] CategoryFilter filter, [AsParameters] SortParams sortParams, ICategoryService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
                 page = Math.Max(page, 1);
                 pageSize = Math.Clamp(pageSize, 1, 30);

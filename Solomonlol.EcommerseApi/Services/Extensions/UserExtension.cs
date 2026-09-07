@@ -10,11 +10,11 @@ namespace Solomonlol.EcommerseApi.Services.Extensions
     {
         public static IQueryable<User> Filter(this IQueryable<User> query, UserFilter filter)
         {
-            if (filter.Id!=null)
+            if (filter.Id != null)
                 query = query.Where(x => x.Id.Equals(filter.Id));
 
             if (!string.IsNullOrEmpty(filter.Email))
-                query = query.Where(x => x.Email==filter.Email);
+                query = query.Where(x => x.Email == filter.Email);
 
             if (!string.IsNullOrEmpty(filter.PhoneNumber))
                 query = query.Where(x => x.PhoneNumber == filter.PhoneNumber);

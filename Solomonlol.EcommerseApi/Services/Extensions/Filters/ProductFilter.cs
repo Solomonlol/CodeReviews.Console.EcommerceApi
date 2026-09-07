@@ -1,6 +1,4 @@
-﻿using Solomonlol.EcommerseApi.Models.Base;
-
-namespace Solomonlol.EcommerseApi.Services.Extensions.Filters
+﻿namespace Solomonlol.EcommerseApi.Services.Extensions.Filters
 {
     public class ProductFilter
     {

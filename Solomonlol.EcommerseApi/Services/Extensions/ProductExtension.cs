@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Solomonlol.EcommerseApi.Models.Base;
+﻿using Solomonlol.EcommerseApi.Models.Base;
 using Solomonlol.EcommerseApi.Services.Extensions.Filters;
 using Solomonlol.EcommerseApi.Services.Extensions.Sort;
 using System.ComponentModel;
@@ -14,7 +13,7 @@ namespace Solomonlol.EcommerseApi.Services.Extensions
             if (!string.IsNullOrEmpty(filter.Name))
                 query = query.Where(x => x.Name == filter.Name);
 
-            if (filter.MaxPrice>=0)
+            if (filter.MaxPrice >= 0)
                 query = query.Where(x => x.Price <= filter.MaxPrice);
 
             if (filter.MinPrice >= 0)

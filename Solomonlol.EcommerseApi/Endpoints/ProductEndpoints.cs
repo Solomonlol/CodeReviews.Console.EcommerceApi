@@ -11,7 +11,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
         public static void MapProductEndpoints(this WebApplication app)
         {
             //get all by page
-            app.MapGet("api/v1/products", [AllowAnonymous] async ([AsParameters]ProductFilter filter, [AsParameters] SortParams sortParams, IProductService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
+            app.MapGet("api/v1/products", [AllowAnonymous] async ([AsParameters] ProductFilter filter, [AsParameters] SortParams sortParams, IProductService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
                 page = Math.Max(page, 1);
                 pageSize = Math.Clamp(pageSize, 1, 30);
