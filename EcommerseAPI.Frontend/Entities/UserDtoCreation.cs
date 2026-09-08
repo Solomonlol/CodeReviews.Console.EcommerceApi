@@ -1,0 +1,14 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EcommerseAPI.Frontend.Entities
+{
+    public class UserDtoCreation : UserDtoRequest
+    {
+        [Required(ErrorMessage = "Password is required.")]
+        [StringLength(50, MinimumLength = 8, ErrorMessage = "Password minimum length is 8 characters and maximum length is 50")]
+        public string Password { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Repeat password is required.")]
+        [StringLength(50, MinimumLength = 8, ErrorMessage = "Password minimum length is 8 characters and maximum length is 50")]
+        public string RepeatPassword { get; set; } = string.Empty;
+    }
+}

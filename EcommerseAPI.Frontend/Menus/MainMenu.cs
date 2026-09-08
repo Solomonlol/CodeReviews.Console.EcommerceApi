@@ -6,20 +6,18 @@ namespace EcommerseAPI.Frontend.Menus
 {
     internal class MainMenu : UserInterface
     {
-        private readonly ProductMenu _productMenu;
-        public MainMenu(ProductMenu productMenu) : base("Main menu")
+        private readonly CatalogMenu _catalogMenu;
+        private readonly AccountMenu _accountMenu;
+        public MainMenu(CatalogMenu productMenu, AccountMenu accountMenu) : base("Main menu")
         {
-            _productMenu = productMenu;
-            AddSubMenu("Products", _productMenu);
-            AddItem("Login", () => Login());
+            _accountMenu = accountMenu;
+            _catalogMenu = productMenu;
+            AddSubMenu("Catalog", _catalogMenu);
+            AddSubMenu("Account", _accountMenu);
             AddExitOption("Exit");
         }
 
-        public async Task Login(CancellationToken ct=default)
-        {
-
-        }
-
+        
         
     }
 }
