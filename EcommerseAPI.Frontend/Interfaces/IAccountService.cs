@@ -1,4 +1,4 @@
-﻿using EcommerseAPI.Frontend.Entities;
+﻿using EcommerseAPI.Frontend.Entities.Dto.Users;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -24,7 +24,7 @@ namespace Solomonlol.EcommerseApi.Services
         }
         public async Task<Result> Create(UserDtoCreation item, CancellationToken ct = default)
         {
-            var userCheck = await _db.Users.FirstOrDefaultAsync(u => u.Login == item.Login, ct);
+            var userCheck = await _db.Users.IgnoreQueryFilters().FirstOrDefaultAsync(u => u.Login == item.Login, ct);
             if (userCheck == null)
             {
                 var user = _mapper.Map<User>(item);

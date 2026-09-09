@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EcommerseAPI.Frontend.Entities
+namespace EcommerseAPI.Frontend.Entities.Dto.Users
 {
     public class UserDtoRequest
     {

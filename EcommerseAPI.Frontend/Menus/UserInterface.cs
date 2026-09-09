@@ -23,6 +23,7 @@ namespace EcommerseAPI.Frontend.Menus
         public async Task StartAsync(CancellationToken ct = default)
         {
             Console.Clear();
+            _exit = false;
             while(!_exit)
             {
                 var choises = _menus.Select(m => m.Name).ToList();

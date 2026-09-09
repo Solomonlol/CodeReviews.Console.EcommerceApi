@@ -14,6 +14,7 @@ using IHost host = Host.CreateDefaultBuilder(args)
         services.AddTransient<MainMenu>();
         services.AddTransient<CatalogMenu>();
         services.AddTransient<AccountMenu>();
+        services.AddScoped<ITableDrowingService, TableDrowingService>();
         services.AddScoped<ILoginService, LoginService>();
         services.AddScoped<IAccountService, AccountService>();
         services.AddHttpClient("ApiClient", (sp, client) =>

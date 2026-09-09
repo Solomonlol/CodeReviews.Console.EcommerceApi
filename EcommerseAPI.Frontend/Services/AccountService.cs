@@ -1,4 +1,4 @@
-﻿using EcommerseAPI.Frontend.Entities;
+﻿using EcommerseAPI.Frontend.Entities.Dto.Users;
 using EcommerseAPI.Frontend.Interfaces;
 using Spectre.Console;
 using System;
@@ -48,6 +48,10 @@ namespace EcommerseAPI.Frontend.Services
         public async Task GetMe(CancellationToken ct = default)
         {
             var url = "api/v1/users/me";
+            var response = await _httpClient.GetAsync(url, ct);
+            if (response.IsSuccessStatusCode)
+                AnsiConsole.MarkupLine($"{response.Content}");
+            else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
         }
 
         public Task GetOne(string login, CancellationToken ct = default)

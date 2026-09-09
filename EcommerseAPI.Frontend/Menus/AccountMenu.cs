@@ -1,4 +1,5 @@
 ﻿using EcommerseAPI.Frontend.Entities;
+using EcommerseAPI.Frontend.Entities.Dto.Users;
 using EcommerseAPI.Frontend.Interfaces;
 using Spectre.Console;
 using System;
@@ -66,7 +67,7 @@ namespace EcommerseAPI.Frontend.Menus
 
         public async Task ShowAccInfo(CancellationToken ct=default)
         {
-
+            await _accountService.GetMe(ct);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace EcommerseAPI.Frontend.Handlers
         {
             _tokenService = tokenService;
         }
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct = default)
         {
             var token = await _tokenService.GetToken(ct);
             if (!string.IsNullOrEmpty(token))
