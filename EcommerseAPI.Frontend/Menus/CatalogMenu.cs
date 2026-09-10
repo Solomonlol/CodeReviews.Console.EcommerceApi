@@ -33,7 +33,7 @@ namespace EcommerseAPI.Frontend.Menus
                 if (content.Items.Any())
                 {
                     var list = content.Items.ToList();
-                    await _drowingService.DrowTable(list, ct);
+                    await _drowingService.DrowSimpleTable(list, "Products", ct);
                 }
             }
             else AnsiConsole.MarkupLine($"{response.StatusCode}");
@@ -42,7 +42,17 @@ namespace EcommerseAPI.Frontend.Menus
         public async Task ChooseCategory(CancellationToken ct = default)
         {
             var url = "api/v1/categories";
-            var response = _httpClient.GetAsync(url, ct);
+            var response = await _httpClient.GetAsync(url, ct);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadFromJsonAsync<PagedResult<ProductDto>>(ct);
+                if (content.Items.Any())
+                {
+                    var list = content.Items.ToList();
+                    await _drowingService.DrowSimpleTable(list, "Products", ct);
+                }
+            }
+            else AnsiConsole.MarkupLine($"{response.StatusCode}");
         }
     }
 }

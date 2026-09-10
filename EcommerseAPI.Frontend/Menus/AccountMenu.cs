@@ -21,8 +21,10 @@ namespace EcommerseAPI.Frontend.Menus
             AddItem("Log In", () => LogIn());
             AddItem("Log Out", () => LogOut());
             AddItem("Create Account", () => CreateAccount());
+            AddItem("Update Account", () => UpdateAccount());
             AddItem("Delete Account", () => DeleteAccount());
-            AddItem("My account", () => ShowAccInfo());
+            AddItem("My account", () => ShowMyAccInfo());
+            AddItem("Find by login", () => ShowByLogin());
             AddItem("All accounts", () => ShowAll());
         }
 
@@ -54,6 +56,20 @@ namespace EcommerseAPI.Frontend.Menus
             await _accountService.Create(user, ct);
         }
 
+        public async Task UpdateAccount(CancellationToken ct=default)
+        {
+            var user = new UserDtoRequest
+            {
+                FirstName = "Anton",
+                LastName = "Gorodetsky",
+                Email = "Sumrak@gmail.com",
+                Login = "Sumrak",
+                PhoneNumber = "321 12 3216598",
+                Role = "Admin"
+            };
+            await _accountService.Update(user, ct);
+        }
+
         public async Task DeleteAccount(CancellationToken ct=default)
         {
             var login = await AnsiConsole.AskAsync<string>("[yellow]Enter login to delete.[/]");
@@ -65,7 +81,13 @@ namespace EcommerseAPI.Frontend.Menus
             await _accountService.GetAll(ct);
         }
 
-        public async Task ShowAccInfo(CancellationToken ct=default)
+        public async Task ShowByLogin(CancellationToken ct=default)
+        {
+            var login = await AnsiConsole.AskAsync<string>("[yellow]Enter login of account:[/]");
+            await _accountService.GetOne(login, ct);
+        }
+
+        public async Task ShowMyAccInfo(CancellationToken ct=default)
         {
             await _accountService.GetMe(ct);
         }

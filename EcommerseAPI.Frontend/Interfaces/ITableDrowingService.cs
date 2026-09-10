@@ -7,6 +7,6 @@ namespace EcommerseAPI.Frontend.Interfaces
 {
     internal interface ITableDrowingService
     {
-        Task DrowTable<T>(IEnumerable<T> itemsList, CancellationToken ct = default);
+        Task DrowSimpleTable<T>(IEnumerable<T> itemsList, string? title = null, CancellationToken ct = default);
     }
 }
