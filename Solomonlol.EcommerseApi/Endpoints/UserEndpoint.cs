@@ -33,13 +33,13 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 : Results.NotFound();
             });
             //get all
-            app.MapGet("api/v1/users", [Authorize(Roles = "Admin, Manager")] async ([AsParameters] UserFilter filter, [AsParameters] SortParams sortParams, IUserService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
+            app.MapGet("api/v1/users/", [Authorize(Roles = "Admin, Manager")] async ([AsParameters] UserFilter filter, [AsParameters] SortParams sortParams, IUserService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
                 var result = await service.GetAll(filter, sortParams, page, pageSize, ct);
                 return Results.Ok(result.Value);
             });
             //create
-            app.MapPost("api/v1/users", [AllowAnonymous] async (UserDtoCreation item, IUserService service, CancellationToken ct) =>
+            app.MapPost("api/v1/users/", [AllowAnonymous] async (UserDtoCreation item, IUserService service, CancellationToken ct) =>
             {
                 var result = await service.Create(item, ct);
                 return result.IsSuccess

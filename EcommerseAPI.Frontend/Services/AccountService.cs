@@ -13,15 +13,17 @@ namespace EcommerseAPI.Frontend.Services
     internal class AccountService : IAccountService
     {
         private readonly HttpClient _httpClient;
-        private readonly ITableDrowingService _drowingService;
-        public AccountService(IHttpClientFactory httpClient, ITableDrowingService drowingService)
+        private readonly ITableDrawingService _drawingService;
+        private readonly IUrlService _urlService;
+        public AccountService(IHttpClientFactory httpClient, ITableDrawingService drawingService, IUrlServiceFactory urlService)
         {
+            _urlService = urlService.Create("api/v1/users/");
             _httpClient = httpClient.CreateClient("ApiClient");
-            _drowingService = drowingService;
+            _drawingService = drawingService;
         }
         public async Task Create(UserDtoCreation user, CancellationToken ct = default)
         {
-            var Url = "api/v1/users";
+            var Url = await _urlService.GetUrl(ct:ct);
             var dto = JsonSerializer.Serialize(user);
             var content = new StringContent(dto, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(Url, content, ct);
@@ -33,7 +35,7 @@ namespace EcommerseAPI.Frontend.Services
         public async Task Delete(string login, CancellationToken ct = default)
         {
             
-            var Url = "api/v1/users/";
+            var Url = await _urlService.GetUrl(ct:ct);
             var response = await _httpClient.DeleteAsync(Url+login, ct);
             if (response.IsSuccessStatusCode)
                 AnsiConsole.MarkupLine($"[green]Account with login name {login} was deleted.[/]");
@@ -42,7 +44,9 @@ namespace EcommerseAPI.Frontend.Services
 
         public async Task GetAll(CancellationToken ct = default)
         {
-            var Url = "api/v1/users";
+            var page = 1;
+            var pageSize = 10;
+            var Url = await _urlService.GetUrl(ct:ct, pageSize: pageSize, page: page);
             var response = await _httpClient.GetAsync(Url, ct);
             if(response.IsSuccessStatusCode)
             {
@@ -50,7 +54,7 @@ namespace EcommerseAPI.Frontend.Services
                 if (content.Items.Any())
                 {
                     var list = content.Items.ToList();
-                    await _drowingService.DrowSimpleTable(list, "Users", ct);
+                    await _drawingService.DrowSimpleTable(list, "Users", ct);
                 }
             }
             else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
@@ -58,7 +62,7 @@ namespace EcommerseAPI.Frontend.Services
 
         public async Task GetMe(CancellationToken ct = default)
         {
-            var url = "api/v1/users/me";
+            var url = await _urlService.GetUrl(ct:ct) +"me";
             var response = await _httpClient.GetAsync(url, ct);
             if (response.IsSuccessStatusCode)
             {
@@ -67,7 +71,7 @@ namespace EcommerseAPI.Frontend.Services
                 {
                     var list = new List<UserDtoResponse>();
                     list.Add(content);
-                    await _drowingService.DrowSimpleTable(list, "My account", ct);
+                    await _drawingService.DrowSimpleTable(list, "My account", ct);
                 }
             }
             else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
@@ -75,7 +79,7 @@ namespace EcommerseAPI.Frontend.Services
 
         public async Task GetOne(string login, CancellationToken ct = default)
         {
-            var url = $"api/v1/users/{login}";
+            var url = await _urlService.GetUrl(ct:ct) + $"{login}";
             var response = await _httpClient.GetAsync(url, ct);
             if (response.IsSuccessStatusCode)
             {
@@ -84,7 +88,7 @@ namespace EcommerseAPI.Frontend.Services
                 {
                     var list = new List<UserDtoResponse>();
                     list.Add(content);
-                    await _drowingService.DrowSimpleTable(list, $"{login} account", ct);
+                    await _drawingService.DrowSimpleTable(list, $"{login} account", ct);
                 }
             }
             else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
@@ -93,7 +97,7 @@ namespace EcommerseAPI.Frontend.Services
         public async Task Update(UserDtoRequest user, CancellationToken ct = default)
         {
             var login = await AnsiConsole.AskAsync<string>("[yellow]Enter login to update:[/]");
-            var url = $"api/v1/users/{login}";
+            var url = await _urlService.GetUrl(ct:ct)+$"{login}";
             var userDto = JsonSerializer.Serialize(user);
             var content = new StringContent(userDto, Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync(url, content, ct);

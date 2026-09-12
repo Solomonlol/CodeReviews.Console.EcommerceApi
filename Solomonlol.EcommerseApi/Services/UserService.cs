@@ -80,7 +80,7 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result<PagedResult<UserDtoResponse>>> GetAll(UserFilter filter, SortParams sortParams, int page = 1, int pageSize = 5, CancellationToken ct = default)
         {
-            var totalCount = await _db.Users.CountAsync(ct);
+            var totalCount = await _db.Users.Filter(filter).CountAsync(ct);
 
             var list = await _db.Users
                 .Sort(sortParams)

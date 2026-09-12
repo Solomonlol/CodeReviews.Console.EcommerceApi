@@ -12,8 +12,8 @@ namespace EcommerseAPI.Frontend.Menus
     internal class CatalogMenu : UserInterface
     {
         private readonly HttpClient _httpClient;
-        private readonly ITableDrowingService _drowingService;
-        public CatalogMenu(IHttpClientFactory clientFactory, ITableDrowingService drowingService) : base("Catalog")
+        private readonly ITableDrawingService _drowingService;
+        public CatalogMenu(IHttpClientFactory clientFactory, ITableDrawingService drowingService) : base("Catalog")
         {
             _drowingService = drowingService;
             _httpClient = clientFactory.CreateClient("ApiClient");

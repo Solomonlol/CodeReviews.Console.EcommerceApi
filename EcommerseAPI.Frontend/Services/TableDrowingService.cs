@@ -8,7 +8,7 @@ using System.Text.Json;
 
 namespace EcommerseAPI.Frontend.Services
 {
-    internal class TableDrowingService : ITableDrowingService
+    internal class TableDrowingService : ITableDrawingService
     {
         public async Task DrowSimpleTable<T>(IEnumerable<T> itemsList, string? title = null, CancellationToken ct = default)
         {
