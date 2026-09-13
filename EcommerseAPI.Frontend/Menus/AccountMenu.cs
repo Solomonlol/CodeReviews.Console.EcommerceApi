@@ -29,7 +29,7 @@ namespace EcommerseAPI.Frontend.Menus
             AddItem("Delete Account", () => DeleteAccount());
             AddItem("My account", () => ShowMyAccInfo());
             AddItem("Find by login", () => ShowByLogin());
-            AddSubMenu("All accounts", new PagedMenu<IPagedResultService, UserDtoResponse, UserFilter>(sp, drawingService, "Accounts"));
+            AddSubMenu("All accounts", new PagedMenu<IAccountService, UserDtoResponse, UserFilter>(sp, drawingService, "Accounts"));
         }
 
         public async Task LogIn(CancellationToken ct = default)

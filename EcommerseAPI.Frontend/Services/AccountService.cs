@@ -11,7 +11,7 @@ using System.Text.Json;
 
 namespace EcommerseAPI.Frontend.Services
 {
-    internal class AccountService : IAccountService, IPagedResultService
+    internal class AccountService : IAccountService
     {
         private readonly HttpClient _httpClient;
         private readonly ITableDrawingService _drawingService;

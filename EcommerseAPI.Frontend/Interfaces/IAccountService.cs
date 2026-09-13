@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EcommerseAPI.Frontend.Interfaces
 {
-    internal interface IAccountService
+    internal interface IAccountService : IPagedResultService
     {
         Task GetMe(CancellationToken ct = default);
         Task GetOne(string login, CancellationToken ct = default);
