@@ -1,4 +1,5 @@
-﻿using EcommerseAPI.Frontend.Interfaces;
+﻿using EcommerseAPI.Frontend.Entities.Dto;
+using EcommerseAPI.Frontend.Interfaces;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,15 @@ namespace EcommerseAPI.Frontend.Services
 {
     internal class TableDrowingService : ITableDrawingService
     {
-        public async Task DrowSimpleTable<T>(IEnumerable<T> itemsList, string? title = null, CancellationToken ct = default)
+        public Task DrowSimpleTable<T>(PagedResult<T>? pagedResult = null,  string? title = null, CancellationToken ct = default, IEnumerable<T>? enumerableValues = null)
         {
+            var itemsList = new List<T>();
+            if (pagedResult != null)
+                itemsList = pagedResult.Items.ToList();
+            else if (enumerableValues != null)
+                itemsList = enumerableValues.ToList();
+            else return Task.CompletedTask;
+            
             var table = new Table()
                             .Border(TableBorder.Double)
                             .ShowRowSeparators();
@@ -35,8 +43,16 @@ namespace EcommerseAPI.Frontend.Services
                 table.AddRow(values);
 
             }
-
+                        
             AnsiConsole.Write(table);
+
+            if (pagedResult != null)
+            {
+                var footerTable = new Table();
+                footerTable.AddColumns($"Page: {pagedResult.Page}", $"Total pages: {pagedResult.TotalPages}", $"Page size: {pagedResult.PageSize}", $" Total count:{pagedResult.TotalCount}");
+                AnsiConsole.Write(footerTable);
+            }
+            return Task.CompletedTask;
         }
     }
 }

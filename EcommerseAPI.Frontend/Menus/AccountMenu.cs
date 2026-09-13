@@ -1,6 +1,8 @@
 ﻿using EcommerseAPI.Frontend.Entities;
 using EcommerseAPI.Frontend.Entities.Dto.Users;
 using EcommerseAPI.Frontend.Interfaces;
+using EcommerseAPI.Frontend.Services;
+using EcommerseAPI.Frontend.Services.Factory.Filters;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
@@ -12,9 +14,11 @@ namespace EcommerseAPI.Frontend.Menus
     {
         private readonly IAccountService _accountService;
         private readonly ILoginService _loginService;
+        //private readonly PagedMenu<AccountService, UserDtoResponse, UserFilter> _pagedMenu;
 
-        public AccountMenu(IAccountService accountService, ILoginService loginService) :base("Account") 
-        {
+        public AccountMenu(IAccountService accountService, ILoginService loginService, IServiceProvider sp, ITableDrawingService drawingService) :base("Account") 
+        {   
+            //_pagedMenu = pagedMenu;
             _loginService = loginService;
             _accountService = accountService;
             AddExitOption("Back");
@@ -25,7 +29,7 @@ namespace EcommerseAPI.Frontend.Menus
             AddItem("Delete Account", () => DeleteAccount());
             AddItem("My account", () => ShowMyAccInfo());
             AddItem("Find by login", () => ShowByLogin());
-            AddItem("All accounts", () => ShowAll());
+            AddSubMenu("All accounts", new PagedMenu<IPagedResultService, UserDtoResponse, UserFilter>(sp, drawingService, "Accounts"));
         }
 
         public async Task LogIn(CancellationToken ct = default)
@@ -74,11 +78,6 @@ namespace EcommerseAPI.Frontend.Menus
         {
             var login = await AnsiConsole.AskAsync<string>("[yellow]Enter login to delete.[/]");
             await _accountService.Delete(login, ct);
-        }
-
-        public async Task ShowAll(CancellationToken ct=default)
-        {
-            await _accountService.GetAll(ct);
         }
 
         public async Task ShowByLogin(CancellationToken ct=default)

@@ -1,5 +1,6 @@
 ﻿using Auth0.ManagementApi.Core;
 using EcommerseAPI.Frontend.Interfaces;
+using EcommerseAPI.Frontend.Services.Factory.Filters;
 using EcommerseAPI.Frontend.Services.Factory.Sort;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,12 @@ namespace EcommerseAPI.Frontend.Services
         private List<string> _urlStrings = new();
         public UrlService(string baseUrl) 
         { 
+            
             _baseUrl = baseUrl;
         }
-        public Task<string> GetUrl(object? filter = null, SortParams? sort = null, int? page=null, int? pageSize=null, CancellationToken ct = default)
+        public Task<string> GetUrl(IFilter? filter = null, SortParams? sort = null, int? page=null, int? pageSize=null, CancellationToken ct = default)
         {
+            _urlStrings.Clear();
             SetFilterUrl(filter);
             SetOrderByUrl(sort);
             SetPage(page, pageSize);
@@ -32,11 +35,10 @@ namespace EcommerseAPI.Frontend.Services
             return Task.FromResult(_baseUrl+ finalString);
         }
 
-        private void SetFilterUrl(object? filter = null)
+        private void SetFilterUrl(IFilter? filter = null)
         {
             if (filter is null) return;
-
-            var properties = typeof(object).GetProperties().ToArray();
+            var properties = filter.GetType().GetProperties();
 
             if (!properties.Any())
                 return;

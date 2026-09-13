@@ -1,6 +1,7 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto;
 using EcommerseAPI.Frontend.Entities.Dto.Users;
 using EcommerseAPI.Frontend.Interfaces;
+using EcommerseAPI.Frontend.Services.Factory.Sort;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Text.Json;
 
 namespace EcommerseAPI.Frontend.Services
 {
-    internal class AccountService : IAccountService
+    internal class AccountService : IAccountService, IPagedResultService
     {
         private readonly HttpClient _httpClient;
         private readonly ITableDrawingService _drawingService;
@@ -42,22 +43,12 @@ namespace EcommerseAPI.Frontend.Services
             else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
         }
 
-        public async Task GetAll(CancellationToken ct = default)
+        public async Task<HttpResponseMessage> GetAll(object? filter = null, SortParams? sort = null, int page=1, int pageSize=5,CancellationToken ct = default)
         {
-            var page = 1;
-            var pageSize = 10;
             var Url = await _urlService.GetUrl(ct:ct, pageSize: pageSize, page: page);
             var response = await _httpClient.GetAsync(Url, ct);
-            if(response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadFromJsonAsync<PagedResult<UserDtoResponse>>(ct);
-                if (content.Items.Any())
-                {
-                    var list = content.Items.ToList();
-                    await _drawingService.DrowSimpleTable(list, "Users", ct);
-                }
-            }
-            else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
+            return response;
+            
         }
 
         public async Task GetMe(CancellationToken ct = default)
@@ -71,7 +62,7 @@ namespace EcommerseAPI.Frontend.Services
                 {
                     var list = new List<UserDtoResponse>();
                     list.Add(content);
-                    await _drawingService.DrowSimpleTable(list, "My account", ct);
+                    await _drawingService.DrowSimpleTable(title: "My account", ct: ct, enumerableValues: list);
                 }
             }
             else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
@@ -88,7 +79,7 @@ namespace EcommerseAPI.Frontend.Services
                 {
                     var list = new List<UserDtoResponse>();
                     list.Add(content);
-                    await _drawingService.DrowSimpleTable(list, $"{login} account", ct);
+                    await _drawingService.DrowSimpleTable(enumerableValues: list, title: $"{login} account",ct: ct);
                 }
             }
             else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");

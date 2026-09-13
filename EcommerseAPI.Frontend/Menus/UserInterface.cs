@@ -24,6 +24,8 @@ namespace EcommerseAPI.Frontend.Menus
         {
             Console.Clear();
             _exit = false;
+
+            await OnStartingAsync(ct);
             while(!_exit)
             {
                 var choises = _menus.Select(m => m.Name).ToList();
@@ -39,5 +41,7 @@ namespace EcommerseAPI.Frontend.Menus
                     await selected.SubMenu.StartAsync(ct);
             }
         }
+        protected virtual Task OnStartingAsync(CancellationToken ct = default) =>
+            Task.CompletedTask;
     }
 }

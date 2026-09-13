@@ -13,8 +13,10 @@ namespace EcommerseAPI.Frontend.Menus
     {
         private readonly HttpClient _httpClient;
         private readonly ITableDrawingService _drowingService;
-        public CatalogMenu(IHttpClientFactory clientFactory, ITableDrawingService drowingService) : base("Catalog")
+        private readonly IUrlService _urlService;
+        public CatalogMenu(IHttpClientFactory clientFactory, ITableDrawingService drowingService, IUrlServiceFactory serviceFactory) : base("Catalog")
         {
+            _urlService = serviceFactory.Create("api/v1/products/");
             _drowingService = drowingService;
             _httpClient = clientFactory.CreateClient("ApiClient");
             AddExitOption("Back");
@@ -25,15 +27,14 @@ namespace EcommerseAPI.Frontend.Menus
 
         public async Task ShowAllProducts(CancellationToken ct = default)
         {
-            var url = "api/v1/products";
+            var url = await _urlService.GetUrl(ct: ct);
             var response = await _httpClient.GetAsync(url, ct);
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadFromJsonAsync<PagedResult<ProductDto>>(ct);
                 if (content.Items.Any())
                 {
-                    var list = content.Items.ToList();
-                    await _drowingService.DrowSimpleTable(list, "Products", ct);
+                    await _drowingService.DrowSimpleTable(content, "Products", ct);
                 }
             }
             else AnsiConsole.MarkupLine($"{response.StatusCode}");
@@ -48,8 +49,8 @@ namespace EcommerseAPI.Frontend.Menus
                 var content = await response.Content.ReadFromJsonAsync<PagedResult<ProductDto>>(ct);
                 if (content.Items.Any())
                 {
-                    var list = content.Items.ToList();
-                    await _drowingService.DrowSimpleTable(list, "Products", ct);
+                    
+                    await _drowingService.DrowSimpleTable(content, "Products", ct);
                 }
             }
             else AnsiConsole.MarkupLine($"{response.StatusCode}");

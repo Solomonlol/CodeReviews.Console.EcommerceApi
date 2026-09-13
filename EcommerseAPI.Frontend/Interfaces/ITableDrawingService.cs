@@ -1,4 +1,5 @@
-﻿using Spectre.Console;
+﻿using EcommerseAPI.Frontend.Entities.Dto;
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,6 +8,6 @@ namespace EcommerseAPI.Frontend.Interfaces
 {
     internal interface ITableDrawingService
     {
-        Task DrowSimpleTable<T>(IEnumerable<T> itemsList, string? title = null, CancellationToken ct = default);
+        Task DrowSimpleTable<T>(PagedResult<T>? pagedResult = null,  string? title = null, CancellationToken ct = default, IEnumerable<T>? enumerableValues = null);
     }
 }
