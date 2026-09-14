@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EcommerseAPI.Frontend.Entities.Dto.Sales
+﻿namespace EcommerseAPI.Frontend.Entities.Dto.Sales
 {
     public class SaleDtoRequest
     {

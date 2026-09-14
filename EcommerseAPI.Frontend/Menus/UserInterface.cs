@@ -7,8 +7,8 @@ namespace EcommerseAPI.Frontend.Menus
     internal class UserInterface : IMenu
     {
         private readonly string _name;
-        private readonly List<MenuItem> _menus=new();
-        private bool _exit =false;
+        private readonly List<MenuItem> _menus = new();
+        private bool _exit = false;
 
         public UserInterface(string name) => _name = name;
 
@@ -26,7 +26,7 @@ namespace EcommerseAPI.Frontend.Menus
             _exit = false;
 
             await OnStartingAsync(ct);
-            while(!_exit)
+            while (!_exit)
             {
                 var choises = _menus.Select(m => m.Name).ToList();
                 var choise = await AnsiConsole.PromptAsync(
@@ -37,7 +37,7 @@ namespace EcommerseAPI.Frontend.Menus
                 var selected = _menus.First(m => m.Name == choise);
                 if (selected.Action != null)
                     await selected.Action();
-                else if(selected.SubMenu!=null)
+                else if (selected.SubMenu != null)
                     await selected.SubMenu.StartAsync(ct);
             }
         }

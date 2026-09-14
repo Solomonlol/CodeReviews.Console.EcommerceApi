@@ -1,7 +1,4 @@
 ﻿using EcommerseAPI.Frontend.Services.Factory.Sort;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EcommerseAPI.Frontend.Interfaces
 {

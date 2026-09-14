@@ -12,7 +12,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
         public static void MapSaleEndpoints(this WebApplication app)
         {
             //get one
-            app.MapGet("api/v1/sales/{saleId}", [Authorize] async (int saleId, ISaleService service, CancellationToken ct) =>
+            app.MapGet("api/v1/sales/{saleId}", [Authorize(Roles = "Admin, Manager")] async (int saleId, ISaleService service, CancellationToken ct) =>
             {
                 var result = await service.Get(saleId, ct);
                 return result.IsSuccess ? Results.Ok(result.Value) : Results.NotFound(result.Error);

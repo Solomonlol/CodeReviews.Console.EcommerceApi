@@ -12,7 +12,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
         public static void MapCategoryEndpoint(this WebApplication app)
         {
             //get all by page
-            app.MapGet("api/v1/categories", [AllowAnonymous] async ([AsParameters] CategoryFilter filter, [AsParameters] SortParams sortParams, ICategoryService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
+            app.MapGet("api/v1/categories/", [AllowAnonymous] async ([AsParameters] CategoryFilter filter, [AsParameters] SortParams sortParams, ICategoryService service, CancellationToken ct, int page = 1, int pageSize = 5) =>
             {
                 page = Math.Max(page, 1);
                 pageSize = Math.Clamp(pageSize, 1, 30);
@@ -28,7 +28,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 : Results.NotFound(result?.Error);
             });
             //create
-            app.MapPost("api/v1/categories", [Authorize(Roles = "Admin, Manager")] async (HttpContext context, CategoryDto category, ICategoryService service, CancellationToken ct) =>
+            app.MapPost("api/v1/categories/", [Authorize(Roles = "Admin, Manager")] async (HttpContext context, CategoryDto category, ICategoryService service, CancellationToken ct) =>
             {
                 var result = await service.Create(category, ct);
                 return result.IsSuccess

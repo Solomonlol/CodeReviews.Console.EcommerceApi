@@ -1,17 +1,13 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto;
 using EcommerseAPI.Frontend.Interfaces;
 using Spectre.Console;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
-using System.Text.Json;
 
 namespace EcommerseAPI.Frontend.Services
 {
     internal class TableDrowingService : ITableDrawingService
     {
-        public Task DrowSimpleTable<T>(PagedResult<T>? pagedResult = null,  string? title = null, CancellationToken ct = default, IEnumerable<T>? enumerableValues = null)
+        public Task DrowSimpleTable<T>(PagedResult<T>? pagedResult = null, string? title = null, CancellationToken ct = default, IEnumerable<T>? enumerableValues = null)
         {
             Console.Clear();
             var itemsList = new List<T>();
@@ -20,7 +16,7 @@ namespace EcommerseAPI.Frontend.Services
             else if (enumerableValues != null)
                 itemsList = enumerableValues.ToList();
             else return Task.CompletedTask;
-            
+
             var table = new Table()
                             .Border(TableBorder.Double)
                             .ShowRowSeparators();
@@ -30,7 +26,7 @@ namespace EcommerseAPI.Frontend.Services
 
             var properties = typeof(T)
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(t=>!t.PropertyType.IsInterface && !t.PropertyType.IsClass 
+                .Where(t => !t.PropertyType.IsInterface && !t.PropertyType.IsClass
                         || t.PropertyType == typeof(string));
 
             foreach (var property in properties)
@@ -40,11 +36,11 @@ namespace EcommerseAPI.Frontend.Services
 
             foreach (var item in itemsList)
             {
-                var values = properties.Select(p => p.GetValue(item)?.ToString() ?? string.Empty).ToArray();
+                var values = properties.Select(p =>Markup.Escape(p.GetValue(item)?.ToString() ?? string.Empty)).ToArray();
                 table.AddRow(values);
 
             }
-                        
+
             AnsiConsole.Write(table);
 
             if (pagedResult != null)

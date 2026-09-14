@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EcommerseAPI.Frontend.Entities.Dto
+﻿namespace EcommerseAPI.Frontend.Entities.Dto
 {
     public class PagedResult<T>
     {

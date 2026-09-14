@@ -1,15 +1,12 @@
 ﻿using EcommerseAPI.Frontend.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Net.Http.Headers;
-using System.Text;
 
 namespace EcommerseAPI.Frontend.Handlers
 {
     internal class TokenHandler : DelegatingHandler
     {
         private readonly ITokenService _tokenService;
-        public TokenHandler(ITokenService tokenService) 
+        public TokenHandler(ITokenService tokenService)
         {
             _tokenService = tokenService;
         }

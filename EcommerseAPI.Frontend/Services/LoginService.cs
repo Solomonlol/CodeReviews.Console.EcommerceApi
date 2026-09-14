@@ -1,8 +1,6 @@
 ﻿using EcommerseAPI.Frontend.Entities;
 using EcommerseAPI.Frontend.Interfaces;
 using Spectre.Console;
-using System;
-using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -28,7 +26,7 @@ namespace EcommerseAPI.Frontend.Services
             {
                 AnsiConsole.MarkupLine($"[green]Authorized[/]");
                 var contentString = await response.Content.ReadFromJsonAsync<string>(ct);
-                if(!string.IsNullOrEmpty(contentString))
+                if (!string.IsNullOrEmpty(contentString))
                     await _tokenService.SaveToken(contentString, ct);
             }
             else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");

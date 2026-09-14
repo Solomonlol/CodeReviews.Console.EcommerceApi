@@ -3,7 +3,6 @@ using EcommerseAPI.Frontend.Interfaces;
 using EcommerseAPI.Frontend.Menus;
 using EcommerseAPI.Frontend.Services;
 using EcommerseAPI.Frontend.Services.Factory;
-using EcommerseAPI.Frontend.Services.Factory.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,7 +10,7 @@ using Microsoft.Extensions.Hosting;
 using IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
-        
+
         services.AddTransient<TokenHandler>();
         services.AddSingleton<ITokenService, TokenService>();
         services.AddSingleton<IUrlServiceFactory, UrlServiceFactory>();
@@ -23,7 +22,7 @@ using IHost host = Host.CreateDefaultBuilder(args)
         services.AddScoped<ITableDrawingService, TableDrowingService>();
         services.AddScoped<ILoginService, LoginService>();
         services.AddScoped<IAccountService, AccountService>();
-        services.AddScoped<IPagedResultService, AccountService>();
+        services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IUrlService, UrlService>();
         services.AddHttpClient("ApiClient", (sp, client) =>
         {

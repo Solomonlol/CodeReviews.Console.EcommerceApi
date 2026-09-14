@@ -1,6 +1,4 @@
 ﻿using EcommerseAPI.Frontend.Interfaces;
-using Spectre.Console;
-using System.Reflection;
 
 namespace EcommerseAPI.Frontend.Services.Factory.Filters
 {
@@ -12,6 +10,6 @@ namespace EcommerseAPI.Frontend.Services.Factory.Filters
         public string? LastName { get; set; } = null;
         public string? Email { get; set; } = null;
         public string? PhoneNumber { get; set; } = null;
-       
+
     }
 }

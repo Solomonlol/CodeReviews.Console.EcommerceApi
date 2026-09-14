@@ -1,5 +1,4 @@
 ﻿using EcommerseAPI.Frontend.Interfaces;
-using System.Reflection;
 
 namespace EcommerseAPI.Frontend.Services.Factory.Filters
 {
@@ -8,7 +7,7 @@ namespace EcommerseAPI.Frontend.Services.Factory.Filters
         public string? Name { get; set; } = null;
         public decimal? MaxPrice { get; set; } = null;
         public decimal? MinPrice { get; set; } = null;
-        
-        
+
+
     }
 }

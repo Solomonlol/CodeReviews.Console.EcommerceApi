@@ -1,5 +1,4 @@
 ﻿using EcommerseAPI.Frontend.Interfaces;
-using System.Reflection;
 
 namespace EcommerseAPI.Frontend.Services.Factory.Filters
 {
@@ -11,6 +10,6 @@ namespace EcommerseAPI.Frontend.Services.Factory.Filters
         public string? CreatedAt { get; set; } = null;
         public string? EndedAt { get; set; } = null;
 
-        
+
     }
 }

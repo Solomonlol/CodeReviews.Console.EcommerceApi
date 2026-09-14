@@ -1,10 +1,7 @@
-﻿using EcommerseAPI.Frontend.Entities.Dto;
-using EcommerseAPI.Frontend.Entities.Dto.Users;
+﻿using EcommerseAPI.Frontend.Entities.Dto.Users;
 using EcommerseAPI.Frontend.Interfaces;
 using EcommerseAPI.Frontend.Services.Factory.Sort;
 using Spectre.Console;
-using System;
-using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -24,7 +21,7 @@ namespace EcommerseAPI.Frontend.Services
         }
         public async Task Create(UserDtoCreation user, CancellationToken ct = default)
         {
-            var Url = await _urlService.GetUrl(ct:ct);
+            var Url = await _urlService.GetUrl(ct: ct);
             var dto = JsonSerializer.Serialize(user);
             var content = new StringContent(dto, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(Url, content, ct);
@@ -35,30 +32,30 @@ namespace EcommerseAPI.Frontend.Services
 
         public async Task Delete(string login, CancellationToken ct = default)
         {
-            
-            var Url = await _urlService.GetUrl(ct:ct);
-            var response = await _httpClient.DeleteAsync(Url+login, ct);
+
+            var Url = await _urlService.GetUrl(ct: ct);
+            var response = await _httpClient.DeleteAsync(Url + login, ct);
             if (response.IsSuccessStatusCode)
                 AnsiConsole.MarkupLine($"[green]Account with login name {login} was deleted.[/]");
             else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
         }
 
-        public async Task<HttpResponseMessage> GetAll(object? filter = null, SortParams? sort = null, int page=1, int pageSize=5,CancellationToken ct = default)
+        public async Task<HttpResponseMessage> GetAll(object? filter = null, SortParams? sort = null, int page = 1, int pageSize = 5, CancellationToken ct = default)
         {
-            var Url = await _urlService.GetUrl(ct:ct, pageSize: pageSize, page: page);
+            var Url = await _urlService.GetUrl(ct: ct, pageSize: pageSize, page: page);
             var response = await _httpClient.GetAsync(Url, ct);
             return response;
-            
+
         }
 
         public async Task GetMe(CancellationToken ct = default)
         {
-            var url = await _urlService.GetUrl(ct:ct) +"me";
+            var url = await _urlService.GetUrl(ct: ct) + "me";
             var response = await _httpClient.GetAsync(url, ct);
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadFromJsonAsync<UserDtoResponse>(ct);
-                if (content!=null)
+                if (content != null)
                 {
                     var list = new List<UserDtoResponse>();
                     list.Add(content);
@@ -70,7 +67,7 @@ namespace EcommerseAPI.Frontend.Services
 
         public async Task GetOne(string login, CancellationToken ct = default)
         {
-            var url = await _urlService.GetUrl(ct:ct) + $"{login}";
+            var url = await _urlService.GetUrl(ct: ct) + $"{login}";
             var response = await _httpClient.GetAsync(url, ct);
             if (response.IsSuccessStatusCode)
             {
@@ -79,7 +76,7 @@ namespace EcommerseAPI.Frontend.Services
                 {
                     var list = new List<UserDtoResponse>();
                     list.Add(content);
-                    await _drawingService.DrowSimpleTable(enumerableValues: list, title: $"{login} account",ct: ct);
+                    await _drawingService.DrowSimpleTable(enumerableValues: list, title: $"{login} account", ct: ct);
                 }
             }
             else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
@@ -88,7 +85,7 @@ namespace EcommerseAPI.Frontend.Services
         public async Task Update(UserDtoRequest user, CancellationToken ct = default)
         {
             var login = await AnsiConsole.AskAsync<string>("[yellow]Enter login to update:[/]");
-            var url = await _urlService.GetUrl(ct:ct)+$"{login}";
+            var url = await _urlService.GetUrl(ct: ct) + $"{login}";
             var userDto = JsonSerializer.Serialize(user);
             var content = new StringContent(userDto, Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync(url, content, ct);

@@ -57,7 +57,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
             //delete
             app.MapDelete("api/v1/users/{login}", [Authorize(Roles = "Admin, Manager")] async (string login, IUserService service, CancellationToken ct) =>
             {
-                
+
                 if (string.IsNullOrEmpty(login) || string.IsNullOrWhiteSpace(login))
                     return Results.BadRequest();
                 var result = await service.Delete(login, ct);

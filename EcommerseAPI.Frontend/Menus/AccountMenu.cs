@@ -1,12 +1,8 @@
 ﻿using EcommerseAPI.Frontend.Entities;
 using EcommerseAPI.Frontend.Entities.Dto.Users;
 using EcommerseAPI.Frontend.Interfaces;
-using EcommerseAPI.Frontend.Services;
 using EcommerseAPI.Frontend.Services.Factory.Filters;
 using Spectre.Console;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EcommerseAPI.Frontend.Menus
 {
@@ -14,11 +10,10 @@ namespace EcommerseAPI.Frontend.Menus
     {
         private readonly IAccountService _accountService;
         private readonly ILoginService _loginService;
-        //private readonly PagedMenu<AccountService, UserDtoResponse, UserFilter> _pagedMenu;
 
-        public AccountMenu(IAccountService accountService, ILoginService loginService, IServiceProvider sp, ITableDrawingService drawingService) :base("Account") 
-        {   
-            //_pagedMenu = pagedMenu;
+        public AccountMenu(IAccountService accountService, ILoginService loginService, IServiceProvider sp, ITableDrawingService drawingService) : base("Account")
+        {
+            
             _loginService = loginService;
             _accountService = accountService;
             AddExitOption("Back");
@@ -44,7 +39,7 @@ namespace EcommerseAPI.Frontend.Menus
             await _loginService.LogOut(ct);
         }
 
-        public async Task CreateAccount(CancellationToken ct=default)
+        public async Task CreateAccount(CancellationToken ct = default)
         {
             var user = new UserDtoCreation
             {
@@ -60,7 +55,7 @@ namespace EcommerseAPI.Frontend.Menus
             await _accountService.Create(user, ct);
         }
 
-        public async Task UpdateAccount(CancellationToken ct=default)
+        public async Task UpdateAccount(CancellationToken ct = default)
         {
             var user = new UserDtoRequest
             {
@@ -74,19 +69,19 @@ namespace EcommerseAPI.Frontend.Menus
             await _accountService.Update(user, ct);
         }
 
-        public async Task DeleteAccount(CancellationToken ct=default)
+        public async Task DeleteAccount(CancellationToken ct = default)
         {
             var login = await AnsiConsole.AskAsync<string>("[yellow]Enter login to delete.[/]");
             await _accountService.Delete(login, ct);
         }
 
-        public async Task ShowByLogin(CancellationToken ct=default)
+        public async Task ShowByLogin(CancellationToken ct = default)
         {
             var login = await AnsiConsole.AskAsync<string>("[yellow]Enter login of account:[/]");
             await _accountService.GetOne(login, ct);
         }
 
-        public async Task ShowMyAccInfo(CancellationToken ct=default)
+        public async Task ShowMyAccInfo(CancellationToken ct = default)
         {
             await _accountService.GetMe(ct);
         }

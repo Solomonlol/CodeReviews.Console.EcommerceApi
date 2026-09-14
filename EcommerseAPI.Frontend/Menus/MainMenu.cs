@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EcommerseAPI.Frontend.Menus
+﻿namespace EcommerseAPI.Frontend.Menus
 {
     internal class MainMenu : UserInterface
     {
@@ -17,7 +13,7 @@ namespace EcommerseAPI.Frontend.Menus
             AddExitOption("Exit");
         }
 
-        
-        
+
+
     }
 }

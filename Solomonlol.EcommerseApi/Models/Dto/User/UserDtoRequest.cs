@@ -16,6 +16,6 @@ namespace Solomonlol.EcommerseApi.Models.Dto.User
         [Required(ErrorMessage = "Phone number is required.")]
         public string PhoneNumber { get; set; } = null!;
         public ICollection<SaleDtoRequest> Sales { get; set; } = [];
-        public string Role {  get; set; } = string.Empty!;
+        public string Role { get; set; } = string.Empty!;
     }
 }

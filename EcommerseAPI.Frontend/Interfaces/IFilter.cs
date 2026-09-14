@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-
-namespace EcommerseAPI.Frontend.Interfaces
+﻿namespace EcommerseAPI.Frontend.Interfaces
 {
     internal interface IFilter
     {
