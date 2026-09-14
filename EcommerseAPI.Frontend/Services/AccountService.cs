@@ -34,7 +34,7 @@ namespace EcommerseAPI.Frontend.Services
         {
 
             var Url = await _urlService.GetUrl(ct: ct);
-            var response = await _httpClient.DeleteAsync(Url + login, ct);
+            var response = await _httpClient.DeleteAsync(Url + login.Trim(), ct);
             if (response.IsSuccessStatusCode)
                 AnsiConsole.MarkupLine($"[green]Account with login name {login} was deleted.[/]");
             else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
@@ -45,7 +45,6 @@ namespace EcommerseAPI.Frontend.Services
             var Url = await _urlService.GetUrl(ct: ct, pageSize: pageSize, page: page);
             var response = await _httpClient.GetAsync(Url, ct);
             return response;
-
         }
 
         public async Task GetMe(CancellationToken ct = default)
