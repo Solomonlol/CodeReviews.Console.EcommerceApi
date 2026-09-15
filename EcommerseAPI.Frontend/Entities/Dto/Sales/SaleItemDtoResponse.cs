@@ -1,4 +1,5 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Products;
+using EcommerseAPI.Frontend.Interfaces;
 
 namespace EcommerseAPI.Frontend.Entities.Dto.Sales
 {

@@ -10,7 +10,7 @@ namespace Solomonlol.EcommerseApi.Models.Dto.Product
         public int? Id { get; set; } = null!;
         public string Name { get; set; } = null!;
         [Column(TypeName = "decimal(18,2)")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; } = null!;
         public string? Description { get; set; }
         public string CategoryName { get; set; } = string.Empty;
         //[JsonIgnore]

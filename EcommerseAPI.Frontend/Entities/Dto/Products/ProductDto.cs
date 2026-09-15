@@ -1,4 +1,5 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Categories;
+using EcommerseAPI.Frontend.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -10,8 +11,8 @@ namespace EcommerseAPI.Frontend.Entities.Dto.Products
         public int? Id { get; set; } = null!;
         public string Name { get; set; } = null!;
         [Column(TypeName = "decimal(18,2)")]
-        public decimal Price { get; set; }
-        public string? Description { get; set; }
+        public decimal? Price { get; set; } = null!;
+        public string? Description { get; set; } = string.Empty!;
         public string CategoryName { get; set; } = string.Empty;
         //[JsonIgnore]
         public IEnumerable<ProductAttributeDisplayDto> Attributes { get; set; } = [];
@@ -20,6 +21,7 @@ namespace EcommerseAPI.Frontend.Entities.Dto.Products
         [JsonIgnore]
         [ForeignKey(nameof(CategoryId))]
         public CategoryDto Category { get; set; } = null!;
+
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using EcommerseAPI.Frontend.Entities.Dto;
+﻿using EcommerseAPI.Frontend.Entities;
+using EcommerseAPI.Frontend.Entities.Dto;
 using EcommerseAPI.Frontend.Entities.Dto.Categories;
 using EcommerseAPI.Frontend.Entities.Dto.Products;
 using EcommerseAPI.Frontend.Interfaces;
@@ -40,22 +41,18 @@ namespace EcommerseAPI.Frontend.Menus
             var product = new ProductDto
             {
                 Name = AnsiConsole.Ask<string>("Enter name:"),
-                Description = "Test descriprion",
-                Price = 10000,
-                CategoryId = (int)CategoryEnum.GPU
+                Description = AnsiConsole.Ask<string>("Enter description:"),
+                Price = AnsiConsole.Ask<int>("Enter price:"),
+                CategoryId = (int)AnsiConsole.Prompt(new SelectionPrompt<CategoryEnum>()
+                .Title("Choose category:")
+                .AddChoices(Enum.GetValues<CategoryEnum>()))
             };
             await _productService.Create(product, ct);
         }
         public async Task Update(CancellationToken ct=default)
         {
-            var product = new ProductDto
-            {
-                Name = "New Super-Duper Product 2",
-                Description = "Test descriprion 2",
-                Price = 100000,
-                CategoryId = (int)CategoryEnum.CPU
-            };
-            await _productService.Update(product, ct);
+            
+            await _productService.Update(ct);
         }
 
         public async Task Delete(CancellationToken ct=default)

@@ -10,7 +10,7 @@ namespace EcommerseAPI.Frontend.Interfaces
     {
         Task GetOne(string productName, CancellationToken ct = default);
         Task Create(ProductDto productItem, CancellationToken ct = default);
-        Task Update(ProductDto productItem, CancellationToken ct = default);
+        Task Update(CancellationToken ct = default);
         Task Delete(string productName, CancellationToken ct = default);
     }
 }

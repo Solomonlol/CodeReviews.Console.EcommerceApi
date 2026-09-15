@@ -1,4 +1,5 @@
-﻿using EcommerseAPI.Frontend.Entities.Dto.Products;
+﻿using Auth0.ManagementApi;
+using EcommerseAPI.Frontend.Entities.Dto.Products;
 using EcommerseAPI.Frontend.Entities.Dto.Users;
 using EcommerseAPI.Frontend.Interfaces;
 using EcommerseAPI.Frontend.Services.Factory.Sort;
@@ -6,6 +7,7 @@ using Spectre.Console;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using static EcommerseAPI.Frontend.Entities.EnumHelper;
 
 namespace EcommerseAPI.Frontend.Services
 {
@@ -65,16 +67,45 @@ namespace EcommerseAPI.Frontend.Services
             else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
         }
 
-        public async Task Update(ProductDto productItem, CancellationToken ct = default)
+        public async Task Update(CancellationToken ct = default)
         {
             var productName = await AnsiConsole.AskAsync<string>("[yellow]Enter product name to update:[/]");
             var url = await _urlService.GetUrl(ct: ct) + $"{productName}";
-            var productDtoSerialized = JsonSerializer.Serialize(productItem);
-            var content = new StringContent(productDtoSerialized, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync(url, content, ct);
+            var response = await _httpClient.GetAsync(url, ct);
             if (response.IsSuccessStatusCode)
-                AnsiConsole.MarkupLine($"[green]User with login {productName} was successfully updated.[/]");
-            else AnsiConsole.MarkupLine($"{response.StatusCode}");
+            {
+                var updatedProduct = new ProductDto();
+                var choises = await AnsiConsole.PromptAsync(new MultiSelectionPrompt<string>()
+                    .Title("Choose what to update:")
+                    .AddChoices("Name", "Description", "Price", "Category"));
+                foreach (var choice in choises)
+                {
+                    switch (choice)
+                    {
+                        case "Name":
+                            updatedProduct.Name = await AnsiConsole.AskAsync<string>($"[yellow]Enter new product {choice}:[/]");
+                            break;
+                        case "Description":
+                            updatedProduct.Description = await AnsiConsole.AskAsync<string>($"[yellow]Enter new product {choice}:[/]");
+                            break;
+                        case "Price":
+                            updatedProduct.Price = await AnsiConsole.AskAsync<decimal>($"[yellow]Enter new product {choice}:[/]");
+                            break;
+                        case "Category":
+                            updatedProduct.CategoryId = (int)await AnsiConsole.PromptAsync(new SelectionPrompt<CategoryEnum>()
+                                                                                        .Title("Choose category:")
+                                                                                        .AddChoices(Enum.GetValues<CategoryEnum>()));
+                            break;
+                    }
+                }
+                var productDtoSerialized = JsonSerializer.Serialize(updatedProduct);
+                var content = new StringContent(productDtoSerialized, Encoding.UTF8, "application/json");
+                response = await _httpClient.PutAsync(url, content, ct);
+                if (response.IsSuccessStatusCode)
+                    AnsiConsole.MarkupLine($"[green]Product with login {productName} was successfully updated.[/]");
+                else AnsiConsole.MarkupLine($"{response.StatusCode}");
+            }
+            else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
         }
     }
 }

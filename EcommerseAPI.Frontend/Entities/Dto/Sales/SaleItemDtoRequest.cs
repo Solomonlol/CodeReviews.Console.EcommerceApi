@@ -1,4 +1,6 @@
-﻿namespace EcommerseAPI.Frontend.Entities.Dto.Sales
+﻿using EcommerseAPI.Frontend.Interfaces;
+
+namespace EcommerseAPI.Frontend.Entities.Dto.Sales
 {
     public class SaleItemDtoRequest
     {
