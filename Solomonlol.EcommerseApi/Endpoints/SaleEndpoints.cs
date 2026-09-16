@@ -43,8 +43,17 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 return result.IsSuccess ? Results.NoContent() : Results.NotFound(result.Error);
             });
             //create
-            app.MapPost("api/v1/sales", [Authorize] async (SaleDtoRequest item, ISaleService service, CancellationToken ct) =>
+            app.MapPost("api/v1/sales", [Authorize] async (ClaimsPrincipal user, SaleDtoRequest item, ISaleService service, IUserService userService, CancellationToken ct) =>
             {
+                var login = user.FindFirst(ClaimTypes.Name)?.Value;
+                if (login == null) return Results.BadRequest();
+
+                var userCheck = await userService.GetByLogin(login);
+                if (userCheck == null)
+                    return Results.Unauthorized();
+
+                item.UserId = userCheck.Value.Id;
+
                 var result = await service.Create(item, ct);
                 return result.IsSuccess ? Results.Created($"api/v1/sales/{result?.Value?.Id}", result?.Value) : Results.Conflict(result.Error);
             });

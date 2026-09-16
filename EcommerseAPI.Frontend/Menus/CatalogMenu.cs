@@ -48,9 +48,12 @@ namespace EcommerseAPI.Frontend.Menus
                 .Title("Choose category:")
                 .AddChoices(Enum.GetValues<CategoryEnum>()))
             };
-            await _productService.Create(product, ct);
+
+            if (await AnsiConsole.ConfirmAsync("Are you sure?", cancellationToken: ct))
+                await _productService.Create(product, ct);
+            else AnsiConsole.MarkupLine("[violet]The operation was cancelled.[/]");
         }
-        public async Task Update(CancellationToken ct=default)
+        public async Task Update(CancellationToken ct = default)
         {
             await _productService.Update(ct);
         }
@@ -58,7 +61,9 @@ namespace EcommerseAPI.Frontend.Menus
         public async Task Delete(CancellationToken ct=default)
         {
             var productName = AnsiConsole.Ask<string>("Enter product name to delete:");
-            await _productService.Delete(productName, ct);
+            if (await AnsiConsole.ConfirmAsync("Are you sure?", cancellationToken: ct))
+                await _productService.Delete(productName, ct);
+            else AnsiConsole.MarkupLine("[violet]The operation was cancelled.[/]");
         }
     }
 }

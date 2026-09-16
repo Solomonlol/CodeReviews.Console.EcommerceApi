@@ -18,18 +18,25 @@ namespace EcommerseAPI.Frontend.Services
         }
         public async Task LogIn(LoginRequest request, CancellationToken ct = default)
         {
-            var url = "api/v1/login";
-            var jsonDto = JsonSerializer.Serialize(request);
-            var content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync(url, content, ct);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                AnsiConsole.MarkupLine($"[green]Authorized[/]");
-                var contentString = await response.Content.ReadFromJsonAsync<string>(ct);
-                if (!string.IsNullOrEmpty(contentString))
-                    await _tokenService.SaveToken(contentString, ct);
+                var url = "api/v1/login";
+                var jsonDto = JsonSerializer.Serialize(request);
+                var content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync(url, content, ct);
+                if (response.IsSuccessStatusCode)
+                {
+                    AnsiConsole.MarkupLine($"[green]Authorized[/]");
+                    var contentString = await response.Content.ReadFromJsonAsync<string>(ct);
+                    if (!string.IsNullOrEmpty(contentString))
+                        await _tokenService.SaveToken(contentString, ct);
+                }
+                else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
             }
-            else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
+            catch (Exception ex)
+            {
+                AnsiConsole.MarkupLine($"[red]Error: {ex.Message}[/]");
+            }
         }
 
         public async Task LogOut(CancellationToken ct = default)

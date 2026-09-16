@@ -12,6 +12,7 @@ namespace EcommerseAPI.Frontend.Menus
         private PagedResult<TResultDto>? _pagedResult;
         private readonly IServiceProvider _serviceProvider;
         private readonly ITableDrawingService _drawingService;
+        private readonly IProductService? _productService;
         private readonly string _title;
         private SortParams? _sortParams;
         private TFilter _filter = new();
@@ -20,6 +21,21 @@ namespace EcommerseAPI.Frontend.Menus
             _title = title;
             _drawingService = drawingService;
             _serviceProvider = serviceProvider;
+            AddItem("Next page", () => NextPage());
+            AddItem("Previous page", () => PreviousPage());
+            AddItem("Choose page", () => ChoosePageNumber());
+            AddItem("Change page size", () => ChangePageSize());
+            AddItem("Add filter", () => AddFiltering());
+            AddItem("Add sort", () => AddSort());
+            AddExitOption("Back");
+        }
+
+        public PagedMenu(IServiceProvider serviceProvider, ITableDrawingService drawingService, IProductService productService, string title) : base(title)
+        {
+            _title = title;
+            _drawingService = drawingService;
+            _serviceProvider = serviceProvider;
+            _productService = productService;
             AddItem("Next page", () => NextPage());
             AddItem("Previous page", () => PreviousPage());
             AddItem("Choose page", () => ChoosePageNumber());

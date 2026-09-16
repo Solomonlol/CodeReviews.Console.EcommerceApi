@@ -20,6 +20,10 @@ namespace EcommerseAPI.Frontend.Menus
             _loginService = loginService;
             AddExitOption("Back");
             AddSubMenu("Show all categories", new PagedMenu<ICategoryService, CategoryDto, CategoryFilter>(sp, drawingService, "Categories"));
+            AddItem("Find one", () => Get());
+            AddItem("Create new", () => Create());
+            AddItem("Update", () => Update());
+            AddItem("Delete", () => Delete());
         }
 
         public async Task Create(CancellationToken ct=default)
@@ -29,17 +33,28 @@ namespace EcommerseAPI.Frontend.Menus
                 Name = await AnsiConsole.AskAsync<string>("Enter category name:"),
                 Description = await AnsiConsole.AskAsync<string>("Enter descriprion of this category:")
             };
-            await _categoryService.Create(dto, ct);
+            if (await AnsiConsole.ConfirmAsync("Are you sure?", cancellationToken: ct))
+                await _categoryService.Create(dto, ct);
+            else AnsiConsole.MarkupLine("[violet]The operation was cancelled.[/]");
         }
 
         public async Task Update(CancellationToken ct=default)
         {
-            var dto = new CategoryDto()
-            {
-                Name = await AnsiConsole.AskAsync<string>("Enter new category name:"),
-                Description = await AnsiConsole.AskAsync<string>("Enter new descriprion of this category:")
-            };
-            //_categoryService.Update()
+             await _categoryService.Update(ct);
+        }
+
+        public async Task Delete(CancellationToken ct=default)
+        {
+            var categoryName = await AnsiConsole.AskAsync<string>("Enter category name to delete:");
+            if(await AnsiConsole.ConfirmAsync("Are you sure?", cancellationToken: ct))
+                await _categoryService.Delete(categoryName, ct);
+            else AnsiConsole.MarkupLine("[violet]The operation was cancelled.[/]");
+        }
+
+        public async Task Get(CancellationToken ct=default)
+        {
+            var categoryName = await AnsiConsole.AskAsync<string>("Enter category name to find:");
+            await _categoryService.GetOne(categoryName, ct);
         }
     }
 }

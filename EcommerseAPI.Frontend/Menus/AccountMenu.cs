@@ -43,36 +43,31 @@ namespace EcommerseAPI.Frontend.Menus
         {
             var user = new UserDtoCreation
             {
-                FirstName = "Arseni",
-                LastName = "Hapechkin",
-                Email = "Solomonlol95@gmail.com",
-                Login = "Solomon",
-                PhoneNumber = "1234567890",
-                Password = "Password123",
-                RepeatPassword = "Password123"
-
+                FirstName = await AnsiConsole.AskAsync<string>($"[yellow]Enter first name:[/]"),
+                LastName = await AnsiConsole.AskAsync<string>($"[yellow]Enter last name:[/]"),
+                Email = await AnsiConsole.AskAsync<string>($"[yellow]Enter email:[/]"),
+                Login = await AnsiConsole.AskAsync<string>($"[yellow]Enter login:[/]"),
+                PhoneNumber = await AnsiConsole.AskAsync<string>($"[yellow]Enter phone number:[/]"),
+                Password = await AnsiConsole.AskAsync<string>($"[yellow]Enter password:[/]"),
+                RepeatPassword = await AnsiConsole.AskAsync<string>($"[yellow]Repeat password:[/]")
             };
-            await _accountService.Create(user, ct);
+            if (await AnsiConsole.ConfirmAsync("Are you sure?", cancellationToken: ct))
+                await _accountService.Create(user, ct);
+            else AnsiConsole.MarkupLine("[violet]The operation was cancelled.[/]");
         }
 
         public async Task UpdateAccount(CancellationToken ct = default)
         {
-            var user = new UserDtoRequest
-            {
-                FirstName = "Anton",
-                LastName = "Gorodetsky",
-                Email = "Sumrak@gmail.com",
-                Login = "Sumrak",
-                PhoneNumber = "321 12 3216598",
-                Role = "Admin"
-            };
-            await _accountService.Update(user, ct);
+            await _accountService.Update(ct);
         }
 
         public async Task DeleteAccount(CancellationToken ct = default)
         {
             var login = await AnsiConsole.AskAsync<string>("[yellow]Enter login to delete.[/]");
-            await _accountService.Delete(login, ct);
+
+            if (await AnsiConsole.ConfirmAsync("Are you sure?", cancellationToken: ct))
+                await _accountService.Delete(login, ct);
+            else AnsiConsole.MarkupLine("[violet]The operation was cancelled.[/]");
         }
 
         public async Task ShowByLogin(CancellationToken ct = default)
