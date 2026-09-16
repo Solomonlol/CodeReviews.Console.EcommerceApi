@@ -61,7 +61,7 @@ namespace EcommerseAPI.Frontend.Services
                 {
                     var list = new List<ProductDto>();
                     list.Add(content);
-                    await _drawingService.DrowSimpleTable(enumerableValues: list, title: $"{productName}", ct: ct);
+                    await _drawingService.DrowSimpleTable(enumerableValues: list, title: $"{productName}", ct: ct, isNestedDrawing: true);
                 }
             }
             else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");

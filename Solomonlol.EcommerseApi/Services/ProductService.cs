@@ -60,6 +60,7 @@ namespace Solomonlol.EcommerseApi.Services
                     Name = p.Name,
                     Price = p.Price,
                     Description = p.Description,
+                    CategoryName = p.Category.Name,
                     CategoryId = p.CategoryId,
                     Attributes = p.Category.Attributes.Select(a => new ProductAttributeDisplayDto
                     {

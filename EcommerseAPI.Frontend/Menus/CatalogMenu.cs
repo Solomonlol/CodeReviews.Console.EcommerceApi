@@ -24,6 +24,7 @@ namespace EcommerseAPI.Frontend.Menus
             _httpClient = clientFactory.CreateClient("ApiClient");
             _productService = productService;
             AddSubMenu("All products", new PagedMenu<IProductService, ProductDto, ProductFilter>(sp, drawingService, "Products"));
+            AddItem("Find one", () => Get());
             AddItem("Create new product", () => Create());
             AddItem("Update product", () => Update());
             AddItem("Delete product", () => Delete());
@@ -51,7 +52,6 @@ namespace EcommerseAPI.Frontend.Menus
         }
         public async Task Update(CancellationToken ct=default)
         {
-            
             await _productService.Update(ct);
         }
 
@@ -59,22 +59,6 @@ namespace EcommerseAPI.Frontend.Menus
         {
             var productName = AnsiConsole.Ask<string>("Enter product name to delete:");
             await _productService.Delete(productName, ct);
-        }
-
-        public async Task ChooseCategory(CancellationToken ct = default)
-        {
-            var url = "api/v1/categories";
-            var response = await _httpClient.GetAsync(url, ct);
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadFromJsonAsync<PagedResult<CategoryDto>>(ct);
-                if (content.Items.Any())
-                {
-
-                    await _drowingService.DrowSimpleTable(content, "Products", ct);
-                }
-            }
-            else AnsiConsole.MarkupLine($"{response.StatusCode}");
         }
     }
 }

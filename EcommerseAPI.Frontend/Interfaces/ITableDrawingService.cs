@@ -4,6 +4,6 @@ namespace EcommerseAPI.Frontend.Interfaces
 {
     internal interface ITableDrawingService
     {
-        Task DrowSimpleTable<T>(PagedResult<T>? pagedResult = null, string? title = null, CancellationToken ct = default, IEnumerable<T>? enumerableValues = null);
+        Task DrowSimpleTable<T>(PagedResult<T>? pagedResult = null, string? title = null, CancellationToken ct = default, IEnumerable<T>? enumerableValues = null, bool isNestedDrawing = false);
     }
 }
