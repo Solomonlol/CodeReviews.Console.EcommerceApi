@@ -99,10 +99,41 @@ namespace EcommerseAPI.Frontend.Menus
         {
             if (_pagedResult == null) return;
 
-            
+            var filter = Activator.CreateInstance<TFilter>();
+
+            var properties = typeof(TFilter).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(t => !t.PropertyType.IsInterface && !t.PropertyType.IsClass
+                        || t.PropertyType == typeof(string));
+
+            var filterParams = await AnsiConsole.PromptAsync(new MultiSelectionPrompt<string>()
+                .Title("Choose filter parameters to add:")
+                .AddChoices(properties.Select(p => p.Name)));
+
+            foreach (var paramName in filterParams)
+            {
+                var prop = properties.First(p => p.Name == paramName);
+
+                object? value = prop.PropertyType switch
+                {
+                    Type t when t == typeof(int) || t == typeof(int?) => await AnsiConsole.AskAsync<int>($"Set {prop.Name}:", ct),
+
+                    Type t when t == typeof(decimal) || t== typeof(decimal?) => await AnsiConsole.AskAsync<decimal>($"Set {prop.Name}:", ct),
+
+                    Type t when t == typeof(string) => await AnsiConsole.AskAsync<string>($"Set {prop.Name}:"),
+
+                    _ => null
+                };
+
+                if (value != null)
+                    prop.SetValue(filter, value);
+            }
+            _filter = filter;
 
             await GetAll(page: _pagedResult.Page, pageSize: _pagedResult.PageSize, sort: _sortParams, filter: _filter, ct: ct);
         }
+
+            
+        
 
         public async Task AddSort(CancellationToken ct = default)
         {
