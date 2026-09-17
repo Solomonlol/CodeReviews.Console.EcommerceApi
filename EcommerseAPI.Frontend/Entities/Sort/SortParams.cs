@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace EcommerseAPI.Frontend.Services.Factory.Sort
+namespace EcommerseAPI.Frontend.Entities.Sort
 {
     public class SortParams
     {

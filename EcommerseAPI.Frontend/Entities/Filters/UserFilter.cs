@@ -1,6 +1,6 @@
 ﻿using EcommerseAPI.Frontend.Interfaces;
 
-namespace EcommerseAPI.Frontend.Services.Factory.Filters
+namespace EcommerseAPI.Frontend.Entities.Filters
 {
     public class UserFilter : IFilter
     {
@@ -10,6 +10,5 @@ namespace EcommerseAPI.Frontend.Services.Factory.Filters
         public string? LastName { get; set; } = null;
         public string? Email { get; set; } = null;
         public string? PhoneNumber { get; set; } = null;
-
     }
 }

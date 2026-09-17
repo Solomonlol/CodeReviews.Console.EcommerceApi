@@ -9,13 +9,8 @@ namespace EcommerseAPI.Frontend.Services
     {
         public Task DrowSimpleTable<T>(PagedResult<T>? pagedResult = null, string? title = null, CancellationToken ct = default, IEnumerable<T>? enumerableValues = null, bool isNestedDrawing = false)
         {
-            int clear = 0;
-            if (isNestedDrawing && clear == 0)
-            {
-                Console.Clear();
-                clear++;
-            }
-
+            Console.Clear();
+            
             var itemsList = new List<T>();
             if (pagedResult != null)
                 itemsList = pagedResult.Items.ToList();

@@ -1,6 +1,6 @@
 ﻿using EcommerseAPI.Frontend.Interfaces;
 
-namespace EcommerseAPI.Frontend.Services.Factory.Filters
+namespace EcommerseAPI.Frontend.Entities.Filters
 {
     public class SaleFilter : IFilter
     {
@@ -9,7 +9,5 @@ namespace EcommerseAPI.Frontend.Services.Factory.Filters
         public decimal? MinTotalPrice { get; set; } = null;
         public string? CreatedAt { get; set; } = null;
         public string? EndedAt { get; set; } = null;
-
-
     }
 }

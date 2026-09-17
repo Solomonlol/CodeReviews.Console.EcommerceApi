@@ -1,5 +1,5 @@
-﻿using EcommerseAPI.Frontend.Interfaces;
-using EcommerseAPI.Frontend.Services.Factory.Sort;
+﻿using EcommerseAPI.Frontend.Entities.Sort;
+using EcommerseAPI.Frontend.Interfaces;
 
 namespace EcommerseAPI.Frontend.Services
 {

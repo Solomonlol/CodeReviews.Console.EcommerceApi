@@ -2,8 +2,8 @@
 using EcommerseAPI.Frontend.Entities.Dto;
 using EcommerseAPI.Frontend.Entities.Dto.Categories;
 using EcommerseAPI.Frontend.Entities.Dto.Products;
+using EcommerseAPI.Frontend.Entities.Filters;
 using EcommerseAPI.Frontend.Interfaces;
-using EcommerseAPI.Frontend.Services.Factory.Filters;
 using Spectre.Console;
 using System.Net.Http.Json;
 using System.Runtime.CompilerServices;

@@ -1,7 +1,7 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Categories;
 using EcommerseAPI.Frontend.Entities.Dto.Users;
+using EcommerseAPI.Frontend.Entities.Filters;
 using EcommerseAPI.Frontend.Interfaces;
-using EcommerseAPI.Frontend.Services.Factory.Filters;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;

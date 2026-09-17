@@ -1,7 +1,7 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Sales;
 using EcommerseAPI.Frontend.Entities.Dto.Users;
+using EcommerseAPI.Frontend.Entities.Sort;
 using EcommerseAPI.Frontend.Interfaces;
-using EcommerseAPI.Frontend.Services.Factory.Sort;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
@@ -58,11 +58,11 @@ namespace EcommerseAPI.Frontend.Services
             }
         }
 
-        public async Task<HttpResponseMessage?> GetAll(object? filter = null, SortParams? sort = null, int page = 1, int pageSize = 5, CancellationToken ct = default)
+        public async Task<HttpResponseMessage?> GetAll(IFilter? filter = null, SortParams? sort = null, int page = 1, int pageSize = 5, CancellationToken ct = default)
         {
             try
             {
-                var Url = await _urlService.GetUrl(ct: ct, pageSize: pageSize, page: page);
+                var Url = await _urlService.GetUrl(ct: ct, pageSize: pageSize, page: page, sort: sort, filter:filter);
                 var response = await _httpClient.GetAsync(Url, ct);
                 return response;
             }

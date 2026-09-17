@@ -1,9 +1,11 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto;
+using EcommerseAPI.Frontend.Entities.Sort;
 using EcommerseAPI.Frontend.Interfaces;
-using EcommerseAPI.Frontend.Services.Factory.Sort;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
+using System.ComponentModel;
 using System.Net.Http.Json;
+using System.Reflection;
 
 namespace EcommerseAPI.Frontend.Menus
 {
@@ -14,7 +16,7 @@ namespace EcommerseAPI.Frontend.Menus
         private readonly ITableDrawingService _drawingService;
         private readonly IProductService? _productService;
         private readonly string _title;
-        private SortParams? _sortParams;
+        private SortParams _sortParams = new();
         private TFilter _filter = new();
         public PagedMenu(IServiceProvider serviceProvider, ITableDrawingService drawingService, string title) : base(title)
         {
@@ -97,6 +99,8 @@ namespace EcommerseAPI.Frontend.Menus
         {
             if (_pagedResult == null) return;
 
+            
+
             await GetAll(page: _pagedResult.Page, pageSize: _pagedResult.PageSize, sort: _sortParams, filter: _filter, ct: ct);
         }
 
@@ -104,10 +108,39 @@ namespace EcommerseAPI.Frontend.Menus
         {
             if (_pagedResult == null) return;
 
+            var properties = typeof(SortParams).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(t => !t.PropertyType.IsInterface && !t.PropertyType.IsClass
+                        || t.PropertyType == typeof(string)); 
+
+            var sortParams = await AnsiConsole.PromptAsync(new MultiSelectionPrompt<string>()
+                .Title("Choose sort parameters to add:")
+                .AddChoices(properties.Select(p=>p.Name)));
+
+            foreach (var property in properties)
+            {
+                var dtoProperties = typeof(TResultDto).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(t => !t.PropertyType.IsInterface && !t.PropertyType.IsClass
+                        || t.PropertyType == typeof(string));
+                if (sortParams.Contains(property.Name))
+                    switch (property.Name)
+                    {
+                        case "OrderBy":
+                            _sortParams.OrderBy = await AnsiConsole.PromptAsync(new SelectionPrompt<string>()
+                                .Title("Order by:")
+                                .AddChoices(dtoProperties.Select(p => p.Name)));
+                            break;
+                        case "Direction":
+                            _sortParams.Direction = await AnsiConsole.PromptAsync(new SelectionPrompt<ListSortDirection>()
+                                .Title("Direction:")
+                                .AddChoices(ListSortDirection.Ascending, ListSortDirection.Descending));
+                            break;
+                    }
+            }
+
             await GetAll(page: _pagedResult.Page, pageSize: _pagedResult.PageSize, sort: _sortParams, filter: _filter, ct: ct);
         }
 
-        private async Task GetAll(object? filter = null, SortParams? sort = null, int page = 1, int pageSize = 5, CancellationToken ct = default)
+        private async Task GetAll(IFilter? filter = null, SortParams? sort = null, int page = 1, int pageSize = 5, CancellationToken ct = default)
         {
             try
             {
@@ -132,7 +165,7 @@ namespace EcommerseAPI.Frontend.Menus
 
         protected override async Task OnStartingAsync(CancellationToken ct = default)
         {
-            await GetAll(ct);
+            await GetAll(ct:ct);
         }
     }
 }

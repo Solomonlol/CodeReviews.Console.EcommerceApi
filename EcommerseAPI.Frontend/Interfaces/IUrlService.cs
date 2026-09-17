@@ -1,4 +1,4 @@
-﻿using EcommerseAPI.Frontend.Services.Factory.Sort;
+﻿using EcommerseAPI.Frontend.Entities.Sort;
 
 namespace EcommerseAPI.Frontend.Interfaces
 {
