@@ -1,4 +1,7 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto;
+using EcommerseAPI.Frontend.Entities.Dto.Products;
+using EcommerseAPI.Frontend.Entities.Dto.Sales;
+using EcommerseAPI.Frontend.Entities.Filters;
 using EcommerseAPI.Frontend.Entities.Sort;
 using EcommerseAPI.Frontend.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +17,7 @@ namespace EcommerseAPI.Frontend.Menus
         private PagedResult<TResultDto>? _pagedResult;
         private readonly IServiceProvider _serviceProvider;
         private readonly ITableDrawingService _drawingService;
-        private readonly IProductService? _productService;
+        private readonly IShoppingCartService? _cartService;
         private readonly string _title;
         private SortParams _sortParams = new();
         private TFilter _filter = new();
@@ -32,19 +35,54 @@ namespace EcommerseAPI.Frontend.Menus
             AddExitOption("Back");
         }
 
-        public PagedMenu(IServiceProvider serviceProvider, ITableDrawingService drawingService, IProductService productService, string title) : base(title)
+        public PagedMenu(IServiceProvider serviceProvider, ITableDrawingService drawingService, IShoppingCartService cartService, SaleMenu saleMenu, string title) : base(title)
         {
             _title = title;
             _drawingService = drawingService;
             _serviceProvider = serviceProvider;
-            _productService = productService;
+            _cartService = cartService;
             AddItem("Next page", () => NextPage());
             AddItem("Previous page", () => PreviousPage());
+            AddItem("Add to cart", () => AddToCart());
+            AddItem("Remove item from cart", () => RemoveFromCart());
+            AddItem("Clear cart", ()=> ClearCart());
+            AddSubMenu("Sale management", saleMenu);
             AddItem("Choose page", () => ChoosePageNumber());
             AddItem("Change page size", () => ChangePageSize());
             AddItem("Add filter", () => AddFiltering());
             AddItem("Add sort", () => AddSort());
             AddExitOption("Back");
+        }
+
+        public async Task AddToCart(CancellationToken ct = default)
+        {
+            if (typeof(TResultDto) == typeof(ProductDto))
+            {
+                var list = _pagedResult?.Items.Cast<ProductDto>().ToList();
+                if (list?.Count > 0)
+                {
+                    var choises = await AnsiConsole.PromptAsync(new MultiSelectionPrompt<ProductDto>()
+                    .Title("[yellow]Choose what products add to cart:[/]")
+                    .AddChoices(list)
+                    .UseConverter(p=>$"{p.Name} | {p.Price} | {p.CategoryName}"));
+                                        
+                    foreach (var item in choises)
+                    {
+                        var quantity = await AnsiConsole.AskAsync<int>($"[yellow]Enter quantity of {item.Name} to add:[/]");
+                        await _cartService.AddToCart(item, quantity, ct);
+                    }
+                }
+            }
+        }
+
+        public async Task ClearCart(CancellationToken ct=default)
+        {
+            await _cartService.Clear(ct);
+        }
+
+        public async Task RemoveFromCart(CancellationToken ct=default)
+        {
+            await _cartService.RemoveFromCart(ct);
         }
 
         public async Task NextPage(CancellationToken ct = default)
@@ -70,7 +108,7 @@ namespace EcommerseAPI.Frontend.Menus
         {
             if (_pagedResult == null) return;
 
-            var pageNumber = await AnsiConsole.AskAsync<int>("Enter page number what you need:");
+            var pageNumber = await AnsiConsole.AskAsync<int>("[yellow]Enter page number what you need:[/]");
             if (pageNumber > _pagedResult.TotalPages | pageNumber < 1)
                 AnsiConsole.MarkupLine("[red]Incorrect data[/]");
             else
@@ -84,7 +122,7 @@ namespace EcommerseAPI.Frontend.Menus
         {
             if (_pagedResult == null) return;
 
-            var pageSize = await AnsiConsole.AskAsync<int>("Enter page number what you need:");
+            var pageSize = await AnsiConsole.AskAsync<int>("[yellow]Enter page number what you need:[/]");
             if (pageSize < 1)
                 AnsiConsole.MarkupLine("[red]Incorrect data[/]");
             else
@@ -115,11 +153,11 @@ namespace EcommerseAPI.Frontend.Menus
 
                 object? value = prop.PropertyType switch
                 {
-                    Type t when t == typeof(int) || t == typeof(int?) => await AnsiConsole.AskAsync<int>($"Set {prop.Name}:", ct),
+                    Type t when t == typeof(int) || t == typeof(int?) => await AnsiConsole.AskAsync<int>($"[yellow]Set {prop.Name}:[/]", ct),
 
-                    Type t when t == typeof(decimal) || t== typeof(decimal?) => await AnsiConsole.AskAsync<decimal>($"Set {prop.Name}:", ct),
+                    Type t when t == typeof(decimal) || t== typeof(decimal?) => await AnsiConsole.AskAsync<decimal>($"[yellow]Set {prop.Name}:[/]", ct),
 
-                    Type t when t == typeof(string) => await AnsiConsole.AskAsync<string>($"Set {prop.Name}:"),
+                    Type t when t == typeof(string) => await AnsiConsole.AskAsync<string>($"[yellow]Set {prop.Name}:[/]"),
 
                     _ => null
                 };
@@ -131,9 +169,6 @@ namespace EcommerseAPI.Frontend.Menus
 
             await GetAll(page: _pagedResult.Page, pageSize: _pagedResult.PageSize, sort: _sortParams, filter: _filter, ct: ct);
         }
-
-            
-        
 
         public async Task AddSort(CancellationToken ct = default)
         {

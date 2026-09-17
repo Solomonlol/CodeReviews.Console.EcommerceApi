@@ -14,13 +14,17 @@ using IHost host = Host.CreateDefaultBuilder(args)
         services.AddTransient<TokenHandler>();
         services.AddSingleton<ITokenService, TokenService>();
         services.AddSingleton<IUrlServiceFactory, UrlServiceFactory>();
+        services.AddSingleton<IShoppingCartService, ShoppingCartService>();
 
         services.AddTransient<MainMenu>();
         services.AddTransient<CatalogMenu>();
         services.AddTransient<AccountMenu>();
+        services.AddTransient<SaleMenu>();
+
 
         services.AddScoped<ITableDrawingService, TableDrowingService>();
         services.AddScoped<ILoginService, LoginService>();
+        services.AddScoped<ISaleService, SaleService>();
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IUrlService, UrlService>();

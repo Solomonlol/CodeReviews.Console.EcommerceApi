@@ -7,9 +7,7 @@ namespace EcommerseAPI.Frontend.Entities
 {
     internal class CartItem
     {
-        public int Quantity { get; set; }
-        public ProductDto Product { get; set; } = null!;
-
-
+        public int? Quantity { get; set; } = null!;
+        public ProductDto? Product { get; set; } = null!;
     }
 }

@@ -17,24 +17,44 @@ namespace EcommerseAPI.Frontend.Services
         private readonly HttpClient _httpClient;
         private readonly IUrlService _urlService;
         private readonly ITableDrawingService _drawingService;
-        public SaleService(IUrlServiceFactory serviceFactory, ITableDrawingService drawingService, IHttpClientFactory clientFactory)
+        private readonly IShoppingCartService _cartService;
+        public SaleService(IUrlServiceFactory serviceFactory, 
+            ITableDrawingService drawingService, 
+            IHttpClientFactory clientFactory,
+            IShoppingCartService cartService)
         {
             _httpClient = clientFactory.CreateClient("ApiClient");
             _urlService = serviceFactory.Create("api/v1/sales/");
             _drawingService = drawingService;
+            _cartService = cartService;
         }
         public async Task Create(CancellationToken ct = default)
         {
             try
             {
-                var sale = new SaleDtoRequest();
-                var Url = await _urlService.GetUrl(ct: ct);
-                var dto = JsonSerializer.Serialize(sale);
-                var content = new StringContent(dto, Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync(Url, content, ct);
-                if (response.IsSuccessStatusCode)
-                    AnsiConsole.MarkupLine("[green]Successfully created[/]");
-                else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
+                var cartList = _cartService.GetList();
+                if (cartList.Count == 0)
+                {
+                    AnsiConsole.MarkupLine("[red]No items in cart.[/]");
+                    return;
+                }
+                if (await AnsiConsole.ConfirmAsync($"Are you sure to create deal with {cartList.Count} items? ", cancellationToken: ct))
+                {
+                    var sale = new SaleDtoRequest();
+                    foreach (var item in cartList)
+                    {
+                        sale.SaleItems.Add(new SaleItemDtoRequest { ProductId = item.Product.Id, Quantity = item.Quantity });
+                    }
+
+                    var Url = await _urlService.GetUrl(ct: ct);
+                    var dto = JsonSerializer.Serialize(sale);
+                    var content = new StringContent(dto, Encoding.UTF8, "application/json");
+                    var response = await _httpClient.PostAsync(Url, content, ct);
+                    if (response.IsSuccessStatusCode)
+                        AnsiConsole.MarkupLine("[green]Successfully created[/]");
+                    else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
+                }
+                else AnsiConsole.MarkupLine("[violet]The operation was cancelled.[/]");
             }
             catch (Exception ex)
             {

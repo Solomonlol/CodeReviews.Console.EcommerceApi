@@ -4,6 +4,7 @@ using EcommerseAPI.Frontend.Entities.Dto.Categories;
 using EcommerseAPI.Frontend.Entities.Dto.Products;
 using EcommerseAPI.Frontend.Entities.Filters;
 using EcommerseAPI.Frontend.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
@@ -14,16 +15,22 @@ namespace EcommerseAPI.Frontend.Menus
     internal class CatalogMenu : UserInterface
     {
         private readonly HttpClient _httpClient;
-        private readonly ITableDrawingService _drowingService;
+        private readonly ITableDrawingService _drawingService;
         private readonly IUrlService _urlService;
         private readonly IProductService _productService;
-        public CatalogMenu(IProductService productService, IHttpClientFactory clientFactory, ITableDrawingService drowingService, IUrlServiceFactory serviceFactory, IServiceProvider sp, ITableDrawingService drawingService) : base("Catalog")
+        public CatalogMenu(IProductService productService, 
+            IHttpClientFactory clientFactory, 
+            IUrlServiceFactory serviceFactory, 
+            IServiceProvider sp,
+            IShoppingCartService cartService, 
+            ITableDrawingService drawingService,
+            SaleMenu saleMenu) : base("Catalog")
         {
             _urlService = serviceFactory.Create("api/v1/products/");
-            _drowingService = drowingService;
+            _drawingService = drawingService;
             _httpClient = clientFactory.CreateClient("ApiClient");
             _productService = productService;
-            AddSubMenu("All products", new PagedMenu<IProductService, ProductDto, ProductFilter>(sp, drawingService, "Products"));
+            AddSubMenu("All products", new PagedMenu<IProductService, ProductDto, ProductFilter>(sp, drawingService, cartService, saleMenu, "Products"));
             AddItem("Find one", () => Get());
             AddItem("Create new product", () => Create());
             AddItem("Update product", () => Update());
