@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using System.Xml.Linq;
 
 namespace EcommerseAPI.Frontend.Services
 {
@@ -96,11 +97,14 @@ namespace EcommerseAPI.Frontend.Services
 
                 var dto = await _productService.GetOne(product.Name, ct);
                 if (dto == null)
+                {
                     AnsiConsole.MarkupLine($"[red]Product was not found.[/]");
+                    return;
+                }
 
                 
                 var attributeList = dto.Attributes.ToList();
-                var productAttributeName = await AnsiConsole.PromptAsync(new SelectionPrompt<string>().Title("[yellow]Choose product:[/]")
+                var productAttributeName = await AnsiConsole.PromptAsync(new SelectionPrompt<string>().Title("[yellow]Choose attribute:[/]")
                     .AddChoices(attributeList.Select(a => a.Name)));
 
                 var url = _attributeUrl + $"{product.CategoryName}/attributes/{productAttributeName}";
@@ -116,9 +120,63 @@ namespace EcommerseAPI.Frontend.Services
             }
         }
 
-        public Task UpdateAttribute(CancellationToken ct = default)
+        public async Task UpdateAttribute(IEnumerable<ProductDto> products, CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var productList = products.ToList();
+                var product = await AnsiConsole.PromptAsync(new SelectionPrompt<ProductDto>().Title("[yellow]Choose product:[/]")
+                    .UseConverter(p => $"{p.Name} | {p.CategoryName}")
+                    .AddChoices(productList));
+                var fullProduct = await _productService.GetOne(product.Name, ct);
+                if (fullProduct == null)
+                {
+                    AnsiConsole.MarkupLine($"[red]Product was not found.[/]");
+                    return;
+                }
+
+                var attributeList = fullProduct.Attributes.ToList();
+                var productAttributeName = await AnsiConsole.PromptAsync(new SelectionPrompt<string>().Title("[yellow]Choose attribute:[/]")
+                    .AddChoices(attributeList.Select(a => a.Name)));
+
+                var attributeDto = new CategoryAttributeDtoRequest()
+                {
+                    Unit = await AnsiConsole.PromptAsync(new TextPrompt<string>("[yellow]Enter unit measurement(optional):[/]").AllowEmpty())
+                };
+
+                var url = _attributeUrl + $"{product.CategoryName}/attributes/{productAttributeName}";
+                var dto = JsonSerializer.Serialize(attributeDto);
+                var content = new StringContent(dto, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PutAsync(url, content, ct);
+
+                if (!response.IsSuccessStatusCode)
+                    return;
+
+                if (await AnsiConsole.ConfirmAsync("Update value?"))
+                {
+                    var value = new ProductAttributeValueDto()
+                    {
+                        ProductAttributeName = productAttributeName,
+                        ProductId = product.Id,
+                        Value = await AnsiConsole.AskAsync<string>("[yellow]Enter value:[/]")
+                    };
+
+                    url = _attributeValueUrl + $"{product.Name.Trim().ToLower()}/attributes/{productAttributeName}";
+                    dto = JsonSerializer.Serialize(value);
+                    content = new StringContent(dto, Encoding.UTF8, "application/json");
+                    response = await _httpClient.PutAsync(url, content, ct);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        AnsiConsole.MarkupLine($"Error: {response.StatusCode}");
+                        return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                AnsiConsole.MarkupLine($"[red]Error: {ex.Message}[/]");
+            }
         }
         //private async Task AddAttributeValue(CancellationToken ct = default)
         //{

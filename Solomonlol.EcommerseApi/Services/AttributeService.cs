@@ -41,22 +41,31 @@ namespace Solomonlol.EcommerseApi.Services
             if (checkCategory == null)
                 return Result.Failure("Category was not found");
 
-            var checkAttribute = await _db.ProductAttributes.FirstOrDefaultAsync(x => x.Name == attributeName, ct);
-            if (checkAttribute != null)
-            {
-                _db.ProductAttributes.Remove(checkAttribute);
-                return await _db.SaveChangesAsync(ct) > 0
-                    ? Result.Success(attributeName)
-                    : Result.Failure("Cannot save changes to database");
-            }
-            else return Result.Failure("Attribute was not found");
+            var checkAttribute = await _db.ProductAttributes
+                .FirstOrDefaultAsync(x => x.CategoryId == checkCategory.Id && x.Name.Trim().ToLower() == attributeName.Trim().ToLower(), ct);
+            if (checkAttribute == null)
+                return Result.Failure("Attribute was not found");
+
+            var relatedValues = await _db.ProductAttributeValues
+                .Where(v => v.CategoryId == checkAttribute.CategoryId &&
+                    v.ProductAttributeName == checkAttribute.Name)
+                .ToListAsync(ct);
+
+            if (relatedValues.Any())
+                _db.ProductAttributeValues.RemoveRange(relatedValues);
+
+            _db.ProductAttributes.Remove(checkAttribute);
+
+            return await _db.SaveChangesAsync(ct) > 0
+                ? Result.Success(attributeName)
+                : Result.Failure("Cannot save changes to database");
         }
         public async Task<Result> UpdateAttribute(string categoryName, string attributeName, ProductAttributeDto item, CancellationToken ct = default)
         {
             var checkCategory = await _db.Categories.FirstOrDefaultAsync(c => c.Name.Trim().ToLower() == categoryName.Trim().ToLower(), ct);
             if (checkCategory != null)
             {
-                var attribute = await _db.ProductAttributes.FirstOrDefaultAsync(p => p.Name.Trim().ToLower() == attributeName.Trim().ToLower(), ct);
+                var attribute = await _db.ProductAttributes.FirstOrDefaultAsync(p =>p.CategoryId==checkCategory.Id && p.Name.Trim().ToLower() == attributeName.Trim().ToLower(), ct);
                 if (attribute != null)
                 {
                     _mapper.Map(item, attribute);
@@ -129,7 +138,7 @@ namespace Solomonlol.EcommerseApi.Services
                 return Result.Failure($"Product with name '{productName}' was not found.");
 
             var productAttributeCheck = await _db.ProductAttributes
-                .FirstOrDefaultAsync(a => a.Name.Trim().ToLower() == productAttributeName.Trim().ToLower(), ct);
+                .FirstOrDefaultAsync(a =>a.CategoryId==productCheck.CategoryId && a.Name.Trim().ToLower() == productAttributeName.Trim().ToLower(), ct);
 
             if (productAttributeCheck == null)
                 return Result.Failure($"Attribute with name '{productAttributeName}' in product '{productName}' was not found.");

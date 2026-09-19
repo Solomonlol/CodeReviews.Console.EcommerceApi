@@ -34,9 +34,11 @@ namespace EcommerseAPI.Frontend.Menus
             await _attributeService.DeleteAttribute(attributes, ct);
         }
 
-        private async Task UpdateAttribute()
+        private async Task UpdateAttribute(CancellationToken ct=default)
         {
-            throw new NotImplementedException();
+            if (_pagedResult == null) return;
+            var attributes = _pagedResult.Items;
+            await _attributeService.UpdateAttribute(attributes, ct);
         }
 
         private async Task AddNewAttribute(CancellationToken ct=default)

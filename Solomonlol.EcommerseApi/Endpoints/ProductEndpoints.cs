@@ -56,7 +56,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 : Results.Conflict(result?.Error);
             });
             //update attribute value
-            app.MapPut("api/v1/products/{productName}/attributes", [Authorize(Roles = "Admin, Manager")] async (string productName, string attributeName, ProductAttributeValueDto attribute, IAttributeValueService service, CancellationToken ct) =>
+            app.MapPut("api/v1/products/{productName}/attributes/{attributeName}", [Authorize(Roles = "Admin, Manager")] async (string productName, string attributeName, ProductAttributeValueDto attribute, IAttributeValueService service, CancellationToken ct) =>
             {
                 var result = await service.UpdateAttributeValue(productName, attributeName, attribute, ct);
                 return result.IsSuccess
