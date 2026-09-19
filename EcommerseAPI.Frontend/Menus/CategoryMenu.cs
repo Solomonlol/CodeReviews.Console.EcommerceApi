@@ -16,13 +16,13 @@ namespace EcommerseAPI.Frontend.Menus
     {
         private readonly ICategoryService _categoryService;
         private readonly ILoginService _loginService;
-        private readonly IAttrributeService _attrributeService;
+        private readonly IAttributeService _attrributeService;
         private readonly ITableDrawingService _drawingService;
 
         public CategoryMenu(IServiceProvider sp) : base("Category menu")
         {
             _drawingService = sp.GetRequiredService<ITableDrawingService>();
-            _attrributeService = sp.GetRequiredService<IAttrributeService>();
+            _attrributeService = sp.GetRequiredService<IAttributeService>();
             _categoryService = sp.GetRequiredService<ICategoryService>();
             _loginService = sp.GetRequiredService<ILoginService>();
 

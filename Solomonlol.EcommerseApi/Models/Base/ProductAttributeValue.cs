@@ -8,9 +8,9 @@ namespace Solomonlol.EcommerseApi.Models.Base
 
         [ForeignKey(nameof(ProductId))]
         public Product Product { get; set; } = null!;
-        public int ProductAttributeId { get; set; }
+        public string ProductAttributeName { get; set; } = string.Empty;
 
-        [ForeignKey(nameof(ProductAttributeId))]
+        [ForeignKey(nameof(ProductAttributeName))]
         public ProductAttribute ProductAttribute { get; set; } = null!;
         public string Value { get; set; } = null!;
     }

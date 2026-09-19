@@ -14,13 +14,13 @@ namespace EcommerseAPI.Frontend.Menus
 {
     internal class PagedMenu<TService, TResultDto, TFilter> : UserInterface where TService : class, IPagedResultService where TFilter : class, IFilter, new()
     {
-        private PagedResult<TResultDto>? _pagedResult;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly ITableDrawingService _drawingService;
-        private readonly IShoppingCartService? _cartService;
-        private readonly string _title;
-        private SortParams _sortParams = new();
-        private TFilter _filter = new();
+        private protected PagedResult<TResultDto>? _pagedResult;
+        private protected readonly IServiceProvider _serviceProvider;
+        private protected readonly ITableDrawingService _drawingService;
+        
+        private protected readonly string _title;
+        private protected SortParams _sortParams = new();
+        private protected TFilter _filter = new();
         public PagedMenu(IServiceProvider sp, string title) : base(title)
         {
             _title = title;
@@ -34,75 +34,6 @@ namespace EcommerseAPI.Frontend.Menus
             AddItem("Add filter", () => AddFiltering());
             AddItem("Add sort", () => AddSort());
             AddExitOption("Back");
-        }
-
-        public PagedMenu(IServiceProvider sp, IMenu subMenu, string subMenuName, string title) : base(title)
-        {
-            _title = title;
-            _serviceProvider = sp;
-            _drawingService = sp.GetRequiredService<ITableDrawingService>();
-            _cartService = sp.GetRequiredService<IShoppingCartService>();
-
-            AddItem("Next page", () => NextPage());
-            AddItem("Previous page", () => PreviousPage());
-            AddItem("Add to cart", () => AddToCart());
-            AddItem("Remove item from cart", () => RemoveFromCart());
-            AddItem("Clear cart", ()=> ClearCart());
-            AddItem("Add new attribute", () => AddNewAttribute());
-            AddItem("Update attribute", () => UpdateAttribute());
-            AddItem("Delete attribute", () => DeleteAttribute());
-            AddSubMenu($"{subMenuName}", subMenu);
-            AddItem("Choose page", () => ChoosePageNumber());
-            AddItem("Change page size", () => ChangePageSize());
-            AddItem("Add filter", () => AddFiltering());
-            AddItem("Add sort", () => AddSort());
-            AddExitOption("Back");
-        }
-
-        private async Task DeleteAttribute()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task UpdateAttribute()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task AddNewAttribute()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task AddToCart(CancellationToken ct = default)
-        {
-            if (typeof(TResultDto) == typeof(ProductDto))
-            {
-                var list = _pagedResult?.Items.Cast<ProductDto>().ToList();
-                if (list?.Count > 0)
-                {
-                    var choises = await AnsiConsole.PromptAsync(new MultiSelectionPrompt<ProductDto>()
-                    .Title("[yellow]Choose what products add to cart:[/]")
-                    .AddChoices(list)
-                    .UseConverter(p=>$"{p.Name} | {p.Price} | {p.CategoryName}"));
-                                        
-                    foreach (var item in choises)
-                    {
-                        var quantity = await AnsiConsole.AskAsync<int>($"[yellow]Enter quantity of {item.Name} to add:[/]");
-                        await _cartService.AddToCart(item, quantity, ct);
-                    }
-                }
-            }
-        }
-
-        public async Task ClearCart(CancellationToken ct=default)
-        {
-            await _cartService.Clear(ct);
-        }
-
-        public async Task RemoveFromCart(CancellationToken ct=default)
-        {
-            await _cartService.RemoveFromCart(ct);
         }
 
         public async Task NextPage(CancellationToken ct = default)
@@ -233,7 +164,7 @@ namespace EcommerseAPI.Frontend.Menus
             {
                 var service = _serviceProvider.GetRequiredService<TService>();
                 var response = await service.GetAll(filter: filter, sort: sort, page: page, pageSize: pageSize, ct: ct);
-                if (response.IsSuccessStatusCode)
+                if (response!=null && response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadFromJsonAsync<PagedResult<TResultDto>>(ct);
                     if (content.Items.Any())

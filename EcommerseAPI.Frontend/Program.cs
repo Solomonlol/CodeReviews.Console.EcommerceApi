@@ -25,7 +25,7 @@ using IHost host = Host.CreateDefaultBuilder(args)
 
         services.AddScoped<ITableDrawingService, TableDrowingService>();
         services.AddScoped<ILoginService, LoginService>();
-        services.AddScoped<IAttrributeService, AttributeService>();
+        services.AddScoped<IAttributeService, AttributeService>();
         services.AddScoped<ISaleService, SaleService>();
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IProductService, ProductService>();

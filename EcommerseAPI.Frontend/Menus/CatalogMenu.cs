@@ -25,7 +25,7 @@ namespace EcommerseAPI.Frontend.Menus
             _drawingService = sp.GetRequiredService<ITableDrawingService>();
             _productService = sp.GetRequiredService<IProductService>();
 
-            AddSubMenu("All products", new PagedMenu<IProductService, ProductDto, ProductFilter>(sp, saleMenu, "Sale menu", "Products"));
+            AddSubMenu("All products", new ProductPagedMenu(saleMenu, "Sale menu", sp, "Products"));
             AddSubMenu("Category management", categoryMenu);
             AddItem("Find one", () => Get());
             AddItem("Create new product", () => Create());

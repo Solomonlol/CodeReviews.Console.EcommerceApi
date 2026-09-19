@@ -38,12 +38,12 @@ namespace Solomonlol.EcommerseApi
                 .IsUnique();
 
             modelBuilder.Entity<ProductAttributeValue>()
-                .HasKey(v => new { v.ProductId, v.ProductAttributeId });
+                .HasKey(v => new { v.ProductId, v.ProductAttributeName });
 
             modelBuilder.Entity<ProductAttributeValue>()
                 .HasOne(v => v.ProductAttribute)
                 .WithMany(p => p.Values)
-                .HasForeignKey(v => v.ProductAttributeId)
+                .HasForeignKey(v => v.ProductAttributeName)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Category>()

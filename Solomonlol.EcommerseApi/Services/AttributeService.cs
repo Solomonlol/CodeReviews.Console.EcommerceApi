@@ -79,7 +79,7 @@ namespace Solomonlol.EcommerseApi.Services
 
             var valueCheck = await _db.ProductAttributeValues
                 .FirstOrDefaultAsync(a =>
-                a.ProductAttributeId == item.ProductAttributeId &&
+                a.ProductAttributeName == item.ProductAttributeName &&
                 a.ProductId == item.ProductId, ct);
             if (valueCheck == null)
             {
@@ -135,7 +135,7 @@ namespace Solomonlol.EcommerseApi.Services
 
             var value = await _db.ProductAttributeValues
                 .FirstOrDefaultAsync(a =>
-                a.ProductAttributeId == item.ProductAttributeId &&
+                a.ProductAttributeName == item.ProductAttributeName &&
                 a.ProductId == item.ProductId, ct);
             if (value != null)
             {
