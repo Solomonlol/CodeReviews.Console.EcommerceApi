@@ -157,7 +157,7 @@ namespace EcommerseAPI.Frontend.Services
                     var value = new ProductAttributeValueDto()
                     {
                         ProductAttributeName = productAttributeName,
-                        ProductId = product.Id,
+                        ProductId = fullProduct.Id,
                         Value = await AnsiConsole.AskAsync<string>("[yellow]Enter value:[/]")
                     };
 

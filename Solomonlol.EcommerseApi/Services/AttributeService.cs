@@ -27,6 +27,7 @@ namespace Solomonlol.EcommerseApi.Services
 
                 var attribute = _mapper.Map<ProductAttribute>(item);
                 attribute.CategoryId = checkCategory.Id;
+                attribute.Name = item.Name;
                 await _db.ProductAttributes.AddAsync(attribute, ct);
                 return await _db.SaveChangesAsync(ct) > 0
                     ? Result<ProductAttributeDto>.Success(_mapper.Map<ProductAttributeDto>(attribute))
@@ -145,7 +146,8 @@ namespace Solomonlol.EcommerseApi.Services
 
             var value = await _db.ProductAttributeValues
                 .FirstOrDefaultAsync(a =>
-                a.ProductAttributeName == item.ProductAttributeName &&
+                a.ProductAttributeName.Trim().ToLower() == item.ProductAttributeName.Trim().ToLower() &&
+                a.CategoryId == productCheck.CategoryId &&
                 a.ProductId == item.ProductId, ct);
             if (value != null)
             {

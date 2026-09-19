@@ -21,6 +21,7 @@ namespace Solomonlol.EcommerseApi.Seeding
             await SeedProduct(db, ct);
             await SeedUser(db, hasher, ct);
             await SeedAttributes(db, ct);
+            await SeedAttributeValues(db, ct);
         }
 
         private static async Task SeedAttributes(ApplicationContext db, CancellationToken ct)
@@ -529,6 +530,540 @@ namespace Solomonlol.EcommerseApi.Seeding
                     .Concat(laptopProducts)
                     .Concat(ssdProducts)
                     .Concat(hddProducts), ct);
+                await db.SaveChangesAsync(ct);
+            }
+        }
+        private static async Task SeedAttributeValues(ApplicationContext db, CancellationToken ct)
+        {
+            if (await db.ProductAttributeValues.AnyAsync(ct))
+                return;
+
+            var products = await db.Products.ToListAsync(ct);
+            var attributes = await db.ProductAttributes.ToListAsync(ct);
+
+            Product? FindProduct(string name) =>
+                products.FirstOrDefault(p => p.Name == name);
+
+            ProductAttribute? FindAttr(int categoryId, string name) =>
+                attributes.FirstOrDefault(a => a.CategoryId == categoryId && a.Name == name);
+
+            var values = new List<ProductAttributeValue>();
+
+            void Add(string productName, int categoryId, string attrName, string value)
+            {
+                var product = FindProduct(productName);
+                var attr = FindAttr(categoryId, attrName);
+                if (product == null || attr == null) return;
+
+                values.Add(new ProductAttributeValue
+                {
+                    ProductId = product.Id,
+                    CategoryId = categoryId,
+                    ProductAttributeName = attr.Name,
+                    Value = value
+                });
+            }
+
+            // ========================= CPU =========================
+            // AMD Ryzen 7 7800X3D
+            Add("AMD Ryzen 7 7800X3D", (int)CategoryEnum.CPU, "Brand", "AMD");
+            Add("AMD Ryzen 7 7800X3D", (int)CategoryEnum.CPU, "Core count", "8");
+            Add("AMD Ryzen 7 7800X3D", (int)CategoryEnum.CPU, "Thread count", "16");
+            Add("AMD Ryzen 7 7800X3D", (int)CategoryEnum.CPU, "Base Clock", "4.2");
+            Add("AMD Ryzen 7 7800X3D", (int)CategoryEnum.CPU, "Max. Boost Clock", "5.0");
+            Add("AMD Ryzen 7 7800X3D", (int)CategoryEnum.CPU, "TDP", "120");
+
+            // AMD Ryzen 5 5600
+            Add("AMD Ryzen 5 5600", (int)CategoryEnum.CPU, "Brand", "AMD");
+            Add("AMD Ryzen 5 5600", (int)CategoryEnum.CPU, "Core count", "6");
+            Add("AMD Ryzen 5 5600", (int)CategoryEnum.CPU, "Thread count", "12");
+            Add("AMD Ryzen 5 5600", (int)CategoryEnum.CPU, "Base Clock", "3.5");
+            Add("AMD Ryzen 5 5600", (int)CategoryEnum.CPU, "Max. Boost Clock", "4.4");
+            Add("AMD Ryzen 5 5600", (int)CategoryEnum.CPU, "TDP", "65");
+
+            // AMD Ryzen 5 7500F
+            Add("AMD Ryzen 5 7500F", (int)CategoryEnum.CPU, "Brand", "AMD");
+            Add("AMD Ryzen 5 7500F", (int)CategoryEnum.CPU, "Core count", "6");
+            Add("AMD Ryzen 5 7500F", (int)CategoryEnum.CPU, "Thread count", "12");
+            Add("AMD Ryzen 5 7500F", (int)CategoryEnum.CPU, "Base Clock", "3.7");
+            Add("AMD Ryzen 5 7500F", (int)CategoryEnum.CPU, "Max. Boost Clock", "5.0");
+            Add("AMD Ryzen 5 7500F", (int)CategoryEnum.CPU, "TDP", "65");
+
+            // Intel Core i5-12400F
+            Add("Intel Core i5-12400F", (int)CategoryEnum.CPU, "Brand", "Intel");
+            Add("Intel Core i5-12400F", (int)CategoryEnum.CPU, "Core count", "6");
+            Add("Intel Core i5-12400F", (int)CategoryEnum.CPU, "Thread count", "12");
+            Add("Intel Core i5-12400F", (int)CategoryEnum.CPU, "Base Clock", "2.5");
+            Add("Intel Core i5-12400F", (int)CategoryEnum.CPU, "Max. Boost Clock", "4.4");
+            Add("Intel Core i5-12400F", (int)CategoryEnum.CPU, "TDP", "65");
+
+            // Intel Core i5-14600KF
+            Add("Intel Core i5-14600KF", (int)CategoryEnum.CPU, "Brand", "Intel");
+            Add("Intel Core i5-14600KF", (int)CategoryEnum.CPU, "Core count", "14");
+            Add("Intel Core i5-14600KF", (int)CategoryEnum.CPU, "Thread count", "20");
+            Add("Intel Core i5-14600KF", (int)CategoryEnum.CPU, "Base Clock", "3.5");
+            Add("Intel Core i5-14600KF", (int)CategoryEnum.CPU, "Max. Boost Clock", "5.3");
+            Add("Intel Core i5-14600KF", (int)CategoryEnum.CPU, "TDP", "125");
+
+            // AMD Ryzen 9 9950X3D
+            Add("AMD Ryzen 9 9950X3D", (int)CategoryEnum.CPU, "Brand", "AMD");
+            Add("AMD Ryzen 9 9950X3D", (int)CategoryEnum.CPU, "Core count", "16");
+            Add("AMD Ryzen 9 9950X3D", (int)CategoryEnum.CPU, "Thread count", "32");
+            Add("AMD Ryzen 9 9950X3D", (int)CategoryEnum.CPU, "Base Clock", "4.3");
+            Add("AMD Ryzen 9 9950X3D", (int)CategoryEnum.CPU, "Max. Boost Clock", "5.7");
+            Add("AMD Ryzen 9 9950X3D", (int)CategoryEnum.CPU, "TDP", "170");
+
+            // Intel Core Ultra 7 270K Plus
+            Add("Intel Core Ultra 7 270K Plus", (int)CategoryEnum.CPU, "Brand", "Intel");
+            Add("Intel Core Ultra 7 270K Plus", (int)CategoryEnum.CPU, "Core count", "20");
+            Add("Intel Core Ultra 7 270K Plus", (int)CategoryEnum.CPU, "Thread count", "20");
+            Add("Intel Core Ultra 7 270K Plus", (int)CategoryEnum.CPU, "Base Clock", "3.9");
+            Add("Intel Core Ultra 7 270K Plus", (int)CategoryEnum.CPU, "Max. Boost Clock", "5.5");
+            Add("Intel Core Ultra 7 270K Plus", (int)CategoryEnum.CPU, "TDP", "125");
+
+            // AMD Ryzen 7 9850X3D
+            Add("AMD Ryzen 7 9850X3D", (int)CategoryEnum.CPU, "Brand", "AMD");
+            Add("AMD Ryzen 7 9850X3D", (int)CategoryEnum.CPU, "Core count", "8");
+            Add("AMD Ryzen 7 9850X3D", (int)CategoryEnum.CPU, "Thread count", "16");
+            Add("AMD Ryzen 7 9850X3D", (int)CategoryEnum.CPU, "Base Clock", "4.5");
+            Add("AMD Ryzen 7 9850X3D", (int)CategoryEnum.CPU, "Max. Boost Clock", "5.6");
+            Add("AMD Ryzen 7 9850X3D", (int)CategoryEnum.CPU, "TDP", "120");
+
+            // ========================= GPU =========================
+            Add("ASUS Dual GeForce RTX 5070 12GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Brand", "ASUS");
+            Add("ASUS Dual GeForce RTX 5070 12GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Ray Tracing Cores", "48");
+            Add("ASUS Dual GeForce RTX 5070 12GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Base Clock", "2.16");
+            Add("ASUS Dual GeForce RTX 5070 12GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Boost Clock", "2.51");
+            Add("ASUS Dual GeForce RTX 5070 12GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Standard Memory Config", "12 GB GDDR7");
+
+            Add("ASUS Prime Radeon RX 9070 XT OC Edition 16GB GDDR6", (int)CategoryEnum.GPU, "Brand", "ASUS");
+            Add("ASUS Prime Radeon RX 9070 XT OC Edition 16GB GDDR6", (int)CategoryEnum.GPU, "Ray Tracing Cores", "64");
+            Add("ASUS Prime Radeon RX 9070 XT OC Edition 16GB GDDR6", (int)CategoryEnum.GPU, "Base Clock", "2.20");
+            Add("ASUS Prime Radeon RX 9070 XT OC Edition 16GB GDDR6", (int)CategoryEnum.GPU, "Boost Clock", "2.54");
+            Add("ASUS Prime Radeon RX 9070 XT OC Edition 16GB GDDR6", (int)CategoryEnum.GPU, "Standard Memory Config", "16 GB GDDR6");
+
+            Add("ASUS ROG Astral LC GeForce RTX 5090 32GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Brand", "ASUS");
+            Add("ASUS ROG Astral LC GeForce RTX 5090 32GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Ray Tracing Cores", "170");
+            Add("ASUS ROG Astral LC GeForce RTX 5090 32GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Base Clock", "2.01");
+            Add("ASUS ROG Astral LC GeForce RTX 5090 32GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Boost Clock", "2.52");
+            Add("ASUS ROG Astral LC GeForce RTX 5090 32GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Standard Memory Config", "32 GB GDDR7");
+
+            Add("ASUS Dual GeForce RTX 5060 8GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Brand", "ASUS");
+            Add("ASUS Dual GeForce RTX 5060 8GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Ray Tracing Cores", "32");
+            Add("ASUS Dual GeForce RTX 5060 8GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Base Clock", "2.28");
+            Add("ASUS Dual GeForce RTX 5060 8GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Boost Clock", "2.55");
+            Add("ASUS Dual GeForce RTX 5060 8GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Standard Memory Config", "8 GB GDDR7");
+
+            Add("ASUS ROG Astral GeForce RTX 5080 16GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Brand", "ASUS");
+            Add("ASUS ROG Astral GeForce RTX 5080 16GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Ray Tracing Cores", "84");
+            Add("ASUS ROG Astral GeForce RTX 5080 16GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Base Clock", "2.30");
+            Add("ASUS ROG Astral GeForce RTX 5080 16GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Boost Clock", "2.62");
+            Add("ASUS ROG Astral GeForce RTX 5080 16GB GDDR7 OC Edition", (int)CategoryEnum.GPU, "Standard Memory Config", "16 GB GDDR7");
+
+            Add("ASUS Prime Radeon RX 9060 XT OC Edition 16GB GDDR6", (int)CategoryEnum.GPU, "Brand", "ASUS");
+            Add("ASUS Prime Radeon RX 9060 XT OC Edition 16GB GDDR6", (int)CategoryEnum.GPU, "Ray Tracing Cores", "40");
+            Add("ASUS Prime Radeon RX 9060 XT OC Edition 16GB GDDR6", (int)CategoryEnum.GPU, "Base Clock", "2.10");
+            Add("ASUS Prime Radeon RX 9060 XT OC Edition 16GB GDDR6", (int)CategoryEnum.GPU, "Boost Clock", "2.45");
+            Add("ASUS Prime Radeon RX 9060 XT OC Edition 16GB GDDR6", (int)CategoryEnum.GPU, "Standard Memory Config", "16 GB GDDR6");
+
+            // ========================= Cases =========================
+            Add("Zalman P30 Air", (int)CategoryEnum.Cases, "Brand", "Zalman");
+            Add("Zalman P30 Air", (int)CategoryEnum.Cases, "Front interface", "USB 3.0 + Audio");
+            Add("Zalman P30 Air", (int)CategoryEnum.Cases, "Motherboard compatibility", "ATX / mATX / ITX");
+            Add("Zalman P30 Air", (int)CategoryEnum.Cases, "PSU max length", "200 mm");
+            Add("Zalman P30 Air", (int)CategoryEnum.Cases, "CPU cooler max height", "160 mm");
+
+            Add("Ocypus Gamma C72 BK ARGB", (int)CategoryEnum.Cases, "Brand", "Ocypus");
+            Add("Ocypus Gamma C72 BK ARGB", (int)CategoryEnum.Cases, "Front interface", "USB-C + USB 3.0 + Audio");
+            Add("Ocypus Gamma C72 BK ARGB", (int)CategoryEnum.Cases, "Motherboard compatibility", "ATX / mATX / ITX");
+            Add("Ocypus Gamma C72 BK ARGB", (int)CategoryEnum.Cases, "PSU max length", "210 mm");
+            Add("Ocypus Gamma C72 BK ARGB", (int)CategoryEnum.Cases, "CPU cooler max height", "165 mm");
+
+            Add("DeepCool Matrexx 50", (int)CategoryEnum.Cases, "Brand", "DeepCool");
+            Add("DeepCool Matrexx 50", (int)CategoryEnum.Cases, "Front interface", "USB 3.0 + Audio");
+            Add("DeepCool Matrexx 50", (int)CategoryEnum.Cases, "Motherboard compatibility", "ATX / mATX / ITX");
+            Add("DeepCool Matrexx 50", (int)CategoryEnum.Cases, "PSU max length", "170 mm");
+            Add("DeepCool Matrexx 50", (int)CategoryEnum.Cases, "CPU cooler max height", "168 mm");
+
+            Add("DeepCool CH560 Digital Black", (int)CategoryEnum.Cases, "Brand", "DeepCool");
+            Add("DeepCool CH560 Digital Black", (int)CategoryEnum.Cases, "Front interface", "USB-C + USB 3.0 + Audio");
+            Add("DeepCool CH560 Digital Black", (int)CategoryEnum.Cases, "Motherboard compatibility", "ATX / mATX / ITX");
+            Add("DeepCool CH560 Digital Black", (int)CategoryEnum.Cases, "PSU max length", "180 mm");
+            Add("DeepCool CH560 Digital Black", (int)CategoryEnum.Cases, "CPU cooler max height", "175 mm");
+
+            Add("Lian Li O11 Dynamic Mini V2 Flow", (int)CategoryEnum.Cases, "Brand", "Lian Li");
+            Add("Lian Li O11 Dynamic Mini V2 Flow", (int)CategoryEnum.Cases, "Front interface", "USB-C + USB 3.0 + Audio");
+            Add("Lian Li O11 Dynamic Mini V2 Flow", (int)CategoryEnum.Cases, "Motherboard compatibility", "ATX / mATX / ITX");
+            Add("Lian Li O11 Dynamic Mini V2 Flow", (int)CategoryEnum.Cases, "PSU max length", "220 mm");
+            Add("Lian Li O11 Dynamic Mini V2 Flow", (int)CategoryEnum.Cases, "CPU cooler max height", "167 mm");
+
+            Add("Lian Li Lancool 216 ARGB", (int)CategoryEnum.Cases, "Brand", "Lian Li");
+            Add("Lian Li Lancool 216 ARGB", (int)CategoryEnum.Cases, "Front interface", "USB-C + USB 3.0 + Audio");
+            Add("Lian Li Lancool 216 ARGB", (int)CategoryEnum.Cases, "Motherboard compatibility", "ATX / mATX / ITX");
+            Add("Lian Li Lancool 216 ARGB", (int)CategoryEnum.Cases, "PSU max length", "210 mm");
+            Add("Lian Li Lancool 216 ARGB", (int)CategoryEnum.Cases, "CPU cooler max height", "180 mm");
+
+            Add("Lian Li Lancool III", (int)CategoryEnum.Cases, "Brand", "Lian Li");
+            Add("Lian Li Lancool III", (int)CategoryEnum.Cases, "Front interface", "USB-C + 2x USB 3.0 + Audio");
+            Add("Lian Li Lancool III", (int)CategoryEnum.Cases, "Motherboard compatibility", "E-ATX / ATX / mATX / ITX");
+            Add("Lian Li Lancool III", (int)CategoryEnum.Cases, "PSU max length", "220 mm");
+            Add("Lian Li Lancool III", (int)CategoryEnum.Cases, "CPU cooler max height", "187 mm");
+
+            // ========================= RAM =========================
+            Add("ADATA XPG Lancer Blade RGB 2x16ГБ DDR5 6000", (int)CategoryEnum.RAM, "Brand", "ADATA");
+            Add("ADATA XPG Lancer Blade RGB 2x16ГБ DDR5 6000", (int)CategoryEnum.RAM, "Speed", "6000");
+            Add("ADATA XPG Lancer Blade RGB 2x16ГБ DDR5 6000", (int)CategoryEnum.RAM, "Total (Kit) Capacity", "32");
+            Add("ADATA XPG Lancer Blade RGB 2x16ГБ DDR5 6000", (int)CategoryEnum.RAM, "CAS Latency", "30");
+            Add("ADATA XPG Lancer Blade RGB 2x16ГБ DDR5 6000", (int)CategoryEnum.RAM, "DRAM Density", "16");
+
+            Add("G.Skill Trident Z5 Neo RGB 2x64ГБ DDR5 6000", (int)CategoryEnum.RAM, "Brand", "G.Skill");
+            Add("G.Skill Trident Z5 Neo RGB 2x64ГБ DDR5 6000", (int)CategoryEnum.RAM, "Speed", "6000");
+            Add("G.Skill Trident Z5 Neo RGB 2x64ГБ DDR5 6000", (int)CategoryEnum.RAM, "Total (Kit) Capacity", "128");
+            Add("G.Skill Trident Z5 Neo RGB 2x64ГБ DDR5 6000", (int)CategoryEnum.RAM, "CAS Latency", "30");
+            Add("G.Skill Trident Z5 Neo RGB 2x64ГБ DDR5 6000", (int)CategoryEnum.RAM, "DRAM Density", "16");
+
+            Add("Team T-Create Expert 2x64ГБ DDR5 6400", (int)CategoryEnum.RAM, "Brand", "TeamGroup");
+            Add("Team T-Create Expert 2x64ГБ DDR5 6400", (int)CategoryEnum.RAM, "Speed", "6400");
+            Add("Team T-Create Expert 2x64ГБ DDR5 6400", (int)CategoryEnum.RAM, "Total (Kit) Capacity", "128");
+            Add("Team T-Create Expert 2x64ГБ DDR5 6400", (int)CategoryEnum.RAM, "CAS Latency", "32");
+            Add("Team T-Create Expert 2x64ГБ DDR5 6400", (int)CategoryEnum.RAM, "DRAM Density", "16");
+
+            Add("Kingston FURY Beast 2x8GB DDR4 PC4-25600", (int)CategoryEnum.RAM, "Brand", "Kingston");
+            Add("Kingston FURY Beast 2x8GB DDR4 PC4-25600", (int)CategoryEnum.RAM, "Speed", "3200");
+            Add("Kingston FURY Beast 2x8GB DDR4 PC4-25600", (int)CategoryEnum.RAM, "Total (Kit) Capacity", "16");
+            Add("Kingston FURY Beast 2x8GB DDR4 PC4-25600", (int)CategoryEnum.RAM, "CAS Latency", "16");
+            Add("Kingston FURY Beast 2x8GB DDR4 PC4-25600", (int)CategoryEnum.RAM, "DRAM Density", "8");
+
+            // ========================= Monitors =========================
+            Add("Xiaomi 2K Gaming Monitor G27Qi 2026", (int)CategoryEnum.Monitors, "Brand", "Xiaomi");
+            Add("Xiaomi 2K Gaming Monitor G27Qi 2026", (int)CategoryEnum.Monitors, "Display Size", "27");
+            Add("Xiaomi 2K Gaming Monitor G27Qi 2026", (int)CategoryEnum.Monitors, "Resolution", "2560x1440");
+            Add("Xiaomi 2K Gaming Monitor G27Qi 2026", (int)CategoryEnum.Monitors, "Aspect Ratio", "16:9");
+            Add("Xiaomi 2K Gaming Monitor G27Qi 2026", (int)CategoryEnum.Monitors, "Screen Surface", "Matte");
+
+            Add("Samsung Odyssey OLED G6", (int)CategoryEnum.Monitors, "Brand", "Samsung");
+            Add("Samsung Odyssey OLED G6", (int)CategoryEnum.Monitors, "Display Size", "27");
+            Add("Samsung Odyssey OLED G6", (int)CategoryEnum.Monitors, "Resolution", "2560x1440");
+            Add("Samsung Odyssey OLED G6", (int)CategoryEnum.Monitors, "Aspect Ratio", "16:9");
+            Add("Samsung Odyssey OLED G6", (int)CategoryEnum.Monitors, "Screen Surface", "Glossy");
+
+            Add("AOC Q27B3MA", (int)CategoryEnum.Monitors, "Brand", "AOC");
+            Add("AOC Q27B3MA", (int)CategoryEnum.Monitors, "Display Size", "27");
+            Add("AOC Q27B3MA", (int)CategoryEnum.Monitors, "Resolution", "2560x1440");
+            Add("AOC Q27B3MA", (int)CategoryEnum.Monitors, "Aspect Ratio", "16:9");
+            Add("AOC Q27B3MA", (int)CategoryEnum.Monitors, "Screen Surface", "Matte");
+
+            Add("LG UltraGear 27G411A-B", (int)CategoryEnum.Monitors, "Brand", "LG");
+            Add("LG UltraGear 27G411A-B", (int)CategoryEnum.Monitors, "Display Size", "27");
+            Add("LG UltraGear 27G411A-B", (int)CategoryEnum.Monitors, "Resolution", "1920x1080");
+            Add("LG UltraGear 27G411A-B", (int)CategoryEnum.Monitors, "Aspect Ratio", "16:9");
+            Add("LG UltraGear 27G411A-B", (int)CategoryEnum.Monitors, "Screen Surface", "Matte");
+
+            Add("Gigabyte GO27Q24A", (int)CategoryEnum.Monitors, "Brand", "Gigabyte");
+            Add("Gigabyte GO27Q24A", (int)CategoryEnum.Monitors, "Display Size", "27");
+            Add("Gigabyte GO27Q24A", (int)CategoryEnum.Monitors, "Resolution", "2560x1440");
+            Add("Gigabyte GO27Q24A", (int)CategoryEnum.Monitors, "Aspect Ratio", "16:9");
+            Add("Gigabyte GO27Q24A", (int)CategoryEnum.Monitors, "Screen Surface", "Glossy");
+
+            // ========================= Headphones =========================
+            Add("Anker Soundcore Space 2", (int)CategoryEnum.Headphones, "Brand", "Anker");
+            Add("Anker Soundcore Space 2", (int)CategoryEnum.Headphones, "Color", "Black");
+            Add("Anker Soundcore Space 2", (int)CategoryEnum.Headphones, "Ear Placement", "Over-ear");
+            Add("Anker Soundcore Space 2", (int)CategoryEnum.Headphones, "Form Factor", "Closed-back");
+            Add("Anker Soundcore Space 2", (int)CategoryEnum.Headphones, "Impedance", "16 Ohm");
+
+            Add("Xiaomi Redmi Headphones Neo", (int)CategoryEnum.Headphones, "Brand", "Xiaomi");
+            Add("Xiaomi Redmi Headphones Neo", (int)CategoryEnum.Headphones, "Color", "Black");
+            Add("Xiaomi Redmi Headphones Neo", (int)CategoryEnum.Headphones, "Ear Placement", "Over-ear");
+            Add("Xiaomi Redmi Headphones Neo", (int)CategoryEnum.Headphones, "Form Factor", "Closed-back");
+            Add("Xiaomi Redmi Headphones Neo", (int)CategoryEnum.Headphones, "Impedance", "32 Ohm");
+
+            Add("Razer Opus X", (int)CategoryEnum.Headphones, "Brand", "Razer");
+            Add("Razer Opus X", (int)CategoryEnum.Headphones, "Color", "Black");
+            Add("Razer Opus X", (int)CategoryEnum.Headphones, "Ear Placement", "Over-ear");
+            Add("Razer Opus X", (int)CategoryEnum.Headphones, "Form Factor", "Closed-back");
+            Add("Razer Opus X", (int)CategoryEnum.Headphones, "Impedance", "32 Ohm");
+
+            Add("Marshall Monitor III ANC", (int)CategoryEnum.Headphones, "Brand", "Marshall");
+            Add("Marshall Monitor III ANC", (int)CategoryEnum.Headphones, "Color", "Black");
+            Add("Marshall Monitor III ANC", (int)CategoryEnum.Headphones, "Ear Placement", "Over-ear");
+            Add("Marshall Monitor III ANC", (int)CategoryEnum.Headphones, "Form Factor", "Closed-back");
+            Add("Marshall Monitor III ANC", (int)CategoryEnum.Headphones, "Impedance", "32 Ohm");
+
+            Add("Apple AirPods Pro 3", (int)CategoryEnum.Headphones, "Brand", "Apple");
+            Add("Apple AirPods Pro 3", (int)CategoryEnum.Headphones, "Color", "White");
+            Add("Apple AirPods Pro 3", (int)CategoryEnum.Headphones, "Ear Placement", "In-ear");
+            Add("Apple AirPods Pro 3", (int)CategoryEnum.Headphones, "Form Factor", "True Wireless");
+            Add("Apple AirPods Pro 3", (int)CategoryEnum.Headphones, "Impedance", "N/A");
+
+            // ========================= Motherboards =========================
+            Add("Sapphire Pure B850M WiFi", (int)CategoryEnum.Motherboards, "Brand", "Sapphire");
+            Add("Sapphire Pure B850M WiFi", (int)CategoryEnum.Motherboards, "CPU Socket", "AM5");
+            Add("Sapphire Pure B850M WiFi", (int)CategoryEnum.Motherboards, "RAM Slots", "4");
+            Add("Sapphire Pure B850M WiFi", (int)CategoryEnum.Motherboards, "Storage Connectors", "2x M.2 + 4x SATA");
+            Add("Sapphire Pure B850M WiFi", (int)CategoryEnum.Motherboards, "Form Factor", "Micro-ATX");
+
+            Add("ASRock B650M-H/M.2+", (int)CategoryEnum.Motherboards, "Brand", "ASRock");
+            Add("ASRock B650M-H/M.2+", (int)CategoryEnum.Motherboards, "CPU Socket", "AM5");
+            Add("ASRock B650M-H/M.2+", (int)CategoryEnum.Motherboards, "RAM Slots", "2");
+            Add("ASRock B650M-H/M.2+", (int)CategoryEnum.Motherboards, "Storage Connectors", "1x M.2 + 4x SATA");
+            Add("ASRock B650M-H/M.2+", (int)CategoryEnum.Motherboards, "Form Factor", "Micro-ATX");
+
+            Add("MSI B550M Pro-VDH WiFi", (int)CategoryEnum.Motherboards, "Brand", "MSI");
+            Add("MSI B550M Pro-VDH WiFi", (int)CategoryEnum.Motherboards, "CPU Socket", "AM4");
+            Add("MSI B550M Pro-VDH WiFi", (int)CategoryEnum.Motherboards, "RAM slots", "4");
+            Add("MSI B550M Pro-VDH WiFi", (int)CategoryEnum.Motherboards, "Storage Connectors", "1x M.2 + 4x SATA");
+            Add("MSI B550M Pro-VDH WiFi", (int)CategoryEnum.Motherboards, "Form Factor", "Micro-ATX");
+
+            Add("Gigabyte B550 Gaming X V2 (rev. 1.0/1.1/1.2)", (int)CategoryEnum.Motherboards, "Brand", "Gigabyte");
+            Add("Gigabyte B550 Gaming X V2 (rev. 1.0/1.1/1.2)", (int)CategoryEnum.Motherboards, "CPU Socket", "AM4");
+            Add("Gigabyte B550 Gaming X V2 (rev. 1.0/1.1/1.2)", (int)CategoryEnum.Motherboards, "RAM Slots", "4");
+            Add("Gigabyte B550 Gaming X V2 (rev. 1.0/1.1/1.2)", (int)CategoryEnum.Motherboards, "Storage Connectors", "2x M.2 + 4x SATA");
+            Add("Gigabyte B550 Gaming X V2 (rev. 1.0/1.1/1.2)", (int)CategoryEnum.Motherboards, "Form Factor", "ATX");
+
+            Add("ASUS TUF Gaming B850-Plus WiFi", (int)CategoryEnum.Motherboards, "Brand", "ASUS");
+            Add("ASUS TUF Gaming B850-Plus WiFi", (int)CategoryEnum.Motherboards, "CPU Socket", "AM5");
+            Add("ASUS TUF Gaming B850-Plus WiFi", (int)CategoryEnum.Motherboards, "RAM Slots", "4");
+            Add("ASUS TUF Gaming B850-Plus WiFi", (int)CategoryEnum.Motherboards, "Storage Connectors", "3x M.2 + 4x SATA");
+            Add("ASUS TUF Gaming B850-Plus WiFi", (int)CategoryEnum.Motherboards, "Form Factor", "ATX");
+
+            Add("ASUS ROG Strix X870E-E Gaming WiFi", (int)CategoryEnum.Motherboards, "Brand", "ASUS");
+            Add("ASUS ROG Strix X870E-E Gaming WiFi", (int)CategoryEnum.Motherboards, "CPU Socket", "AM5");
+            Add("ASUS ROG Strix X870E-E Gaming WiFi", (int)CategoryEnum.Motherboards, "RAM Slots", "4");
+            Add("ASUS ROG Strix X870E-E Gaming WiFi", (int)CategoryEnum.Motherboards, "Storage Connectors", "5x M.2 + 4x SATA");
+            Add("ASUS ROG Strix X870E-E Gaming WiFi", (int)CategoryEnum.Motherboards, "Form Factor", "ATX");
+
+            Add("ASRock X870E Taichi", (int)CategoryEnum.Motherboards, "Brand", "ASRock");
+            Add("ASRock X870E Taichi", (int)CategoryEnum.Motherboards, "CPU Socket", "AM5");
+            Add("ASRock X870E Taichi", (int)CategoryEnum.Motherboards, "RAM Slots", "4");
+            Add("ASRock X870E Taichi", (int)CategoryEnum.Motherboards, "Storage Connectors", "4x M.2 + 4x SATA");
+            Add("ASRock X870E Taichi", (int)CategoryEnum.Motherboards, "Form Factor", "ATX");
+
+            // ========================= Fans =========================
+            Add("Zalman CNPS13X Black", (int)CategoryEnum.Fans, "Brand", "Zalman");
+            Add("Zalman CNPS13X Black", (int)CategoryEnum.Fans, "Product Dimensions", "140 x 140 x 25 mm");
+            Add("Zalman CNPS13X Black", (int)CategoryEnum.Fans, "Power Connector Type", "4-pin PWM");
+            Add("Zalman CNPS13X Black", (int)CategoryEnum.Fans, "Voltage", "12 V");
+            Add("Zalman CNPS13X Black", (int)CategoryEnum.Fans, "Maximum Rotational Speed", "1500 RPM");
+
+            Add("ADATA XPG Levante II 240", (int)CategoryEnum.Fans, "Brand", "ADATA");
+            Add("ADATA XPG Levante II 240", (int)CategoryEnum.Fans, "Product Dimensions", "276 x 120 x 27 mm");
+            Add("ADATA XPG Levante II 240", (int)CategoryEnum.Fans, "Power Connector Type", "4-pin PWM");
+            Add("ADATA XPG Levante II 240", (int)CategoryEnum.Fans, "Voltage", "12 V");
+            Add("ADATA XPG Levante II 240", (int)CategoryEnum.Fans, "Maximum Rotational Speed", "2000 RPM");
+
+            Add("Arctic Liquid Freezer III Pro 360", (int)CategoryEnum.Fans, "Brand", "Arctic");
+            Add("Arctic Liquid Freezer III Pro 360", (int)CategoryEnum.Fans, "Product Dimensions", "398 x 120 x 38 mm");
+            Add("Arctic Liquid Freezer III Pro 360", (int)CategoryEnum.Fans, "Power Connector Type", "4-pin PWM");
+            Add("Arctic Liquid Freezer III Pro 360", (int)CategoryEnum.Fans, "Voltage", "12 V");
+            Add("Arctic Liquid Freezer III Pro 360", (int)CategoryEnum.Fans, "Maximum Rotational Speed", "2000 RPM");
+
+            Add("ID-Cooling DX360 Max Black", (int)CategoryEnum.Fans, "Brand", "ID-Cooling");
+            Add("ID-Cooling DX360 Max Black", (int)CategoryEnum.Fans, "Product Dimensions", "400 x 120 x 38 mm");
+            Add("ID-Cooling DX360 Max Black", (int)CategoryEnum.Fans, "Power Connector Type", "4-pin PWM");
+            Add("ID-Cooling DX360 Max Black", (int)CategoryEnum.Fans, "Voltage", "12 V");
+            Add("ID-Cooling DX360 Max Black", (int)CategoryEnum.Fans, "Maximum Rotational Speed", "1800 RPM");
+
+            Add("Noctua NH-D15 G2", (int)CategoryEnum.Fans, "Brand", "Noctua");
+            Add("Noctua NH-D15 G2", (int)CategoryEnum.Fans, "Product Dimensions", "165 x 150 x 135 mm");
+            Add("Noctua NH-D15 G2", (int)CategoryEnum.Fans, "Power Connector Type", "4-pin PWM");
+            Add("Noctua NH-D15 G2", (int)CategoryEnum.Fans, "Voltage", "12 V");
+            Add("Noctua NH-D15 G2", (int)CategoryEnum.Fans, "Maximum Rotational Speed", "1500 RPM");
+
+            // ========================= Mouse =========================
+            Add("Lenovo Yoga Pro", (int)CategoryEnum.Mouse, "Brand", "Lenovo");
+            Add("Lenovo Yoga Pro", (int)CategoryEnum.Mouse, "Color", "Gray");
+            Add("Lenovo Yoga Pro", (int)CategoryEnum.Mouse, "Connectivity Technology", "Wireless");
+            Add("Lenovo Yoga Pro", (int)CategoryEnum.Mouse, "Special Feature", "Ergonomic");
+            Add("Lenovo Yoga Pro", (int)CategoryEnum.Mouse, "Movement Detection Technology", "Optical");
+
+            Add("Logitech M350 Pebble", (int)CategoryEnum.Mouse, "Brand", "Logitech");
+            Add("Logitech M350 Pebble", (int)CategoryEnum.Mouse, "Color", "White");
+            Add("Logitech M350 Pebble", (int)CategoryEnum.Mouse, "Connectivity Technology", "Wireless (Bluetooth/Logi Bolt)");
+            Add("Logitech M350 Pebble", (int)CategoryEnum.Mouse, "Special Feature", "Silent clicks");
+            Add("Logitech M350 Pebble", (int)CategoryEnum.Mouse, "Movement Detection Technology", "Optical");
+
+            Add("A4Tech Bloody V8M Max", (int)CategoryEnum.Mouse, "Brand", "A4Tech");
+            Add("A4Tech Bloody V8M Max", (int)CategoryEnum.Mouse, "Color", "Black");
+            Add("A4Tech Bloody V8M Max", (int)CategoryEnum.Mouse, "Connectivity Technology", "Wired");
+            Add("A4Tech Bloody V8M Max", (int)CategoryEnum.Mouse, "Special Feature", "12000 CPI");
+            Add("A4Tech Bloody V8M Max", (int)CategoryEnum.Mouse, "Movement Detection Technology", "Optical");
+
+            Add("Logitech G304 Lightspeed", (int)CategoryEnum.Mouse, "Brand", "Logitech");
+            Add("Logitech G304 Lightspeed", (int)CategoryEnum.Mouse, "Color", "Black");
+            Add("Logitech G304 Lightspeed", (int)CategoryEnum.Mouse, "Connectivity Technology", "Wireless (LIGHTSPEED)");
+            Add("Logitech G304 Lightspeed", (int)CategoryEnum.Mouse, "Special Feature", "1 ms response");
+            Add("Logitech G304 Lightspeed", (int)CategoryEnum.Mouse, "Movement Detection Technology", "Optical HERO");
+
+            Add("Logitech Pro X Superlight 2", (int)CategoryEnum.Mouse, "Brand", "Logitech");
+            Add("Logitech Pro X Superlight 2", (int)CategoryEnum.Mouse, "Color", "Black");
+            Add("Logitech Pro X Superlight 2", (int)CategoryEnum.Mouse, "Connectivity Technology", "Wireless (LIGHTSPEED)");
+            Add("Logitech Pro X Superlight 2", (int)CategoryEnum.Mouse, "Special Feature", "Ultra-lightweight");
+            Add("Logitech Pro X Superlight 2", (int)CategoryEnum.Mouse, "Movement Detection Technology", "Optical HERO");
+
+            Add("Razer Naga V2 Pro", (int)CategoryEnum.Mouse, "Brand", "Razer");
+            Add("Razer Naga V2 Pro", (int)CategoryEnum.Mouse, "Color", "Black");
+            Add("Razer Naga V2 Pro", (int)CategoryEnum.Mouse, "Connectivity Technology", "Wired / Wireless / Bluetooth");
+            Add("Razer Naga V2 Pro", (int)CategoryEnum.Mouse, "Special Feature", "19 programmable buttons");
+            Add("Razer Naga V2 Pro", (int)CategoryEnum.Mouse, "Movement Detection Technology", "Optical Focus Pro 30K");
+
+            // ========================= Keyboards =========================
+            Add("Keychron K10 HE Standart Version Black K10H-J1-RU (Nebula Magnetic)", (int)CategoryEnum.Keyboards, "Brand", "Keychron");
+            Add("Keychron K10 HE Standart Version Black K10H-J1-RU (Nebula Magnetic)", (int)CategoryEnum.Keyboards, "Connectivity Technology", "USB-A / Wireless / Bluetooth");
+            Add("Keychron K10 HE Standart Version Black K10H-J1-RU (Nebula Magnetic)", (int)CategoryEnum.Keyboards, "Recommended Uses For Product", "Gaming / Office");
+            Add("Keychron K10 HE Standart Version Black K10H-J1-RU (Nebula Magnetic)", (int)CategoryEnum.Keyboards, "Special Feature", "Magnetic switches");
+            Add("Keychron K10 HE Standart Version Black K10H-J1-RU (Nebula Magnetic)", (int)CategoryEnum.Keyboards, "Color", "Black");
+
+            Add("Lenovo Legion K310 RGB", (int)CategoryEnum.Keyboards, "Brand", "Lenovo");
+            Add("Lenovo Legion K310 RGB", (int)CategoryEnum.Keyboards, "Connectivity Technology", "USB-A");
+            Add("Lenovo Legion K310 RGB", (int)CategoryEnum.Keyboards, "Recommended Uses For Product", "Gaming");
+            Add("Lenovo Legion K310 RGB", (int)CategoryEnum.Keyboards, "Special Feature", "RGB backlight");
+            Add("Lenovo Legion K310 RGB", (int)CategoryEnum.Keyboards, "Color", "Black");
+
+            Add("Samsung Smart Keyboard", (int)CategoryEnum.Keyboards, "Brand", "Samsung");
+            Add("Samsung Smart Keyboard", (int)CategoryEnum.Keyboards, "Connectivity Technology", "Bluetooth");
+            Add("Samsung Smart Keyboard", (int)CategoryEnum.Keyboards, "Recommended Uses For Product", "Office / Tablet");
+            Add("Samsung Smart Keyboard", (int)CategoryEnum.Keyboards, "Special Feature", "Compact");
+            Add("Samsung Smart Keyboard", (int)CategoryEnum.Keyboards, "Color", "Black");
+
+            Add("A4Tech KV-300H", (int)CategoryEnum.Keyboards, "Brand", "A4Tech");
+            Add("A4Tech KV-300H", (int)CategoryEnum.Keyboards, "Connectivity Technology", "USB-A");
+            Add("A4Tech KV-300H", (int)CategoryEnum.Keyboards, "Recommended Uses For Product", "Office");
+            Add("A4Tech KV-300H", (int)CategoryEnum.Keyboards, "Special Feature", "USB hub");
+            Add("A4Tech KV-300H", (int)CategoryEnum.Keyboards, "Color", "Gray");
+
+            Add("Logitech Corded Keyboard K280e", (int)CategoryEnum.Keyboards, "Brand", "Logitech");
+            Add("Logitech Corded Keyboard K280e", (int)CategoryEnum.Keyboards, "Connectivity Technology", "USB-A");
+            Add("Logitech Corded Keyboard K280e", (int)CategoryEnum.Keyboards, "Recommended Uses For Product", "Office");
+            Add("Logitech Corded Keyboard K280e", (int)CategoryEnum.Keyboards, "Special Feature", "Moisture-resistant");
+            Add("Logitech Corded Keyboard K280e", (int)CategoryEnum.Keyboards, "Color", "Black");
+
+            Add("Razer Huntsman V2 Analog", (int)CategoryEnum.Keyboards, "Brand", "Razer");
+            Add("Razer Huntsman V2 Analog", (int)CategoryEnum.Keyboards, "Connectivity Technology", "USB-A");
+            Add("Razer Huntsman V2 Analog", (int)CategoryEnum.Keyboards, "Recommended Uses For Product", "Gaming");
+            Add("Razer Huntsman V2 Analog", (int)CategoryEnum.Keyboards, "Special Feature", "Analog Optical Switches");
+            Add("Razer Huntsman V2 Analog", (int)CategoryEnum.Keyboards, "Color", "Black");
+
+            // ========================= Laptops =========================
+            Add("Lenovo Legion 5 15AHP10", (int)CategoryEnum.Laptops, "Brand", "Lenovo");
+            Add("Lenovo Legion 5 15AHP10", (int)CategoryEnum.Laptops, "Model Name", "Legion 5 15AHP10");
+            Add("Lenovo Legion 5 15AHP10", (int)CategoryEnum.Laptops, "Screen Size", "15.1\"");
+            Add("Lenovo Legion 5 15AHP10", (int)CategoryEnum.Laptops, "CPU Model", "AMD Ryzen 7 260");
+            Add("Lenovo Legion 5 15AHP10", (int)CategoryEnum.Laptops, "Hard Disk Size", "512 GB SSD");
+            Add("Lenovo Legion 5 15AHP10", (int)CategoryEnum.Laptops, "Memory Installed Size", "16 GB");
+
+            Add("Lenovo IdeaPad Slim 3 15IRH10", (int)CategoryEnum.Laptops, "Brand", "Lenovo");
+            Add("Lenovo IdeaPad Slim 3 15IRH10", (int)CategoryEnum.Laptops, "Model Name", "IdeaPad Slim 3 15IRH10");
+            Add("Lenovo IdeaPad Slim 3 15IRH10", (int)CategoryEnum.Laptops, "Screen Size", "15.3\"");
+            Add("Lenovo IdeaPad Slim 3 15IRH10", (int)CategoryEnum.Laptops, "CPU Model", "Intel Core i7-13620H");
+            Add("Lenovo IdeaPad Slim 3 15IRH10", (int)CategoryEnum.Laptops, "Hard Disk Size", "1024 GB SSD");
+            Add("Lenovo IdeaPad Slim 3 15IRH10", (int)CategoryEnum.Laptops, "Memory Installed Size", "16 GB");
+
+            Add("ASUS ROG Strix G16 2025 G614FR-S5022W", (int)CategoryEnum.Laptops, "Brand", "ASUS");
+            Add("ASUS ROG Strix G16 2025 G614FR-S5022W", (int)CategoryEnum.Laptops, "Model Name", "ROG Strix G16 2025");
+            Add("ASUS ROG Strix G16 2025 G614FR-S5022W", (int)CategoryEnum.Laptops, "Screen Size", "16\"");
+            Add("ASUS ROG Strix G16 2025 G614FR-S5022W", (int)CategoryEnum.Laptops, "CPU Model", "AMD Ryzen 9");
+            Add("ASUS ROG Strix G16 2025 G614FR-S5022W", (int)CategoryEnum.Laptops, "Hard Disk Size", "1 TB SSD");
+            Add("ASUS ROG Strix G16 2025 G614FR-S5022W", (int)CategoryEnum.Laptops, "Memory Installed Size", "32 GB");
+
+            Add("Acer Aspire Lite 16 AL16-54P-52AL", (int)CategoryEnum.Laptops, "Brand", "Acer");
+            Add("Acer Aspire Lite 16 AL16-54P-52AL", (int)CategoryEnum.Laptops, "Model Name", "Aspire Lite 16");
+            Add("Acer Aspire Lite 16 AL16-54P-52AL", (int)CategoryEnum.Laptops, "Screen Size", "16.0\"");
+            Add("Acer Aspire Lite 16 AL16-54P-52AL", (int)CategoryEnum.Laptops, "CPU Model", "Intel Core 5 120U");
+            Add("Acer Aspire Lite 16 AL16-54P-52AL", (int)CategoryEnum.Laptops, "Hard Disk Size", "512 GB SSD");
+            Add("Acer Aspire Lite 16 AL16-54P-52AL", (int)CategoryEnum.Laptops, "Memory Installed Size", "16 GB");
+
+            Add("Apple MacBook Neo 13\" A18 Pro 2026 MHFH4", (int)CategoryEnum.Laptops, "Brand", "Apple");
+            Add("Apple MacBook Neo 13\" A18 Pro 2026 MHFH4", (int)CategoryEnum.Laptops, "Model Name", "MacBook Neo 13");
+            Add("Apple MacBook Neo 13\" A18 Pro 2026 MHFH4", (int)CategoryEnum.Laptops, "Screen Size", "13\"");
+            Add("Apple MacBook Neo 13\" A18 Pro 2026 MHFH4", (int)CategoryEnum.Laptops, "CPU Model", "A18 Pro");
+            Add("Apple MacBook Neo 13\" A18 Pro 2026 MHFH4", (int)CategoryEnum.Laptops, "Hard Disk Size", "256 GB SSD");
+            Add("Apple MacBook Neo 13\" A18 Pro 2026 MHFH4", (int)CategoryEnum.Laptops, "Memory Installed Size", "16 GB");
+
+            Add("Acer Nitro V 15 ANV15-52-57BB", (int)CategoryEnum.Laptops, "Brand", "Acer");
+            Add("Acer Nitro V 15 ANV15-52-57BB", (int)CategoryEnum.Laptops, "Model Name", "Nitro V 15");
+            Add("Acer Nitro V 15 ANV15-52-57BB", (int)CategoryEnum.Laptops, "Screen Size", "15.6\"");
+            Add("Acer Nitro V 15 ANV15-52-57BB", (int)CategoryEnum.Laptops, "CPU Model", "Intel Core i5-13420H");
+            Add("Acer Nitro V 15 ANV15-52-57BB", (int)CategoryEnum.Laptops, "Hard Disk Size", "512 GB SSD");
+            Add("Acer Nitro V 15 ANV15-52-57BB", (int)CategoryEnum.Laptops, "Memory Installed Size", "16 GB");
+
+            // ========================= SSD =========================
+            Add("ADATA Legend 900 Pro 1TB SLEG-900P-1TCS", (int)CategoryEnum.SSD, "Brand", "ADATA");
+            Add("ADATA Legend 900 Pro 1TB SLEG-900P-1TCS", (int)CategoryEnum.SSD, "Digital Storage Capacity", "1 TB");
+            Add("ADATA Legend 900 Pro 1TB SLEG-900P-1TCS", (int)CategoryEnum.SSD, "Hard Disk Interface", "PCIe 4.0 x4");
+            Add("ADATA Legend 900 Pro 1TB SLEG-900P-1TCS", (int)CategoryEnum.SSD, "Connectivity Technology", "NVMe");
+            Add("ADATA Legend 900 Pro 1TB SLEG-900P-1TCS", (int)CategoryEnum.SSD, "Form Factor", "M.2 2280");
+
+            Add("Patriot P300 512GB P300P512GM28", (int)CategoryEnum.SSD, "Brand", "Patriot");
+            Add("Patriot P300 512GB P300P512GM28", (int)CategoryEnum.SSD, "Digital Storage Capacity", "512 GB");
+            Add("Patriot P300 512GB P300P512GM28", (int)CategoryEnum.SSD, "Hard Disk Interface", "PCIe 3.0 x4");
+            Add("Patriot P300 512GB P300P512GM28", (int)CategoryEnum.SSD, "Connectivity Technology", "NVMe");
+            Add("Patriot P300 512GB P300P512GM28", (int)CategoryEnum.SSD, "Form Factor", "M.2 2280");
+
+            Add("Kingston A400 240GB SA400S37/240G", (int)CategoryEnum.SSD, "Brand", "Kingston");
+            Add("Kingston A400 240GB SA400S37/240G", (int)CategoryEnum.SSD, "Digital Storage Capacity", "240 GB");
+            Add("Kingston A400 240GB SA400S37/240G", (int)CategoryEnum.SSD, "Hard Disk Interface", "SATA 3.0");
+            Add("Kingston A400 240GB SA400S37/240G", (int)CategoryEnum.SSD, "Connectivity Technology", "SATA");
+            Add("Kingston A400 240GB SA400S37/240G", (int)CategoryEnum.SSD, "Form Factor", "2.5\"");
+
+            Add("Kingston KC3000 1TB SKC3000S/1024G", (int)CategoryEnum.SSD, "Brand", "Kingston");
+            Add("Kingston KC3000 1TB SKC3000S/1024G", (int)CategoryEnum.SSD, "Digital Storage Capacity", "1 TB");
+            Add("Kingston KC3000 1TB SKC3000S/1024G", (int)CategoryEnum.SSD, "Hard Disk Interface", "PCIe 4.0 x4");
+            Add("Kingston KC3000 1TB SKC3000S/1024G", (int)CategoryEnum.SSD, "Connectivity Technology", "NVMe");
+            Add("Kingston KC3000 1TB SKC3000S/1024G", (int)CategoryEnum.SSD, "Form Factor", "M.2 2280");
+
+            Add("Samsung 990 Pro 1TB MZ-V9P1T0BW", (int)CategoryEnum.SSD, "Brand", "Samsung");
+            Add("Samsung 990 Pro 1TB MZ-V9P1T0BW", (int)CategoryEnum.SSD, "Digital Storage Capacity", "1 TB");
+            Add("Samsung 990 Pro 1TB MZ-V9P1T0BW", (int)CategoryEnum.SSD, "Hard Disk Interface", "PCIe 4.0 x4");
+            Add("Samsung 990 Pro 1TB MZ-V9P1T0BW", (int)CategoryEnum.SSD, "Connectivity Technology", "NVMe");
+            Add("Samsung 990 Pro 1TB MZ-V9P1T0BW", (int)CategoryEnum.SSD, "Form Factor", "M.2 2280");
+
+            Add("Samsung 9100 Pro 4TB MZ-VAP4T0BW", (int)CategoryEnum.SSD, "Brand", "Samsung");
+            Add("Samsung 9100 Pro 4TB MZ-VAP4T0BW", (int)CategoryEnum.SSD, "Digital Storage Capacity", "4 TB");
+            Add("Samsung 9100 Pro 4TB MZ-VAP4T0BW", (int)CategoryEnum.SSD, "Hard Disk Interface", "PCIe 5.0 x4");
+            Add("Samsung 9100 Pro 4TB MZ-VAP4T0BW", (int)CategoryEnum.SSD, "Connectivity Technology", "NVMe");
+            Add("Samsung 9100 Pro 4TB MZ-VAP4T0BW", (int)CategoryEnum.SSD, "Form Factor", "M.2 2280");
+
+            // ========================= HDD =========================
+            Add("WD Purple 1TB [WD10PURZ]", (int)CategoryEnum.HDD, "Brand", "Western Digital");
+            Add("WD Purple 1TB [WD10PURZ]", (int)CategoryEnum.HDD, "Digital Storage Capacity", "1 TB");
+            Add("WD Purple 1TB [WD10PURZ]", (int)CategoryEnum.HDD, "Hard Disk Interface", "SATA 3.0");
+            Add("WD Purple 1TB [WD10PURZ]", (int)CategoryEnum.HDD, "Connectivity Technology", "SATA");
+            Add("WD Purple 1TB [WD10PURZ]", (int)CategoryEnum.HDD, "Form Factor", "3.5\"");
+
+            Add("WD Red Plus 4TB WD40EFPX", (int)CategoryEnum.HDD, "Brand", "Western Digital");
+            Add("WD Red Plus 4TB WD40EFPX", (int)CategoryEnum.HDD, "Digital Storage Capacity", "4 TB");
+            Add("WD Red Plus 4TB WD40EFPX", (int)CategoryEnum.HDD, "Hard Disk Interface", "SATA 3.0");
+            Add("WD Red Plus 4TB WD40EFPX", (int)CategoryEnum.HDD, "Connectivity Technology", "SATA");
+            Add("WD Red Plus 4TB WD40EFPX", (int)CategoryEnum.HDD, "Form Factor", "3.5\"");
+
+            Add("Seagate IronWolf 4TB ST4000VN006", (int)CategoryEnum.HDD, "Brand", "Seagate");
+            Add("Seagate IronWolf 4TB ST4000VN006", (int)CategoryEnum.HDD, "Digital Storage Capacity", "4 TB");
+            Add("Seagate IronWolf 4TB ST4000VN006", (int)CategoryEnum.HDD, "Hard Disk Interface", "SATA 3.0");
+            Add("Seagate IronWolf 4TB ST4000VN006", (int)CategoryEnum.HDD, "Connectivity Technology", "SATA");
+            Add("Seagate IronWolf 4TB ST4000VN006", (int)CategoryEnum.HDD, "Form Factor", "3.5\"");
+
+            Add("SWD Red Plus 8TB WD80EFPX", (int)CategoryEnum.HDD, "Brand", "Western Digital");
+            Add("SWD Red Plus 8TB WD80EFPX", (int)CategoryEnum.HDD, "Digital Storage Capacity", "8 TB");
+            Add("SWD Red Plus 8TB WD80EFPX", (int)CategoryEnum.HDD, "Hard Disk Interface", "SATA 3.0");
+            Add("SWD Red Plus 8TB WD80EFPX", (int)CategoryEnum.HDD, "Connectivity Technology", "SATA");
+            Add("SWD Red Plus 8TB WD80EFPX", (int)CategoryEnum.HDD, "Form Factor", "3.5\"");
+
+            Add("WD Caviar Blue 1TB (WD10EZEX)", (int)CategoryEnum.HDD, "Brand", "Western Digital");
+            Add("WD Caviar Blue 1TB (WD10EZEX)", (int)CategoryEnum.HDD, "Digital Storage Capacity", "1 TB");
+            Add("WD Caviar Blue 1TB (WD10EZEX)", (int)CategoryEnum.HDD, "Hard Disk Interface", "SATA 3.0");
+            Add("WD Caviar Blue 1TB (WD10EZEX)", (int)CategoryEnum.HDD, "Connectivity Technology", "SATA");
+            Add("WD Caviar Blue 1TB (WD10EZEX)", (int)CategoryEnum.HDD, "Form Factor", "3.5\"");
+
+            Add("Seagate Barracuda 2TB ST2000DM008", (int)CategoryEnum.HDD, "Brand", "Seagate");
+            Add("Seagate Barracuda 2TB ST2000DM008", (int)CategoryEnum.HDD, "Digital Storage Capacity", "2 TB");
+            Add("Seagate Barracuda 2TB ST2000DM008", (int)CategoryEnum.HDD, "Hard Disk Interface", "SATA 3.0");
+            Add("Seagate Barracuda 2TB ST2000DM008", (int)CategoryEnum.HDD, "Connectivity Technology", "SATA");
+            Add("Seagate Barracuda 2TB ST2000DM008", (int)CategoryEnum.HDD, "Form Factor", "3.5\"");
+
+            if (values.Count > 0)
+            {
+                await db.ProductAttributeValues.AddRangeAsync(values, ct);
                 await db.SaveChangesAsync(ct);
             }
         }
