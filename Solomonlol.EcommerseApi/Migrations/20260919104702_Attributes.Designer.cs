@@ -12,8 +12,8 @@ using Solomonlol.EcommerseApi;
 namespace Solomonlol.EcommerseApi.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20260919103200_Attribute")]
-    partial class Attribute
+    [Migration("20260919104702_Attributes")]
+    partial class Attributes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,22 +88,16 @@ namespace Solomonlol.EcommerseApi.Migrations
 
             modelBuilder.Entity("Solomonlol.EcommerseApi.Models.Base.ProductAttribute", b =>
                 {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Unit")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Name");
-
-                    b.HasIndex("CategoryId", "Name")
-                        .IsUnique();
+                    b.HasKey("CategoryId", "Name");
 
                     b.ToTable("ProductAttributes");
                 });
@@ -113,6 +107,9 @@ namespace Solomonlol.EcommerseApi.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ProductAttributeName")
                         .HasColumnType("nvarchar(450)");
 
@@ -120,9 +117,9 @@ namespace Solomonlol.EcommerseApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ProductId", "ProductAttributeName");
+                    b.HasKey("ProductId", "CategoryId", "ProductAttributeName");
 
-                    b.HasIndex("ProductAttributeName");
+                    b.HasIndex("CategoryId", "ProductAttributeName");
 
                     b.ToTable("ProductAttributeValues");
                 });
@@ -252,16 +249,16 @@ namespace Solomonlol.EcommerseApi.Migrations
 
             modelBuilder.Entity("Solomonlol.EcommerseApi.Models.Base.ProductAttributeValue", b =>
                 {
-                    b.HasOne("Solomonlol.EcommerseApi.Models.Base.ProductAttribute", "ProductAttribute")
-                        .WithMany("Values")
-                        .HasForeignKey("ProductAttributeName")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Solomonlol.EcommerseApi.Models.Base.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Solomonlol.EcommerseApi.Models.Base.ProductAttribute", "ProductAttribute")
+                        .WithMany("Values")
+                        .HasForeignKey("CategoryId", "ProductAttributeName")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Product");

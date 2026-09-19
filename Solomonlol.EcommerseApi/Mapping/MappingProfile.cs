@@ -46,7 +46,6 @@ namespace Solomonlol.EcommerseApi.Mapping
             CreateMap<ProductAttribute, ProductAttributeDto>();
             CreateMap<ProductAttributeDto, ProductAttribute>()
                 .ForMember(p => p.Values, d => d.Ignore())
-                .ForMember(p => p.Id, d => d.Ignore())
                 .ForMember(p => p.CategoryId, d => d.Ignore())
                 .ForMember(p => p.Category, d => d.Ignore());
 

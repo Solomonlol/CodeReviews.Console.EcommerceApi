@@ -84,6 +84,7 @@ namespace Solomonlol.EcommerseApi.Services
             if (valueCheck == null)
             {
                 var value = _mapper.Map<ProductAttributeValue>(item);
+                value.CategoryId = productCheck.CategoryId;
 
                 await _db.ProductAttributeValues.AddAsync(value, ct);
                 return await _db.SaveChangesAsync(ct) > 0

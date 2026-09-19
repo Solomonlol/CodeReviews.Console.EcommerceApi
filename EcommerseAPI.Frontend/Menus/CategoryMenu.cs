@@ -28,23 +28,10 @@ namespace EcommerseAPI.Frontend.Menus
 
             AddSubMenu("Show all categories", new PagedMenu<ICategoryService, CategoryDto, CategoryFilter>(sp, "Categories"));
             AddItem("Find one", () => Get());
-            AddItem("Add attribute", () => AddAttribute());
-            AddItem("Update attribute", () => UpdateAttribute());
-            AddItem("Delete attribute", () => DeleteAttribute());
             AddItem("Create new", () => Create());
             AddItem("Update", () => Update());
             AddItem("Delete", () => Delete());
             AddExitOption("Back");
-        }
-
-        private async Task UpdateAttribute()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task DeleteAttribute()
-        {
-            throw new NotImplementedException();
         }
 
         public async Task Create(CancellationToken ct=default)
@@ -88,11 +75,6 @@ namespace EcommerseAPI.Frontend.Menus
             }
             else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
         }
-
-        public async Task AddAttribute(CancellationToken ct=default)
-        {
-            await _attrributeService.AddAttribute(ct);
-        }
-        
+               
     }
 }

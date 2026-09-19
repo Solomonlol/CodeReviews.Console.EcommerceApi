@@ -27,9 +27,11 @@ namespace EcommerseAPI.Frontend.Menus
             AddSubMenu($"{subMenuTitle}", subMenu);
         }
 
-        private async Task DeleteAttribute()
+        private async Task DeleteAttribute(CancellationToken ct=default)
         {
-            throw new NotImplementedException();
+            if (_pagedResult == null) return;
+            var attributes = _pagedResult.Items;
+            await _attributeService.DeleteAttribute(attributes, ct);
         }
 
         private async Task UpdateAttribute()
@@ -39,7 +41,9 @@ namespace EcommerseAPI.Frontend.Menus
 
         private async Task AddNewAttribute(CancellationToken ct=default)
         {
-            await _attributeService.AddAttribute(ct);
+            if (_pagedResult == null) return;
+            var attributes = _pagedResult.Items;
+            await _attributeService.AddAttribute(attributes, ct);
         }
 
         public async Task AddToCart(CancellationToken ct = default)

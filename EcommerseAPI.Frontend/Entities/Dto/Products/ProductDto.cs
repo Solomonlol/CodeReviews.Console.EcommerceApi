@@ -8,7 +8,7 @@ namespace EcommerseAPI.Frontend.Entities.Dto.Products
 {
     public class ProductDto
     {
-        public int? Id { get; set; } = null!;
+        public int Id { get; set; }
         public string Name { get; set; } = null!;
         [Column(TypeName = "decimal(18,2)")]
         public decimal? Price { get; set; } = null!;
@@ -17,7 +17,7 @@ namespace EcommerseAPI.Frontend.Entities.Dto.Products
         //[JsonIgnore]
         public IEnumerable<ProductAttributeDisplayDto> Attributes { get; set; } = [];
         [Required]
-        public int? CategoryId { get; set; } = null!;
+        public int CategoryId { get; set; }
         [JsonIgnore]
         [ForeignKey(nameof(CategoryId))]
         public CategoryDto Category { get; set; } = null!;

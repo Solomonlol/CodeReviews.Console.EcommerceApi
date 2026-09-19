@@ -6,14 +6,13 @@ namespace Solomonlol.EcommerseApi.Models.Base
 {
     public class ProductAttribute
     {
-        
-        public int Id { get; set; }
+        [Key]
+        public string Name { get; set; }
         public int CategoryId { get; set; }
         [ForeignKey(nameof(CategoryId))]
         [JsonIgnore]
         public Category Category { get; set; } = null!;
-        [Key]
-        public string Name { get; set; } = null!;
+        
         public string? Unit { get; set; }
         public ICollection<ProductAttributeValue> Values { get; set; } = [];
     }

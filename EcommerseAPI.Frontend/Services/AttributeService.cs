@@ -1,5 +1,6 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto;
 using EcommerseAPI.Frontend.Entities.Dto.Categories;
+using EcommerseAPI.Frontend.Entities.Dto.Products;
 using EcommerseAPI.Frontend.Entities.Dto.Users;
 using EcommerseAPI.Frontend.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,47 +9,72 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 
 namespace EcommerseAPI.Frontend.Services
 {
     internal class AttributeService : IAttributeService
     {
-        private readonly ICategoryService _categoryService;
+        //private readonly ICategoryService _categoryService;
         private readonly IProductService _productService;
-        private readonly ITableDrawingService _drawingService;
+        //private readonly ITableDrawingService _drawingService;
+        private readonly string _attributeUrl = "api/v1/categories/";
+        private readonly string _attributeValueUrl = "api/v1/products/";
+        private readonly HttpClient _httpClient;
         public AttributeService(IServiceProvider sp) 
         {
-            _drawingService = sp.GetRequiredService<ITableDrawingService>();
-            _categoryService = sp.GetRequiredService<ICategoryService>();
+            //_drawingService = sp.GetRequiredService<ITableDrawingService>();
+            //_categoryService = sp.GetRequiredService<ICategoryService>();
             _productService = sp.GetRequiredService<IProductService>();
+            _httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("ApiClient");
         }
 
-        public async Task AddAttribute(CancellationToken ct = default)
+        public async Task AddAttribute(IEnumerable<ProductDto> attributes, CancellationToken ct = default)
         {
             try
             {
-                var categoryName = await AnsiConsole.AskAsync<string>("[yellow]Enter category name:[/]");
-                var response = await _categoryService.GetOne(categoryName, ct);
-                if (response == null)
+                var productList = attributes.ToList();
+                var product = await AnsiConsole.PromptAsync(new SelectionPrompt<ProductDto>().Title("[yellow]Choose product:[/]")
+                    .UseConverter(p=>$"{p.Name} | {p.CategoryName}")
+                    .AddChoices(productList));
+                await _productService.GetOne(product.Name, ct);
+
+                var attributeDto = new CategoryAttributeDtoRequest()
                 {
-                    AnsiConsole.MarkupLine($"[red]Not found category with name '{categoryName}'[/]");
-                    return;
-                }
+                    Name = await AnsiConsole.AskAsync<string>("[yellow]Enter attribute name:[/]"),
+                    Unit = await AnsiConsole.PromptAsync(new TextPrompt<string>("[yellow]Enter unit measurement(optional):[/]").AllowEmpty())
+                };
+
+                var url = _attributeUrl + $"{product.CategoryName}/attributes";
+                var dto = JsonSerializer.Serialize(attributeDto);
+                var content = new StringContent(dto, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync(url, content, ct);
+
                 if (!response.IsSuccessStatusCode)
                 {
-                    AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
+                    AnsiConsole.MarkupLine($"Error: {response.StatusCode}");
                     return;
                 }
 
-                var content = await response.Content.ReadFromJsonAsync<CategoryDto>(ct);
-
-
-                content = await response.Content.ReadFromJsonAsync<CategoryDto>(ct);
-                if (content != null)
+                if (await AnsiConsole.ConfirmAsync("Add value?"))
                 {
-                    var list = new List<CategoryDto>();
-                    list.Add(content);
-                    await _drawingService.DrowSimpleTable(enumerableValues: list, title: $"{categoryName}", ct: ct);
+                    var value = new ProductAttributeValueDto()
+                    {
+                        ProductAttributeName = attributeDto.Name,
+                        ProductId = product.Id,
+                        Value = await AnsiConsole.AskAsync<string>("[yellow]Enter value:[/]")
+                    };
+
+                    url = _attributeValueUrl + $"{product.Name}/attributes";
+                    dto = JsonSerializer.Serialize(value);
+                    content = new StringContent(dto, Encoding.UTF8, "application/json");
+                    response = await _httpClient.PostAsync(url, content, ct);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        AnsiConsole.MarkupLine($"Error: {response.StatusCode}");
+                        return;
+                    }
                 }
 
             }
@@ -58,24 +84,50 @@ namespace EcommerseAPI.Frontend.Services
             }
         }
 
-        public Task AddAttributeValue(CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task DeleteAttribute(CancellationToken ct = default)
+        public async Task DeleteAttribute(IEnumerable<ProductDto> products, CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var productList = products.ToList();
+                var product = await AnsiConsole.PromptAsync(new SelectionPrompt<ProductDto>().Title("[yellow]Choose product:[/]")
+                    .UseConverter(p => $"{p.Name} | {p.CategoryName}")
+                    .AddChoices(productList));
+
+                var dto = await _productService.GetOne(product.Name, ct);
+                if (dto == null)
+                    AnsiConsole.MarkupLine($"[red]Product was not found.[/]");
+
+                
+                var attributeList = dto.Attributes.ToList();
+                var productAttributeName = await AnsiConsole.PromptAsync(new SelectionPrompt<string>().Title("[yellow]Choose product:[/]")
+                    .AddChoices(attributeList.Select(a => a.Name)));
+
+                var url = _attributeUrl + $"{product.CategoryName}/attributes/{productAttributeName}";
+                var response = await _httpClient.DeleteAsync(url, ct);
+
+                if (response.IsSuccessStatusCode)
+                    AnsiConsole.MarkupLine("[green]Attribute was deleted.[/]");
+
+            }
+            catch (Exception ex)
+            {
+                AnsiConsole.MarkupLine($"[red]Error: {ex.Message}[/]");
+            }
         }
 
         public Task UpdateAttribute(CancellationToken ct = default)
         {
             throw new NotImplementedException();
         }
+        //private async Task AddAttributeValue(CancellationToken ct = default)
+        //{
+        //    var value = 
+        //}
 
-        public Task UpdateAttributeValue(CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
+        //private Task UpdateAttributeValue(CancellationToken ct = default)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

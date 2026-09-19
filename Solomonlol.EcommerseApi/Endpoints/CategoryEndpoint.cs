@@ -68,7 +68,7 @@ namespace Solomonlol.EcommerseApi.Endpoints
                 : Results.Conflict(result?.Error);
             });
             //delete attribute
-            app.MapDelete("api/v1/categories/{categoryName}/attributes", [Authorize(Roles = "Admin, Manager")] async (string categoryName, string attributeName, IAttributeService service, CancellationToken ct) =>
+            app.MapDelete("api/v1/categories/{categoryName}/attributes/{attributeName}", [Authorize(Roles = "Admin, Manager")] async (string categoryName, string attributeName, IAttributeService service, CancellationToken ct) =>
             {
                 var result = await service.DeleteAttribute(categoryName, attributeName, ct);
                 return result.IsSuccess

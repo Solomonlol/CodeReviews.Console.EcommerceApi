@@ -72,7 +72,7 @@ namespace EcommerseAPI.Frontend.Services
             }
         }
 
-        public async Task GetOne(string productName, CancellationToken ct = default)
+        public async Task<ProductDto?> GetOne(string productName, CancellationToken ct = default)
         {
             try
             {
@@ -86,13 +86,17 @@ namespace EcommerseAPI.Frontend.Services
                         var list = new List<ProductDto>();
                         list.Add(content);
                         await _drawingService.DrowSimpleTable(enumerableValues: list, title: $"{productName}", ct: ct, isNestedDrawing: true);
+                        
                     }
+                    return content;
                 }
-                else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
+                AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
+                return null;
             }
             catch (Exception ex)
             {
                 AnsiConsole.MarkupLine($"[red]Error: {ex.Message}[/]");
+                return null;
             }
         }
 
