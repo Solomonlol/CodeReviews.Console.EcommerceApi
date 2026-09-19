@@ -1,17 +1,10 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Categories;
-using EcommerseAPI.Frontend.Entities.Dto.Products;
-using EcommerseAPI.Frontend.Entities.Dto.Users;
 using EcommerseAPI.Frontend.Entities.Sort;
 using EcommerseAPI.Frontend.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
-using System;
-using System.Collections.Generic;
-using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using System.Xml.Linq;
-using static EcommerseAPI.Frontend.Entities.EnumHelper;
 
 namespace EcommerseAPI.Frontend.Services
 {
@@ -64,7 +57,7 @@ namespace EcommerseAPI.Frontend.Services
         {
             try
             {
-                var Url = await _urlService.GetUrl(ct: ct, pageSize: pageSize, page: page, filter:filter, sort: sort);
+                var Url = await _urlService.GetUrl(ct: ct, pageSize: pageSize, page: page, filter: filter, sort: sort);
                 var response = await _httpClient.GetAsync(Url, ct);
                 return response;
             }
@@ -144,6 +137,6 @@ namespace EcommerseAPI.Frontend.Services
             }
         }
 
-        
+
     }
 }

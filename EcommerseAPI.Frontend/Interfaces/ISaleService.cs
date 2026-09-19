@@ -1,10 +1,4 @@
-﻿using EcommerseAPI.Frontend.Entities.Dto.Categories;
-using EcommerseAPI.Frontend.Entities.Dto.Sales;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EcommerseAPI.Frontend.Interfaces
+﻿namespace EcommerseAPI.Frontend.Interfaces
 {
     internal interface ISaleService : IPagedResultService
     {

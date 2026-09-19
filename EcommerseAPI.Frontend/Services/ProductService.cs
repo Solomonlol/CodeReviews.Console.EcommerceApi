@@ -1,6 +1,4 @@
-﻿using Auth0.ManagementApi;
-using EcommerseAPI.Frontend.Entities.Dto.Products;
-using EcommerseAPI.Frontend.Entities.Dto.Users;
+﻿using EcommerseAPI.Frontend.Entities.Dto.Products;
 using EcommerseAPI.Frontend.Entities.Sort;
 using EcommerseAPI.Frontend.Interfaces;
 using Spectre.Console;
@@ -86,7 +84,7 @@ namespace EcommerseAPI.Frontend.Services
                         var list = new List<ProductDto>();
                         list.Add(content);
                         await _drawingService.DrowSimpleTable(enumerableValues: list, title: $"{productName}", ct: ct, isNestedDrawing: true);
-                        
+
                     }
                     return content;
                 }

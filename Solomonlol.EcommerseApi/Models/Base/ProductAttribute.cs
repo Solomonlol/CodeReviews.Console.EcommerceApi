@@ -12,7 +12,7 @@ namespace Solomonlol.EcommerseApi.Models.Base
         [ForeignKey(nameof(CategoryId))]
         [JsonIgnore]
         public Category Category { get; set; } = null!;
-        
+
         public string? Unit { get; set; }
         public ICollection<ProductAttributeValue> Values { get; set; } = [];
     }

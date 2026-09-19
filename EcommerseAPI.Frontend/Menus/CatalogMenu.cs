@@ -1,13 +1,7 @@
-﻿using EcommerseAPI.Frontend.Entities;
-using EcommerseAPI.Frontend.Entities.Dto;
-using EcommerseAPI.Frontend.Entities.Dto.Categories;
-using EcommerseAPI.Frontend.Entities.Dto.Products;
-using EcommerseAPI.Frontend.Entities.Filters;
+﻿using EcommerseAPI.Frontend.Entities.Dto.Products;
 using EcommerseAPI.Frontend.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
-using System.Net.Http.Json;
-using System.Runtime.CompilerServices;
 using static EcommerseAPI.Frontend.Entities.EnumHelper;
 
 namespace EcommerseAPI.Frontend.Menus
@@ -34,13 +28,13 @@ namespace EcommerseAPI.Frontend.Menus
             AddExitOption("Back");
         }
 
-        public async Task Get(CancellationToken ct=default)
+        public async Task Get(CancellationToken ct = default)
         {
             var productName = await AnsiConsole.AskAsync<string>("[yellow]Enter product name to find:[/]");
             await _productService.GetOne(productName, ct);
         }
 
-        public async Task Create(CancellationToken ct=default)
+        public async Task Create(CancellationToken ct = default)
         {
             var product = new ProductDto
             {
@@ -61,7 +55,7 @@ namespace EcommerseAPI.Frontend.Menus
             await _productService.Update(ct);
         }
 
-        public async Task Delete(CancellationToken ct=default)
+        public async Task Delete(CancellationToken ct = default)
         {
             var productName = AnsiConsole.Ask<string>("[yellow]Enter product name to delete:[/]");
             if (await AnsiConsole.ConfirmAsync("Are you sure?", cancellationToken: ct))
@@ -69,6 +63,6 @@ namespace EcommerseAPI.Frontend.Menus
             else AnsiConsole.MarkupLine("[violet]The operation was cancelled.[/]");
         }
 
-        
+
     }
 }

@@ -1,6 +1,4 @@
-﻿using EcommerseAPI.Frontend.Interfaces;
-
-namespace EcommerseAPI.Frontend.Entities.Dto.Products
+﻿namespace EcommerseAPI.Frontend.Entities.Dto.Products
 {
     public class ProductAttributeDisplayDto
     {

@@ -10,7 +10,7 @@ namespace EcommerseAPI.Frontend.Services
         public Task DrowSimpleTable<T>(PagedResult<T>? pagedResult = null, string? title = null, CancellationToken ct = default, IEnumerable<T>? enumerableValues = null, bool isNestedDrawing = false)
         {
             Console.Clear();
-            
+
             var itemsList = new List<T>();
             if (pagedResult != null)
                 itemsList = pagedResult.Items.ToList();
@@ -32,12 +32,12 @@ namespace EcommerseAPI.Frontend.Services
             {
                 properties = typeof(T)
                         .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                        .Where(t => IsCollection(t.PropertyType) && t.PropertyType!=typeof(string));
-                                
+                        .Where(t => IsCollection(t.PropertyType) && t.PropertyType != typeof(string));
+
                 foreach (var property in properties)
                 {
                     var elementType = GetCollectionElementType(property.PropertyType);
-                        if (elementType == null) continue;
+                    if (elementType == null) continue;
 
                     var allNestedItems = new List<object>();
                     foreach (var item in itemsList)
@@ -45,11 +45,11 @@ namespace EcommerseAPI.Frontend.Services
                         var collection = property.GetValue(item) as System.Collections.IEnumerable;
                         if (collection == null) continue;
 
-                        foreach(var nested in collection)
+                        foreach (var nested in collection)
                         {
-                            if(nested!=null)
+                            if (nested != null)
                                 allNestedItems.Add(nested);
-                        }    
+                        }
                     }
                     if (allNestedItems.Count == 0) continue;
                     DrawNested(elementType, allNestedItems, $"{property.Name}");
@@ -66,7 +66,7 @@ namespace EcommerseAPI.Frontend.Services
         }
 
 
-        private void Draw<T>(IEnumerable<PropertyInfo>? properties, List<T> itemsList, string? title=null)
+        private void Draw<T>(IEnumerable<PropertyInfo>? properties, List<T> itemsList, string? title = null)
         {
             var table = new Table()
                             .Border(TableBorder.Double)
@@ -142,7 +142,7 @@ namespace EcommerseAPI.Frontend.Services
             if (collectionType.IsArray)
                 return collectionType.GetElementType();
 
-            if(collectionType.IsGenericType)
+            if (collectionType.IsGenericType)
             {
                 var args = collectionType.GetGenericArguments();
                 if (args.Length == 1)

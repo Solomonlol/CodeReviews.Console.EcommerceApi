@@ -14,7 +14,7 @@ namespace EcommerseAPI.Frontend.Menus
 
         public AccountMenu(IServiceProvider sp) : base("Account")
         {
-            
+
             _loginService = sp.GetRequiredService<ILoginService>();
             _accountService = sp.GetRequiredService<IAccountService>();
             AddExitOption("Back");

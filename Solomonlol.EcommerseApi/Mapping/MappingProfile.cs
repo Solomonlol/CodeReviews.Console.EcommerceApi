@@ -22,12 +22,12 @@ namespace Solomonlol.EcommerseApi.Mapping
                 .ForMember(p => p.Id, d => d.Ignore())
                 .ForMember(p => p.CategoryId, d => d.UseDestinationValue())
                 .ForMember(p => p.Category, d => d.Ignore())
-                .ForMember(p=>p.Price, opt=>
+                .ForMember(p => p.Price, opt =>
                 {
                     opt.PreCondition(s => s.Price.HasValue);
                     opt.MapFrom(s => s.Price!.Value);
                 })
-                .ForAllMembers(p=>p.Condition((dto, destination, value)=>
+                .ForAllMembers(p => p.Condition((dto, destination, value) =>
                     value != null && !(value is string s && string.IsNullOrEmpty(s))
                 ));
 

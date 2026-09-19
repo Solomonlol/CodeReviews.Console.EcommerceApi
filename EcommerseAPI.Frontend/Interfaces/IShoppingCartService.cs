@@ -1,8 +1,5 @@
 ﻿using EcommerseAPI.Frontend.Entities;
 using EcommerseAPI.Frontend.Entities.Dto.Products;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EcommerseAPI.Frontend.Interfaces
 {

@@ -1,5 +1,4 @@
-﻿using EcommerseAPI.Frontend.Entities.Dto.Products;
-using EcommerseAPI.Frontend.Entities.Dto.Users;
+﻿using EcommerseAPI.Frontend.Entities.Dto.Users;
 using EcommerseAPI.Frontend.Entities.Sort;
 using EcommerseAPI.Frontend.Interfaces;
 using Spectre.Console;
@@ -59,7 +58,7 @@ namespace EcommerseAPI.Frontend.Services
         {
             try
             {
-                var Url = await _urlService.GetUrl(ct: ct, pageSize: pageSize, page: page, sort:sort, filter:filter);
+                var Url = await _urlService.GetUrl(ct: ct, pageSize: pageSize, page: page, sort: sort, filter: filter);
                 var response = await _httpClient.GetAsync(Url, ct);
                 return response;
             }
@@ -166,7 +165,7 @@ namespace EcommerseAPI.Frontend.Services
                     else AnsiConsole.MarkupLine("[violet]The operation was cancelled.[/]");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 AnsiConsole.MarkupLine($"[red]Error: {ex.Message}[/]");
             }

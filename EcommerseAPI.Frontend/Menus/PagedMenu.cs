@@ -1,7 +1,4 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto;
-using EcommerseAPI.Frontend.Entities.Dto.Products;
-using EcommerseAPI.Frontend.Entities.Dto.Sales;
-using EcommerseAPI.Frontend.Entities.Filters;
 using EcommerseAPI.Frontend.Entities.Sort;
 using EcommerseAPI.Frontend.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +14,7 @@ namespace EcommerseAPI.Frontend.Menus
         private protected PagedResult<TResultDto>? _pagedResult;
         private protected readonly IServiceProvider _serviceProvider;
         private protected readonly ITableDrawingService _drawingService;
-        
+
         private protected readonly string _title;
         private protected SortParams _sortParams = new();
         private protected TFilter _filter = new();
@@ -55,7 +52,7 @@ namespace EcommerseAPI.Frontend.Menus
             await GetAll(page: _pagedResult.Page, pageSize: _pagedResult.PageSize, sort: _sortParams, filter: _filter, ct: ct);
         }
 
-        public async Task ChoosePageNumber(CancellationToken ct=default)
+        public async Task ChoosePageNumber(CancellationToken ct = default)
         {
             if (_pagedResult == null) return;
 
@@ -80,7 +77,7 @@ namespace EcommerseAPI.Frontend.Menus
             {
                 _pagedResult.Page = 1;
                 _pagedResult.PageSize = pageSize;
-                await GetAll(page: _pagedResult.Page, pageSize: _pagedResult.PageSize, sort: _sortParams, filter: _filter, ct:ct);
+                await GetAll(page: _pagedResult.Page, pageSize: _pagedResult.PageSize, sort: _sortParams, filter: _filter, ct: ct);
             }
         }
 
@@ -106,7 +103,7 @@ namespace EcommerseAPI.Frontend.Menus
                 {
                     Type t when t == typeof(int) || t == typeof(int?) => await AnsiConsole.AskAsync<int>($"[yellow]Set {prop.Name}:[/]", ct),
 
-                    Type t when t == typeof(decimal) || t== typeof(decimal?) => await AnsiConsole.AskAsync<decimal>($"[yellow]Set {prop.Name}:[/]", ct),
+                    Type t when t == typeof(decimal) || t == typeof(decimal?) => await AnsiConsole.AskAsync<decimal>($"[yellow]Set {prop.Name}:[/]", ct),
 
                     Type t when t == typeof(string) => await AnsiConsole.AskAsync<string>($"[yellow]Set {prop.Name}:[/]"),
 
@@ -128,11 +125,11 @@ namespace EcommerseAPI.Frontend.Menus
 
             var properties = typeof(SortParams).GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(t => !t.PropertyType.IsInterface && !t.PropertyType.IsClass
-                        || t.PropertyType == typeof(string)); 
+                        || t.PropertyType == typeof(string));
 
             var sortParams = await AnsiConsole.PromptAsync(new MultiSelectionPrompt<string>()
                 .Title("Choose sort parameters to add:")
-                .AddChoices(properties.Select(p=>p.Name)));
+                .AddChoices(properties.Select(p => p.Name)));
 
             foreach (var property in properties)
             {
@@ -164,7 +161,7 @@ namespace EcommerseAPI.Frontend.Menus
             {
                 var service = _serviceProvider.GetRequiredService<TService>();
                 var response = await service.GetAll(filter: filter, sort: sort, page: page, pageSize: pageSize, ct: ct);
-                if (response!=null && response.IsSuccessStatusCode)
+                if (response != null && response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadFromJsonAsync<PagedResult<TResultDto>>(ct);
                     if (content.Items.Any())
@@ -183,7 +180,7 @@ namespace EcommerseAPI.Frontend.Menus
 
         protected override async Task OnStartingAsync(CancellationToken ct = default)
         {
-            await GetAll(ct:ct);
+            await GetAll(ct: ct);
         }
     }
 }

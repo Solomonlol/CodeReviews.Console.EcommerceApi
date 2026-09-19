@@ -1,5 +1,4 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Sales;
-using EcommerseAPI.Frontend.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace EcommerseAPI.Frontend.Entities.Dto.Users

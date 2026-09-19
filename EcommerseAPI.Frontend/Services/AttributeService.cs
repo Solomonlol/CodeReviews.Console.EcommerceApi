@@ -1,16 +1,10 @@
-﻿using EcommerseAPI.Frontend.Entities.Dto;
-using EcommerseAPI.Frontend.Entities.Dto.Categories;
+﻿using EcommerseAPI.Frontend.Entities.Dto.Categories;
 using EcommerseAPI.Frontend.Entities.Dto.Products;
-using EcommerseAPI.Frontend.Entities.Dto.Users;
 using EcommerseAPI.Frontend.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
-using System;
-using System.Collections.Generic;
-using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using System.Xml.Linq;
 
 namespace EcommerseAPI.Frontend.Services
 {
@@ -22,7 +16,7 @@ namespace EcommerseAPI.Frontend.Services
         private readonly string _attributeUrl = "api/v1/categories/";
         private readonly string _attributeValueUrl = "api/v1/products/";
         private readonly HttpClient _httpClient;
-        public AttributeService(IServiceProvider sp) 
+        public AttributeService(IServiceProvider sp)
         {
             //_drawingService = sp.GetRequiredService<ITableDrawingService>();
             //_categoryService = sp.GetRequiredService<ICategoryService>();
@@ -36,7 +30,7 @@ namespace EcommerseAPI.Frontend.Services
             {
                 var productList = attributes.ToList();
                 var product = await AnsiConsole.PromptAsync(new SelectionPrompt<ProductDto>().Title("[yellow]Choose product:[/]")
-                    .UseConverter(p=>$"{p.Name} | {p.CategoryName}")
+                    .UseConverter(p => $"{p.Name} | {p.CategoryName}")
                     .AddChoices(productList));
                 await _productService.GetOne(product.Name, ct);
 
@@ -102,7 +96,7 @@ namespace EcommerseAPI.Frontend.Services
                     return;
                 }
 
-                
+
                 var attributeList = dto.Attributes.ToList();
                 var productAttributeName = await AnsiConsole.PromptAsync(new SelectionPrompt<string>().Title("[yellow]Choose attribute:[/]")
                     .AddChoices(attributeList.Select(a => a.Name)));

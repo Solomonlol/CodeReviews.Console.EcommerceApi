@@ -1,14 +1,9 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Categories;
-using EcommerseAPI.Frontend.Entities.Dto.Users;
 using EcommerseAPI.Frontend.Entities.Filters;
 using EcommerseAPI.Frontend.Interfaces;
-using EcommerseAPI.Frontend.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
-using System;
-using System.Collections.Generic;
 using System.Net.Http.Json;
-using System.Text;
 
 namespace EcommerseAPI.Frontend.Menus
 {
@@ -34,7 +29,7 @@ namespace EcommerseAPI.Frontend.Menus
             AddExitOption("Back");
         }
 
-        public async Task Create(CancellationToken ct=default)
+        public async Task Create(CancellationToken ct = default)
         {
             var dto = new CategoryDto()
             {
@@ -46,20 +41,20 @@ namespace EcommerseAPI.Frontend.Menus
             else AnsiConsole.MarkupLine("[violet]The operation was cancelled.[/]");
         }
 
-        public async Task Update(CancellationToken ct=default)
+        public async Task Update(CancellationToken ct = default)
         {
-             await _categoryService.Update(ct);
+            await _categoryService.Update(ct);
         }
 
-        public async Task Delete(CancellationToken ct=default)
+        public async Task Delete(CancellationToken ct = default)
         {
             var categoryName = await AnsiConsole.AskAsync<string>("Enter category name to delete:");
-            if(await AnsiConsole.ConfirmAsync("Are you sure?", cancellationToken: ct))
+            if (await AnsiConsole.ConfirmAsync("Are you sure?", cancellationToken: ct))
                 await _categoryService.Delete(categoryName, ct);
             else AnsiConsole.MarkupLine("[violet]The operation was cancelled.[/]");
         }
 
-        public async Task Get(CancellationToken ct=default)
+        public async Task Get(CancellationToken ct = default)
         {
             var categoryName = await AnsiConsole.AskAsync<string>("Enter category name to find:");
             var response = await _categoryService.GetOne(categoryName, ct);
@@ -75,6 +70,6 @@ namespace EcommerseAPI.Frontend.Menus
             }
             else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
         }
-               
+
     }
 }

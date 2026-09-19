@@ -1,12 +1,8 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Products;
 using EcommerseAPI.Frontend.Entities.Filters;
 using EcommerseAPI.Frontend.Interfaces;
-using EcommerseAPI.Frontend.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EcommerseAPI.Frontend.Menus
 {
@@ -27,21 +23,21 @@ namespace EcommerseAPI.Frontend.Menus
             AddSubMenu($"{subMenuTitle}", subMenu);
         }
 
-        private async Task DeleteAttribute(CancellationToken ct=default)
+        private async Task DeleteAttribute(CancellationToken ct = default)
         {
             if (_pagedResult == null) return;
             var attributes = _pagedResult.Items;
             await _attributeService.DeleteAttribute(attributes, ct);
         }
 
-        private async Task UpdateAttribute(CancellationToken ct=default)
+        private async Task UpdateAttribute(CancellationToken ct = default)
         {
             if (_pagedResult == null) return;
             var attributes = _pagedResult.Items;
             await _attributeService.UpdateAttribute(attributes, ct);
         }
 
-        private async Task AddNewAttribute(CancellationToken ct=default)
+        private async Task AddNewAttribute(CancellationToken ct = default)
         {
             if (_pagedResult == null) return;
             var attributes = _pagedResult.Items;
@@ -64,7 +60,7 @@ namespace EcommerseAPI.Frontend.Menus
                     await _cartService.AddToCart(item, quantity, ct);
                 }
             }
-            
+
         }
 
         public async Task ClearCart(CancellationToken ct = default)

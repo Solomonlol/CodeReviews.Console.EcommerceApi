@@ -1,11 +1,7 @@
 ﻿using EcommerseAPI.Frontend.Entities;
-using EcommerseAPI.Frontend.Entities.Dto;
 using EcommerseAPI.Frontend.Entities.Dto.Products;
 using EcommerseAPI.Frontend.Interfaces;
 using Spectre.Console;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EcommerseAPI.Frontend.Services
 {
@@ -15,7 +11,7 @@ namespace EcommerseAPI.Frontend.Services
         public Task AddToCart(ProductDto dto, int quantity = 1, CancellationToken ct = default)
         {
             var cartItem = new CartItem();
-            var check = _cartList.FirstOrDefault(c => c.Product == dto);
+            var check = _cartList.FirstOrDefault(c => c.Product?.Id == dto.Id);
             if (check == null)
             {
                 cartItem.Quantity = quantity;
@@ -57,7 +53,7 @@ namespace EcommerseAPI.Frontend.Services
             else AnsiConsole.MarkupLine("[red]No product available in cart[/]");
         }
 
-        public Task Clear(CancellationToken ct=default)
+        public Task Clear(CancellationToken ct = default)
         {
             _cartList.Clear();
             return Task.CompletedTask;

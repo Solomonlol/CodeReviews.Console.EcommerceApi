@@ -1,7 +1,4 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Products;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EcommerseAPI.Frontend.Interfaces
 {
@@ -11,6 +8,6 @@ namespace EcommerseAPI.Frontend.Interfaces
         Task UpdateAttribute(IEnumerable<ProductDto> products, CancellationToken ct = default);
         Task DeleteAttribute(IEnumerable<ProductDto> attributes, CancellationToken ct = default);
 
-        
+
     }
 }

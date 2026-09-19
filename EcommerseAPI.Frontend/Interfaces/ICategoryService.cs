@@ -1,8 +1,4 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Categories;
-using EcommerseAPI.Frontend.Entities.Dto.Users;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EcommerseAPI.Frontend.Interfaces
 {

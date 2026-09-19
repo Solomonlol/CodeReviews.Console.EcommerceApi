@@ -1,14 +1,10 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Sales;
-using EcommerseAPI.Frontend.Entities.Dto.Users;
 using EcommerseAPI.Frontend.Entities.Sort;
 using EcommerseAPI.Frontend.Interfaces;
 using Spectre.Console;
-using System;
-using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using static EcommerseAPI.Frontend.Entities.EnumHelper;
 
 namespace EcommerseAPI.Frontend.Services
 {
@@ -18,8 +14,8 @@ namespace EcommerseAPI.Frontend.Services
         private readonly IUrlService _urlService;
         private readonly ITableDrawingService _drawingService;
         private readonly IShoppingCartService _cartService;
-        public SaleService(IUrlServiceFactory serviceFactory, 
-            ITableDrawingService drawingService, 
+        public SaleService(IUrlServiceFactory serviceFactory,
+            ITableDrawingService drawingService,
             IHttpClientFactory clientFactory,
             IShoppingCartService cartService)
         {
@@ -82,7 +78,7 @@ namespace EcommerseAPI.Frontend.Services
         {
             try
             {
-                var Url = await _urlService.GetUrl(ct: ct, pageSize: pageSize, page: page, sort: sort, filter:filter);
+                var Url = await _urlService.GetUrl(ct: ct, pageSize: pageSize, page: page, sort: sort, filter: filter);
                 var response = await _httpClient.GetAsync(Url, ct);
                 return response;
             }
@@ -101,10 +97,10 @@ namespace EcommerseAPI.Frontend.Services
                 var response = await _httpClient.GetAsync(url, ct);
                 if (response.IsSuccessStatusCode)
                 {
-                    var content = await response.Content.ReadFromJsonAsync<UserDtoResponse>(ct);
+                    var content = await response.Content.ReadFromJsonAsync<SaleDtoResponse>(ct);
                     if (content != null)
                     {
-                        var list = new List<UserDtoResponse>();
+                        var list = new List<SaleDtoResponse>();
                         list.Add(content);
                         await _drawingService.DrowSimpleTable(enumerableValues: list, title: $"Sale id: {id}", ct: ct, isNestedDrawing: true);
                     }

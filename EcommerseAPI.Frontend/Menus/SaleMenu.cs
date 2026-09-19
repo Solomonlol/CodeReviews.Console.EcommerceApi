@@ -1,13 +1,8 @@
-﻿using EcommerseAPI.Frontend.Entities.Dto.Products;
-using EcommerseAPI.Frontend.Entities.Dto.Sales;
+﻿using EcommerseAPI.Frontend.Entities.Dto.Sales;
 using EcommerseAPI.Frontend.Entities.Filters;
 using EcommerseAPI.Frontend.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using static EcommerseAPI.Frontend.Entities.EnumHelper;
 
 namespace EcommerseAPI.Frontend.Menus
 {
@@ -18,10 +13,10 @@ namespace EcommerseAPI.Frontend.Menus
         private readonly IUrlService _urlService;
         private readonly IShoppingCartService _cartService;
         private readonly ISaleService _saleService;
-        public SaleMenu(IProductService productService, 
-            IHttpClientFactory clientFactory, 
-            ITableDrawingService drawingService, 
-            IUrlServiceFactory serviceFactory, 
+        public SaleMenu(IProductService productService,
+            IHttpClientFactory clientFactory,
+            ITableDrawingService drawingService,
+            IUrlServiceFactory serviceFactory,
             IServiceProvider sp,
             IShoppingCartService cartService
             ) : base("Catalog")

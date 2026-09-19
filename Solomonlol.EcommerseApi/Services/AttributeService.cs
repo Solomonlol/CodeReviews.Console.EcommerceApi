@@ -66,7 +66,7 @@ namespace Solomonlol.EcommerseApi.Services
             var checkCategory = await _db.Categories.FirstOrDefaultAsync(c => c.Name.Trim().ToLower() == categoryName.Trim().ToLower(), ct);
             if (checkCategory != null)
             {
-                var attribute = await _db.ProductAttributes.FirstOrDefaultAsync(p =>p.CategoryId==checkCategory.Id && p.Name.Trim().ToLower() == attributeName.Trim().ToLower(), ct);
+                var attribute = await _db.ProductAttributes.FirstOrDefaultAsync(p => p.CategoryId == checkCategory.Id && p.Name.Trim().ToLower() == attributeName.Trim().ToLower(), ct);
                 if (attribute != null)
                 {
                     _mapper.Map(item, attribute);
@@ -139,7 +139,7 @@ namespace Solomonlol.EcommerseApi.Services
                 return Result.Failure($"Product with name '{productName}' was not found.");
 
             var productAttributeCheck = await _db.ProductAttributes
-                .FirstOrDefaultAsync(a =>a.CategoryId==productCheck.CategoryId && a.Name.Trim().ToLower() == productAttributeName.Trim().ToLower(), ct);
+                .FirstOrDefaultAsync(a => a.CategoryId == productCheck.CategoryId && a.Name.Trim().ToLower() == productAttributeName.Trim().ToLower(), ct);
 
             if (productAttributeCheck == null)
                 return Result.Failure($"Attribute with name '{productAttributeName}' in product '{productName}' was not found.");
