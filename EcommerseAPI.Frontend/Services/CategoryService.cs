@@ -3,12 +3,14 @@ using EcommerseAPI.Frontend.Entities.Dto.Products;
 using EcommerseAPI.Frontend.Entities.Dto.Users;
 using EcommerseAPI.Frontend.Entities.Sort;
 using EcommerseAPI.Frontend.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using System.Xml.Linq;
 using static EcommerseAPI.Frontend.Entities.EnumHelper;
 
 namespace EcommerseAPI.Frontend.Services
@@ -18,11 +20,11 @@ namespace EcommerseAPI.Frontend.Services
         private readonly HttpClient _httpClient;
         private readonly ITableDrawingService _drawingService;
         private readonly IUrlService _urlService;
-        public CategoryService(IHttpClientFactory httpClient, ITableDrawingService drawingService, IUrlServiceFactory urlService)
+        public CategoryService(IServiceProvider sp)
         {
-            _urlService = urlService.Create("api/v1/categories/");
-            _httpClient = httpClient.CreateClient("ApiClient");
-            _drawingService = drawingService;
+            _urlService = sp.GetRequiredService<IUrlServiceFactory>().Create("api/v1/categories/");
+            _httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("ApiClient");
+            _drawingService = sp.GetRequiredService<ITableDrawingService>();
         }
         public async Task Create(CategoryDto category, CancellationToken ct = default)
         {
@@ -73,27 +75,29 @@ namespace EcommerseAPI.Frontend.Services
             }
         }
 
-        public async Task GetOne(string categoryName, CancellationToken ct = default)
+        public async Task<HttpResponseMessage?> GetOne(string categoryName, CancellationToken ct = default)
         {
             try
             {
                 var url = await _urlService.GetUrl(ct: ct) + $"{categoryName}";
                 var response = await _httpClient.GetAsync(url, ct);
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadFromJsonAsync<CategoryDto>(ct);
-                    if (content != null)
-                    {
-                        var list = new List<CategoryDto>();
-                        list.Add(content);
-                        await _drawingService.DrowSimpleTable(enumerableValues: list, title: $"{categoryName}", ct: ct);
-                    }
-                }
-                else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
+                return response;
+                //if (response.IsSuccessStatusCode)
+                //{
+                //    var content = await response.Content.ReadFromJsonAsync<CategoryDto>(ct);
+                //    if (content != null)
+                //    {
+                //        var list = new List<CategoryDto>();
+                //        list.Add(content);
+                //        await _drawingService.DrowSimpleTable(enumerableValues: list, title: $"{categoryName}", ct: ct);
+                //    }
+                //}
+                //else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
             }
             catch (Exception ex)
             {
                 AnsiConsole.MarkupLine($"[red]Error: {ex.Message}[/]");
+                return null;
             }
         }
 
@@ -139,5 +143,7 @@ namespace EcommerseAPI.Frontend.Services
                 AnsiConsole.MarkupLine($"[red]Error: {ex.Message}[/]");
             }
         }
+
+        
     }
 }

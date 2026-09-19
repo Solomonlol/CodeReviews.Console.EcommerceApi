@@ -32,7 +32,7 @@ namespace EcommerseAPI.Frontend.Menus
             _httpClient = clientFactory.CreateClient("ApiClient");
             _saleService = sp.GetRequiredService<ISaleService>();
 
-            AddSubMenu("All sales", new PagedMenu<ISaleService, SaleDtoResponse, SaleFilter>(sp, drawingService, "Sales"));
+            AddSubMenu("All sales", new PagedMenu<ISaleService, SaleDtoResponse, SaleFilter>(sp, "Sales"));
             AddItem("Find one", () => Get());
             AddItem("Create new sale", () => Create());
             AddItem("Close sale", () => Close());

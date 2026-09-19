@@ -18,19 +18,15 @@ namespace EcommerseAPI.Frontend.Menus
         private readonly ITableDrawingService _drawingService;
         private readonly IUrlService _urlService;
         private readonly IProductService _productService;
-        public CatalogMenu(IProductService productService, 
-            IHttpClientFactory clientFactory, 
-            IUrlServiceFactory serviceFactory, 
-            IServiceProvider sp,
-            IShoppingCartService cartService, 
-            ITableDrawingService drawingService,
-            SaleMenu saleMenu) : base("Catalog")
+        public CatalogMenu(IServiceProvider sp, SaleMenu saleMenu, CategoryMenu categoryMenu) : base("Catalog")
         {
-            _urlService = serviceFactory.Create("api/v1/products/");
-            _drawingService = drawingService;
-            _httpClient = clientFactory.CreateClient("ApiClient");
-            _productService = productService;
-            AddSubMenu("All products", new PagedMenu<IProductService, ProductDto, ProductFilter>(sp, drawingService, cartService, saleMenu, "Products"));
+            _urlService = sp.GetRequiredService<IUrlServiceFactory>().Create("api/v1/products/");
+            _httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("ApiClient");
+            _drawingService = sp.GetRequiredService<ITableDrawingService>();
+            _productService = sp.GetRequiredService<IProductService>();
+
+            AddSubMenu("All products", new PagedMenu<IProductService, ProductDto, ProductFilter>(sp, saleMenu, "Sale menu", "Products"));
+            AddSubMenu("Category management", categoryMenu);
             AddItem("Find one", () => Get());
             AddItem("Create new product", () => Create());
             AddItem("Update product", () => Update());
@@ -40,7 +36,7 @@ namespace EcommerseAPI.Frontend.Menus
 
         public async Task Get(CancellationToken ct=default)
         {
-            var productName = await AnsiConsole.AskAsync<string>("Enter product name to find:");
+            var productName = await AnsiConsole.AskAsync<string>("[yellow]Enter product name to find:[/]");
             await _productService.GetOne(productName, ct);
         }
 
@@ -48,11 +44,11 @@ namespace EcommerseAPI.Frontend.Menus
         {
             var product = new ProductDto
             {
-                Name = AnsiConsole.Ask<string>("Enter name:"),
-                Description = AnsiConsole.Ask<string>("Enter description:"),
-                Price = AnsiConsole.Ask<int>("Enter price:"),
+                Name = AnsiConsole.Ask<string>("[yellow]Enter name:[/]"),
+                Description = AnsiConsole.Ask<string>("[yellow]Enter description:[/]"),
+                Price = AnsiConsole.Ask<int>("[yellow]Enter price:[/]"),
                 CategoryId = (int)AnsiConsole.Prompt(new SelectionPrompt<CategoryEnum>()
-                .Title("Choose category:")
+                .Title("[yellow]Choose category:[/]")
                 .AddChoices(Enum.GetValues<CategoryEnum>()))
             };
 
@@ -67,10 +63,12 @@ namespace EcommerseAPI.Frontend.Menus
 
         public async Task Delete(CancellationToken ct=default)
         {
-            var productName = AnsiConsole.Ask<string>("Enter product name to delete:");
+            var productName = AnsiConsole.Ask<string>("[yellow]Enter product name to delete:[/]");
             if (await AnsiConsole.ConfirmAsync("Are you sure?", cancellationToken: ct))
                 await _productService.Delete(productName, ct);
             else AnsiConsole.MarkupLine("[violet]The operation was cancelled.[/]");
         }
+
+        
     }
 }

@@ -21,11 +21,12 @@ namespace EcommerseAPI.Frontend.Menus
         private readonly string _title;
         private SortParams _sortParams = new();
         private TFilter _filter = new();
-        public PagedMenu(IServiceProvider serviceProvider, ITableDrawingService drawingService, string title) : base(title)
+        public PagedMenu(IServiceProvider sp, string title) : base(title)
         {
             _title = title;
-            _drawingService = drawingService;
-            _serviceProvider = serviceProvider;
+            _serviceProvider = sp;
+            _drawingService = sp.GetRequiredService<ITableDrawingService>();
+
             AddItem("Next page", () => NextPage());
             AddItem("Previous page", () => PreviousPage());
             AddItem("Choose page", () => ChoosePageNumber());
@@ -35,23 +36,42 @@ namespace EcommerseAPI.Frontend.Menus
             AddExitOption("Back");
         }
 
-        public PagedMenu(IServiceProvider serviceProvider, ITableDrawingService drawingService, IShoppingCartService cartService, SaleMenu saleMenu, string title) : base(title)
+        public PagedMenu(IServiceProvider sp, IMenu subMenu, string subMenuName, string title) : base(title)
         {
             _title = title;
-            _drawingService = drawingService;
-            _serviceProvider = serviceProvider;
-            _cartService = cartService;
+            _serviceProvider = sp;
+            _drawingService = sp.GetRequiredService<ITableDrawingService>();
+            _cartService = sp.GetRequiredService<IShoppingCartService>();
+
             AddItem("Next page", () => NextPage());
             AddItem("Previous page", () => PreviousPage());
             AddItem("Add to cart", () => AddToCart());
             AddItem("Remove item from cart", () => RemoveFromCart());
             AddItem("Clear cart", ()=> ClearCart());
-            AddSubMenu("Sale management", saleMenu);
+            AddItem("Add new attribute", () => AddNewAttribute());
+            AddItem("Update attribute", () => UpdateAttribute());
+            AddItem("Delete attribute", () => DeleteAttribute());
+            AddSubMenu($"{subMenuName}", subMenu);
             AddItem("Choose page", () => ChoosePageNumber());
             AddItem("Change page size", () => ChangePageSize());
             AddItem("Add filter", () => AddFiltering());
             AddItem("Add sort", () => AddSort());
             AddExitOption("Back");
+        }
+
+        private async Task DeleteAttribute()
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task UpdateAttribute()
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task AddNewAttribute()
+        {
+            throw new NotImplementedException();
         }
 
         public async Task AddToCart(CancellationToken ct = default)
@@ -166,6 +186,7 @@ namespace EcommerseAPI.Frontend.Menus
                     prop.SetValue(filter, value);
             }
             _filter = filter;
+            _pagedResult.Page = 1;
 
             await GetAll(page: _pagedResult.Page, pageSize: _pagedResult.PageSize, sort: _sortParams, filter: _filter, ct: ct);
         }
@@ -202,7 +223,7 @@ namespace EcommerseAPI.Frontend.Menus
                             break;
                     }
             }
-
+            _pagedResult.Page = 1;
             await GetAll(page: _pagedResult.Page, pageSize: _pagedResult.PageSize, sort: _sortParams, filter: _filter, ct: ct);
         }
 

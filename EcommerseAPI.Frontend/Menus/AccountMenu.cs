@@ -2,6 +2,7 @@
 using EcommerseAPI.Frontend.Entities.Dto.Users;
 using EcommerseAPI.Frontend.Entities.Filters;
 using EcommerseAPI.Frontend.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 
 namespace EcommerseAPI.Frontend.Menus
@@ -11,11 +12,11 @@ namespace EcommerseAPI.Frontend.Menus
         private readonly IAccountService _accountService;
         private readonly ILoginService _loginService;
 
-        public AccountMenu(IAccountService accountService, ILoginService loginService, IServiceProvider sp, ITableDrawingService drawingService) : base("Account")
+        public AccountMenu(IServiceProvider sp) : base("Account")
         {
             
-            _loginService = loginService;
-            _accountService = accountService;
+            _loginService = sp.GetRequiredService<ILoginService>();
+            _accountService = sp.GetRequiredService<IAccountService>();
             AddExitOption("Back");
             AddItem("Log In", () => LogIn());
             AddItem("Log Out", () => LogOut());
@@ -24,7 +25,7 @@ namespace EcommerseAPI.Frontend.Menus
             AddItem("Delete Account", () => DeleteAccount());
             AddItem("My account", () => ShowMyAccInfo());
             AddItem("Find by login", () => ShowByLogin());
-            AddSubMenu("All accounts", new PagedMenu<IAccountService, UserDtoResponse, UserFilter>(sp, drawingService, "Accounts"));
+            AddSubMenu("All accounts", new PagedMenu<IAccountService, UserDtoResponse, UserFilter>(sp, "Accounts"));
         }
 
         public async Task LogIn(CancellationToken ct = default)

@@ -20,14 +20,17 @@ using IHost host = Host.CreateDefaultBuilder(args)
         services.AddTransient<CatalogMenu>();
         services.AddTransient<AccountMenu>();
         services.AddTransient<SaleMenu>();
+        services.AddTransient<CategoryMenu>();
 
 
         services.AddScoped<ITableDrawingService, TableDrowingService>();
         services.AddScoped<ILoginService, LoginService>();
+        services.AddScoped<IAttrributeService, AttributeService>();
         services.AddScoped<ISaleService, SaleService>();
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IUrlService, UrlService>();
+        services.AddScoped<ICategoryService, CategoryService>();
         services.AddHttpClient("ApiClient", (sp, client) =>
         {
             var config = sp.GetRequiredService<IConfiguration>();
