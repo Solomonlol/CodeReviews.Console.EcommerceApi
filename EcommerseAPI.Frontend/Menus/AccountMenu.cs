@@ -60,7 +60,7 @@ namespace EcommerseAPI.Frontend.Menus
                 await _accountService.Create(user, ct);
             else AnsiConsole.MarkupLine("[violet]The operation was cancelled.[/]");
         }
-        
+
 
         public async Task UpdateAccount(CancellationToken ct = default)
         {

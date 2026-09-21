@@ -1,7 +1,6 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto;
 using EcommerseAPI.Frontend.Entities.Sort;
 using EcommerseAPI.Frontend.Interfaces;
-using EcommerseAPI.Frontend.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using System.ComponentModel;
@@ -35,7 +34,7 @@ namespace EcommerseAPI.Frontend.Menus
             AddItem("Add sort", () => AddSort());
         }
 
-        public async Task Renew(CancellationToken ct=default)
+        public async Task Renew(CancellationToken ct = default)
         {
             if (_pagedResult == null) return;
 

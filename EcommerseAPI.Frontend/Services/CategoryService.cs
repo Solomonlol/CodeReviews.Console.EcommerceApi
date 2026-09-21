@@ -1,5 +1,4 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Categories;
-using EcommerseAPI.Frontend.Entities.Dto.Products;
 using EcommerseAPI.Frontend.Entities.Sort;
 using EcommerseAPI.Frontend.Interfaces;
 using EcommerseAPI.Frontend.MyValidation;

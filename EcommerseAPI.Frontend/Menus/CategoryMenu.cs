@@ -37,7 +37,7 @@ namespace EcommerseAPI.Frontend.Menus
             {
                 dto.Name = await AnsiConsole.AskAsync<string>("Enter category name:");
                 dto.Description = await AnsiConsole.AskAsync<string>("Enter descriprion of this category:");
-            } 
+            }
             while (!await MyValidations.Validate(dto));
 
             if (await AnsiConsole.ConfirmAsync("Are you sure?", cancellationToken: ct))

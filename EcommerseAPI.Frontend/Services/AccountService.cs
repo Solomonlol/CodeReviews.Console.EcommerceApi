@@ -155,7 +155,8 @@ namespace EcommerseAPI.Frontend.Services
                                                                                                 .AddChoices(Enum.GetValues<RoleEnum>()))).ToString();
                                     break;
                             }
-                        }                    }
+                        }
+                    }
                     while (!await MyValidations.Validate(choises));
 
                     if (await AnsiConsole.ConfirmAsync("Are you sure?", cancellationToken: ct))
