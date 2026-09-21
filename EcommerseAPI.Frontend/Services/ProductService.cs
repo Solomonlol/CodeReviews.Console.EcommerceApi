@@ -108,7 +108,8 @@ namespace EcommerseAPI.Frontend.Services
                 var response = await _httpClient.GetAsync(url, ct);
                 if (response.IsSuccessStatusCode)
                 {
-                    var updatedProduct = new ProductDto();
+                    var responseDto = await response.Content.ReadFromJsonAsync<ProductDto>();
+                    var updatedProduct = responseDto ?? new ProductDto();
                     var choises = await AnsiConsole.PromptAsync(new MultiSelectionPrompt<string>()
                         .Title("Choose what to update:")
                         .AddChoices("Name", "Description", "Price", "Category"));

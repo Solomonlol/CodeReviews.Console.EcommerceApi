@@ -1,9 +1,11 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Categories;
+using EcommerseAPI.Frontend.Entities.Dto.Products;
 using EcommerseAPI.Frontend.Entities.Sort;
 using EcommerseAPI.Frontend.Interfaces;
 using EcommerseAPI.Frontend.MyValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
@@ -93,7 +95,8 @@ namespace EcommerseAPI.Frontend.Services
                 var response = await _httpClient.GetAsync(url, ct);
                 if (response.IsSuccessStatusCode)
                 {
-                    var updatedCategory = new CategoryDto();
+                    var responseDto = await response.Content.ReadFromJsonAsync<CategoryDto>();
+                    var updatedCategory = responseDto ?? new CategoryDto();
                     var choises = await AnsiConsole.PromptAsync(new MultiSelectionPrompt<string>()
                         .Title("Choose what to update:")
                         .AddChoices("Name", "Description"));

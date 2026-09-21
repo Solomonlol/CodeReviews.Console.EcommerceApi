@@ -1,6 +1,7 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto;
 using EcommerseAPI.Frontend.Entities.Sort;
 using EcommerseAPI.Frontend.Interfaces;
+using EcommerseAPI.Frontend.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using System.ComponentModel;
@@ -24,13 +25,21 @@ namespace EcommerseAPI.Frontend.Menus
             _serviceProvider = sp;
             _drawingService = sp.GetRequiredService<ITableDrawingService>();
 
+            AddExitOption("Back");
             AddItem("Next page", () => NextPage());
             AddItem("Previous page", () => PreviousPage());
+            AddItem("Renew page", () => Renew());
             AddItem("Choose page", () => ChoosePageNumber());
             AddItem("Change page size", () => ChangePageSize());
             AddItem("Add filter", () => AddFiltering());
             AddItem("Add sort", () => AddSort());
-            AddExitOption("Back");
+        }
+
+        public async Task Renew(CancellationToken ct=default)
+        {
+            if (_pagedResult == null) return;
+
+            await GetAll(page: _pagedResult.Page, pageSize: _pagedResult.PageSize, sort: _sortParams, filter: _filter, ct: ct);
         }
 
         public async Task NextPage(CancellationToken ct = default)
@@ -177,6 +186,13 @@ namespace EcommerseAPI.Frontend.Menus
                 AnsiConsole.MarkupLine($"[red]{ex.Message}[/]");
             }
         }
+
+        //public async Task GetOne(CancellationToken ct = default)
+        //{
+        //    var service =
+        //    var productName = await AnsiConsole.AskAsync<string>("[yellow]Enter product name to find:[/]");
+        //    await _productService.GetOne(productName, ct);
+        //}
 
         protected override async Task OnStartingAsync(CancellationToken ct = default)
         {

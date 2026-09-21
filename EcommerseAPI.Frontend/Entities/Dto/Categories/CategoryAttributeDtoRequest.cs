@@ -11,7 +11,7 @@ namespace EcommerseAPI.Frontend.Entities.Dto.Categories
         [StringLength(20, MinimumLength = 3, ErrorMessage = "Attribute name minimum length = 3, maximum = 20")]
         public string Name { get; set; } = null!;
 
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "Attribute name minimum length = 3, maximum = 20")]
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "Unit name minimum length = 3, maximum = 20")]
         public string? Unit { get; set; }
     }
 }
