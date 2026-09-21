@@ -12,8 +12,5 @@
             AddSubMenu("Account", _accountMenu);
             AddExitOption("Exit");
         }
-
-
-
     }
 }

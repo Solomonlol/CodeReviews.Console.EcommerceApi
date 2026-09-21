@@ -1,5 +1,6 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Products;
 using EcommerseAPI.Frontend.Interfaces;
+using EcommerseAPI.Frontend.MyValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using static EcommerseAPI.Frontend.Entities.EnumHelper;
@@ -36,15 +37,17 @@ namespace EcommerseAPI.Frontend.Menus
 
         public async Task Create(CancellationToken ct = default)
         {
-            var product = new ProductDto
+            var product = new ProductDto();
+            do
             {
-                Name = AnsiConsole.Ask<string>("[yellow]Enter name:[/]"),
-                Description = AnsiConsole.Ask<string>("[yellow]Enter description:[/]"),
-                Price = AnsiConsole.Ask<int>("[yellow]Enter price:[/]"),
-                CategoryId = (int)AnsiConsole.Prompt(new SelectionPrompt<CategoryEnum>()
+                product.Name = AnsiConsole.Ask<string>("[yellow]Enter name:[/]");
+                product.Description = AnsiConsole.Ask<string>("[yellow]Enter description:[/]");
+                product.Price = AnsiConsole.Ask<int>("[yellow]Enter price:[/]");
+                product.CategoryId = (int)AnsiConsole.Prompt(new SelectionPrompt<CategoryEnum>()
                 .Title("[yellow]Choose category:[/]")
-                .AddChoices(Enum.GetValues<CategoryEnum>()))
-            };
+                .AddChoices(Enum.GetValues<CategoryEnum>()));
+            }
+            while (!await MyValidations.Validate(product));
 
             if (await AnsiConsole.ConfirmAsync("Are you sure?", cancellationToken: ct))
                 await _productService.Create(product, ct);

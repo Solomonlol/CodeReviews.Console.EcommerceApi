@@ -2,6 +2,7 @@
 using EcommerseAPI.Frontend.Entities.Dto.Users;
 using EcommerseAPI.Frontend.Entities.Filters;
 using EcommerseAPI.Frontend.Interfaces;
+using EcommerseAPI.Frontend.MyValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 
@@ -42,20 +43,24 @@ namespace EcommerseAPI.Frontend.Menus
 
         public async Task CreateAccount(CancellationToken ct = default)
         {
-            var user = new UserDtoCreation
+            var user = new UserDtoCreation();
+            do
             {
-                FirstName = await AnsiConsole.AskAsync<string>($"[yellow]Enter first name:[/]"),
-                LastName = await AnsiConsole.AskAsync<string>($"[yellow]Enter last name:[/]"),
-                Email = await AnsiConsole.AskAsync<string>($"[yellow]Enter email:[/]"),
-                Login = await AnsiConsole.AskAsync<string>($"[yellow]Enter login:[/]"),
-                PhoneNumber = await AnsiConsole.AskAsync<string>($"[yellow]Enter phone number:[/]"),
-                Password = await AnsiConsole.AskAsync<string>($"[yellow]Enter password:[/]"),
-                RepeatPassword = await AnsiConsole.AskAsync<string>($"[yellow]Repeat password:[/]")
-            };
+                user.FirstName = await AnsiConsole.AskAsync<string>($"[yellow]Enter first name:[/]");
+                user.LastName = await AnsiConsole.AskAsync<string>($"[yellow]Enter last name:[/]");
+                user.Email = await AnsiConsole.AskAsync<string>($"[yellow]Enter email:[/]");
+                user.Login = await AnsiConsole.AskAsync<string>($"[yellow]Enter login:[/]");
+                user.PhoneNumber = await AnsiConsole.AskAsync<string>($"[yellow]Enter phone number:[/]");
+                user.Password = await AnsiConsole.AskAsync<string>($"[yellow]Enter password:[/]");
+                user.RepeatPassword = await AnsiConsole.AskAsync<string>($"[yellow]Repeat password:[/]");
+            }
+            while (!await MyValidations.Validate(user));
+
             if (await AnsiConsole.ConfirmAsync("Are you sure?", cancellationToken: ct))
                 await _accountService.Create(user, ct);
             else AnsiConsole.MarkupLine("[violet]The operation was cancelled.[/]");
         }
+        
 
         public async Task UpdateAccount(CancellationToken ct = default)
         {

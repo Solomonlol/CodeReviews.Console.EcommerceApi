@@ -1,6 +1,7 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Categories;
 using EcommerseAPI.Frontend.Entities.Dto.Products;
 using EcommerseAPI.Frontend.Interfaces;
+using EcommerseAPI.Frontend.MyValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using System.Text;
@@ -10,35 +11,34 @@ namespace EcommerseAPI.Frontend.Services
 {
     internal class AttributeService : IAttributeService
     {
-        //private readonly ICategoryService _categoryService;
         private readonly IProductService _productService;
-        //private readonly ITableDrawingService _drawingService;
         private readonly string _attributeUrl = "api/v1/categories/";
         private readonly string _attributeValueUrl = "api/v1/products/";
         private readonly HttpClient _httpClient;
         public AttributeService(IServiceProvider sp)
         {
-            //_drawingService = sp.GetRequiredService<ITableDrawingService>();
-            //_categoryService = sp.GetRequiredService<ICategoryService>();
+            
             _productService = sp.GetRequiredService<IProductService>();
             _httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("ApiClient");
         }
 
-        public async Task AddAttribute(IEnumerable<ProductDto> attributes, CancellationToken ct = default)
+        public async Task AddAttribute(IEnumerable<ProductDto> products, CancellationToken ct = default)
         {
             try
             {
-                var productList = attributes.ToList();
+                var productList = products.ToList();
                 var product = await AnsiConsole.PromptAsync(new SelectionPrompt<ProductDto>().Title("[yellow]Choose product:[/]")
                     .UseConverter(p => $"{p.Name} | {p.CategoryName}")
                     .AddChoices(productList));
                 await _productService.GetOne(product.Name, ct);
 
-                var attributeDto = new CategoryAttributeDtoRequest()
+                var attributeDto = new CategoryAttributeDtoRequest();
+                do
                 {
-                    Name = await AnsiConsole.AskAsync<string>("[yellow]Enter attribute name:[/]"),
-                    Unit = await AnsiConsole.PromptAsync(new TextPrompt<string>("[yellow]Enter unit measurement(optional):[/]").AllowEmpty())
-                };
+                    attributeDto.Name = await AnsiConsole.AskAsync<string>("[yellow]Enter attribute name:[/]");
+                    attributeDto.Unit = await AnsiConsole.PromptAsync(new TextPrompt<string>("[yellow]Enter unit measurement(optional):[/]").AllowEmpty());
+                }
+                while (!await MyValidations.Validate(attributeDto));
 
                 var url = _attributeUrl + $"{product.CategoryName}/attributes";
                 var dto = JsonSerializer.Serialize(attributeDto);
@@ -53,12 +53,14 @@ namespace EcommerseAPI.Frontend.Services
 
                 if (await AnsiConsole.ConfirmAsync("Add value?"))
                 {
-                    var value = new ProductAttributeValueDto()
+                    var value = new ProductAttributeValueDto();
+                    do
                     {
-                        ProductAttributeName = attributeDto.Name,
-                        ProductId = product.Id,
-                        Value = await AnsiConsole.AskAsync<string>("[yellow]Enter value:[/]")
-                    };
+                        value.ProductAttributeName = attributeDto.Name;
+                        value.ProductId = product.Id;
+                        value.Value = await AnsiConsole.AskAsync<string>("[yellow]Enter value:[/]");
+                    }
+                    while (!await MyValidations.Validate(value));
 
                     url = _attributeValueUrl + $"{product.Name}/attributes";
                     dto = JsonSerializer.Serialize(value);
@@ -148,12 +150,14 @@ namespace EcommerseAPI.Frontend.Services
 
                 if (await AnsiConsole.ConfirmAsync("Update value?"))
                 {
-                    var value = new ProductAttributeValueDto()
+                    var value = new ProductAttributeValueDto();
+                    do
                     {
-                        ProductAttributeName = productAttributeName,
-                        ProductId = fullProduct.Id,
-                        Value = await AnsiConsole.AskAsync<string>("[yellow]Enter value:[/]")
-                    };
+                        value.ProductAttributeName = productAttributeName;
+                        value.ProductId = fullProduct.Id;
+                        value.Value = await AnsiConsole.AskAsync<string>("[yellow]Enter value:[/]");
+                    }
+                    while (!await MyValidations.Validate(value));
 
                     url = _attributeValueUrl + $"{product.Name.Trim().ToLower()}/attributes/{productAttributeName}";
                     dto = JsonSerializer.Serialize(value);
@@ -172,14 +176,5 @@ namespace EcommerseAPI.Frontend.Services
                 AnsiConsole.MarkupLine($"[red]Error: {ex.Message}[/]");
             }
         }
-        //private async Task AddAttributeValue(CancellationToken ct = default)
-        //{
-        //    var value = 
-        //}
-
-        //private Task UpdateAttributeValue(CancellationToken ct = default)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

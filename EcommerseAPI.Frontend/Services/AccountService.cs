@@ -1,6 +1,7 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Users;
 using EcommerseAPI.Frontend.Entities.Sort;
 using EcommerseAPI.Frontend.Interfaces;
+using EcommerseAPI.Frontend.MyValidation;
 using Spectre.Console;
 using System.Net.Http.Json;
 using System.Text;
@@ -130,29 +131,33 @@ namespace EcommerseAPI.Frontend.Services
                     var choises = await AnsiConsole.PromptAsync(new MultiSelectionPrompt<string>()
                         .Title("Choose what to update:")
                         .AddChoices("First Name", "Last Name", "Email", "Phone number", "Role"));
-                    foreach (var choice in choises)
+                    do
                     {
-                        switch (choice)
+                        foreach (var choice in choises)
                         {
-                            case "First Name":
-                                updatedUser?.FirstName = await AnsiConsole.AskAsync<string>($"[yellow]Enter new {choice}:[/]");
-                                break;
-                            case "Last Name":
-                                updatedUser?.LastName = await AnsiConsole.AskAsync<string>($"[yellow]Enter new {choice}:[/]");
-                                break;
-                            case "Email":
-                                updatedUser?.Email = await AnsiConsole.AskAsync<string>($"[yellow]Enter new {choice}:[/]");
-                                break;
-                            case "Phone number":
-                                updatedUser?.PhoneNumber = await AnsiConsole.AskAsync<string>($"[yellow]Enter new {choice}:[/]");
-                                break;
-                            case "Role":
-                                updatedUser?.Role = (await AnsiConsole.PromptAsync(new SelectionPrompt<RoleEnum>()
-                                                                                            .Title("Choose category:")
-                                                                                            .AddChoices(Enum.GetValues<RoleEnum>()))).ToString();
-                                break;
-                        }
-                    }
+                            switch (choice)
+                            {
+                                case "First Name":
+                                    updatedUser?.FirstName = await AnsiConsole.AskAsync<string>($"[yellow]Enter new {choice}:[/]");
+                                    break;
+                                case "Last Name":
+                                    updatedUser?.LastName = await AnsiConsole.AskAsync<string>($"[yellow]Enter new {choice}:[/]");
+                                    break;
+                                case "Email":
+                                    updatedUser?.Email = await AnsiConsole.AskAsync<string>($"[yellow]Enter new {choice}:[/]");
+                                    break;
+                                case "Phone number":
+                                    updatedUser?.PhoneNumber = await AnsiConsole.AskAsync<string>($"[yellow]Enter new {choice}:[/]");
+                                    break;
+                                case "Role":
+                                    updatedUser?.Role = (await AnsiConsole.PromptAsync(new SelectionPrompt<RoleEnum>()
+                                                                                                .Title("Choose category:")
+                                                                                                .AddChoices(Enum.GetValues<RoleEnum>()))).ToString();
+                                    break;
+                            }
+                        }                    }
+                    while (!await MyValidations.Validate(choises));
+
                     if (await AnsiConsole.ConfirmAsync("Are you sure?", cancellationToken: ct))
                     {
                         var userDto = JsonSerializer.Serialize(updatedUser);

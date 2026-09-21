@@ -1,6 +1,7 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Products;
 using EcommerseAPI.Frontend.Entities.Sort;
 using EcommerseAPI.Frontend.Interfaces;
+using EcommerseAPI.Frontend.MyValidation;
 using Spectre.Console;
 using System.Net.Http.Json;
 using System.Text;
@@ -111,26 +112,31 @@ namespace EcommerseAPI.Frontend.Services
                     var choises = await AnsiConsole.PromptAsync(new MultiSelectionPrompt<string>()
                         .Title("Choose what to update:")
                         .AddChoices("Name", "Description", "Price", "Category"));
-                    foreach (var choice in choises)
+                    do
                     {
-                        switch (choice)
+                        foreach (var choice in choises)
                         {
-                            case "Name":
-                                updatedProduct.Name = await AnsiConsole.AskAsync<string>($"[yellow]Enter new product {choice}:[/]");
-                                break;
-                            case "Description":
-                                updatedProduct.Description = await AnsiConsole.AskAsync<string>($"[yellow]Enter new product {choice}:[/]");
-                                break;
-                            case "Price":
-                                updatedProduct.Price = await AnsiConsole.AskAsync<decimal>($"[yellow]Enter new product {choice}:[/]");
-                                break;
-                            case "Category":
-                                updatedProduct.CategoryId = (int)await AnsiConsole.PromptAsync(new SelectionPrompt<CategoryEnum>()
-                                                                                            .Title("Choose category:")
-                                                                                            .AddChoices(Enum.GetValues<CategoryEnum>()));
-                                break;
+                            switch (choice)
+                            {
+                                case "Name":
+                                    updatedProduct.Name = await AnsiConsole.AskAsync<string>($"[yellow]Enter new product {choice}:[/]");
+                                    break;
+                                case "Description":
+                                    updatedProduct.Description = await AnsiConsole.AskAsync<string>($"[yellow]Enter new product {choice}:[/]");
+                                    break;
+                                case "Price":
+                                    updatedProduct.Price = await AnsiConsole.AskAsync<decimal>($"[yellow]Enter new product {choice}:[/]");
+                                    break;
+                                case "Category":
+                                    updatedProduct.CategoryId = (int)await AnsiConsole.PromptAsync(new SelectionPrompt<CategoryEnum>()
+                                                                                                .Title("Choose category:")
+                                                                                                .AddChoices(Enum.GetValues<CategoryEnum>()));
+                                    break;
+                            }
                         }
                     }
+                    while (!await MyValidations.Validate(updatedProduct));
+
                     var productDtoSerialized = JsonSerializer.Serialize(updatedProduct);
                     var content = new StringContent(productDtoSerialized, Encoding.UTF8, "application/json");
                     response = await _httpClient.PutAsync(url, content, ct);

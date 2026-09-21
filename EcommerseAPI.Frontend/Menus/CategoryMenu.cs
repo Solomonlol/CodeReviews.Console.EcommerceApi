@@ -1,6 +1,7 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Categories;
 using EcommerseAPI.Frontend.Entities.Filters;
 using EcommerseAPI.Frontend.Interfaces;
+using EcommerseAPI.Frontend.MyValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using System.Net.Http.Json;
@@ -31,11 +32,14 @@ namespace EcommerseAPI.Frontend.Menus
 
         public async Task Create(CancellationToken ct = default)
         {
-            var dto = new CategoryDto()
+            var dto = new CategoryDto();
+            do
             {
-                Name = await AnsiConsole.AskAsync<string>("Enter category name:"),
-                Description = await AnsiConsole.AskAsync<string>("Enter descriprion of this category:")
-            };
+                dto.Name = await AnsiConsole.AskAsync<string>("Enter category name:");
+                dto.Description = await AnsiConsole.AskAsync<string>("Enter descriprion of this category:");
+            } 
+            while (!await MyValidations.Validate(dto));
+
             if (await AnsiConsole.ConfirmAsync("Are you sure?", cancellationToken: ct))
                 await _categoryService.Create(dto, ct);
             else AnsiConsole.MarkupLine("[violet]The operation was cancelled.[/]");

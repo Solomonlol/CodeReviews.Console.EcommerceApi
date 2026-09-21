@@ -1,6 +1,7 @@
 ﻿using EcommerseAPI.Frontend.Entities.Dto.Categories;
 using EcommerseAPI.Frontend.Entities.Sort;
 using EcommerseAPI.Frontend.Interfaces;
+using EcommerseAPI.Frontend.MyValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using System.Text;
@@ -75,17 +76,6 @@ namespace EcommerseAPI.Frontend.Services
                 var url = await _urlService.GetUrl(ct: ct) + $"{categoryName}";
                 var response = await _httpClient.GetAsync(url, ct);
                 return response;
-                //if (response.IsSuccessStatusCode)
-                //{
-                //    var content = await response.Content.ReadFromJsonAsync<CategoryDto>(ct);
-                //    if (content != null)
-                //    {
-                //        var list = new List<CategoryDto>();
-                //        list.Add(content);
-                //        await _drawingService.DrowSimpleTable(enumerableValues: list, title: $"{categoryName}", ct: ct);
-                //    }
-                //}
-                //else AnsiConsole.MarkupLine($"[red]Error: {response.StatusCode}[/]");
             }
             catch (Exception ex)
             {
@@ -107,18 +97,23 @@ namespace EcommerseAPI.Frontend.Services
                     var choises = await AnsiConsole.PromptAsync(new MultiSelectionPrompt<string>()
                         .Title("Choose what to update:")
                         .AddChoices("Name", "Description"));
-                    foreach (var choice in choises)
+                    do
                     {
-                        switch (choice)
+                        foreach (var choice in choises)
                         {
-                            case "Name":
-                                updatedCategory.Name = await AnsiConsole.AskAsync<string>($"[yellow]Enter new product {choice}:[/]");
-                                break;
-                            case "Description":
-                                updatedCategory.Description = await AnsiConsole.AskAsync<string>($"[yellow]Enter new product {choice}:[/]");
-                                break;
+                            switch (choice)
+                            {
+                                case "Name":
+                                    updatedCategory.Name = await AnsiConsole.AskAsync<string>($"[yellow]Enter new product {choice}:[/]");
+                                    break;
+                                case "Description":
+                                    updatedCategory.Description = await AnsiConsole.AskAsync<string>($"[yellow]Enter new product {choice}:[/]");
+                                    break;
+                            }
                         }
                     }
+                    while (!await MyValidations.Validate(updatedCategory));
+
                     if (await AnsiConsole.ConfirmAsync("Are you sure?", cancellationToken: ct))
                     {
                         var categoryDto = JsonSerializer.Serialize(updatedCategory);
