@@ -101,7 +101,7 @@ namespace Solomonlol.EcommerseApi.Services
 
         public async Task<Result<PagedResult<SaleDtoResponse>>> GetAllByLogin(SaleFilter filter, SortParams sortParams, string login, int page = 1, int pageSize = 5, CancellationToken ct = default)
         {
-            var totalCount = await _db.Sales.Where(s => s.User.Login == login).CountAsync(ct);
+            var totalCount = await _db.Sales.Filter(filter).Where(s => s.User.Login == login).CountAsync(ct);
             var list = await _db.Sales
                 .Where(s => s.User.Login == login)
                 .Filter(filter)
