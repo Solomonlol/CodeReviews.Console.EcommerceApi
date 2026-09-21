@@ -850,6 +850,14 @@ dotnet run
 
 The Console UI will start and communicate with the API using HTTP requests.
 
+⚠️ **Important:** on every startup, `SeedDb.SeedAll()` calls `Database.EnsureDeletedAsync()` **followed by** `Database.MigrateAsync()` — meaning the database is dropped and recreated from scratch, then re-seeded, every single time you run the API. Any data you created in a previous session (new users, sales, etc.) will be wiped on the next run. This is convenient for a portfolio project with a rich, deterministic demo catalog, but would need to be removed before this could be used as anything beyond a demo.
+4. The seed populates: ~13 categories (CPU, GPU, RAM, Motherboards, Cases, Monitors, Headphones, Fans, Mouse, Keyboards, Laptops, SSD, HDD), a full PC-parts product catalog per category with attributes (e.g. CPU core/thread count, clock speeds; GPU memory; RAM speed/latency, etc.), and 5 demo users. Seeded login/password pairs:
+   | Login | Role | Password |
+   |---|---|---|
+   | `First` | Admin | `Password123` |
+   | `Second` | Manager | `Password123` |
+   | `Third`, `Fourth`, `Fifth` | User | `Password123` |
+
 ---
 
 # Using Swagger
